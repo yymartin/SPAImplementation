@@ -19,7 +19,6 @@ public class AsymmetricEncryption {
 		byte[] encryptedByte = null;
 		try {
 			encryptorAlgorithm = Cipher.getInstance("RSA");
-			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, publicKey);
 			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, key);
 			encryptedByte = encryptorAlgorithm.doFinal(clearText.getBytes());
 		} catch (NoSuchAlgorithmException e) {
