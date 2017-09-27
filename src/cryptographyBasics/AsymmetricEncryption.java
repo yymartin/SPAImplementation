@@ -1,6 +1,7 @@
 package cryptographyBasics;
 
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -11,12 +12,15 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class AsymmetricEncryption {
-	public static byte[] encrypt(String clearText, PublicKey publicKey){
+	
+	//The key is public
+	public static byte[] encrypt(String clearText, Key key){
 		Cipher encryptorAlgorithm;
 		byte[] encryptedByte = null;
 		try {
 			encryptorAlgorithm = Cipher.getInstance("RSA");
 			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, publicKey);
+			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, key);
 			encryptedByte = encryptorAlgorithm.doFinal(clearText.getBytes());
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -36,13 +40,14 @@ public class AsymmetricEncryption {
 		}
 		return encryptedByte;
 	}
-
-	public static String decrypt(byte[] cipherText, PrivateKey privateKey){
+	
+	//The key is private
+	public static String decrypt(byte[] cipherText, Key key){
 		Cipher decryptorAlgorithm;
 		byte[] decryptedByte = null;
 		try {
 			decryptorAlgorithm = Cipher.getInstance("RSA");
-			decryptorAlgorithm.init(Cipher.DECRYPT_MODE, privateKey);
+			decryptorAlgorithm.init(Cipher.DECRYPT_MODE, key);
 			decryptedByte = decryptorAlgorithm.doFinal(cipherText);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -65,57 +70,14 @@ public class AsymmetricEncryption {
 	
 	//Implementation of Sign(ssk, msg) (page 6)
 	public static byte[] sign(PrivateKey secretSigningKey, String message) {
-		Cipher encryptorAlgorithm;
-		byte[] signature = null;
-		try {
-			encryptorAlgorithm = Cipher.getInstance("RSA");
-			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, secretSigningKey);
-			signature = encryptorAlgorithm.doFinal(message.getBytes());
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		byte[] signature = encrypt(message, secretSigningKey);
+		
 		return signature;
 	}
 	
 	//Implementation of SigVerify(svk, msg, sig) (page 6)
 	public static boolean signatureVerification(PublicKey secretVerificationKey, String message, byte[] signature) {
-		Cipher decryptorAlgorithm;
-		byte[] decryptedByte = null;
-		try {
-			decryptorAlgorithm = Cipher.getInstance("RSA");
-			decryptorAlgorithm.init(Cipher.DECRYPT_MODE, secretVerificationKey);
-			decryptedByte = decryptorAlgorithm.doFinal(signature);
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		String clearText = new String(decryptedByte);
+		String clearText = decrypt(signature, secretVerificationKey);
 		
 		return clearText.equals(message);
 	}
