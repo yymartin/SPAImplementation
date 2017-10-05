@@ -10,6 +10,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -19,6 +20,27 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 public class MyKeyGenerator {
+	
+	public static SecretKey generateHMacKey() {
+        KeyGenerator keyGen = null;
+		try {
+			keyGen = KeyGenerator.getInstance("HmacSHA256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        keyGen.init(128);
+        return keyGen.generateKey();
+	}
+	
+	public static byte[] getOneTimePaddingKey() {
+		SecureRandom random = new SecureRandom();
+		byte[] key = new byte[128];
+		random.nextBytes(key);;
+		
+		return key;
+	}
+	
 	public static SecretKey generateSymmetricKey(){
 		SecretKey key = null;
 		try {

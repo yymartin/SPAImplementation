@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Random;
 
+//Source: https://en.wikipedia.org/wiki/Oblivious_transfer
 public class OTReceiver {
 	private final int randomMessageSize = 1024;
 
