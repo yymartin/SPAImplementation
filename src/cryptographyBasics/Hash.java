@@ -1,5 +1,7 @@
 package cryptographyBasics;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -10,9 +12,9 @@ import javax.crypto.spec.PBEKeySpec;
 
 import javax.xml.bind.DatatypeConverter;
 
-//Source: https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
-public class PBKDF2 {
-	public static String generateHash(String password) {
+public class Hash {
+	//Source: https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+	public static String generatePBKDF2WithHmacSHA1Hash(String password) {
 		int iterations = 1000;
 		char[] chars = password.toCharArray();
 		byte[] salt = generateSalt();
@@ -57,6 +59,18 @@ public class PBKDF2 {
 			e.printStackTrace();
 		}
 		return Arrays.equals(hash, testHash);
+	}
+	
+	public static BigInteger generateSHA256Hash(BigInteger number) {
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] hash = digest.digest(number.toByteArray());
+		return new BigInteger(hash);
 	}
 
 	private static byte[] generateSalt() {

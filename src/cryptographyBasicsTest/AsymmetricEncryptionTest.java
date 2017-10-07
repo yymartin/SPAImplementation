@@ -1,9 +1,13 @@
 package cryptographyBasicsTest;
 
-import static org.junit.Assert.*;
+
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
+import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -15,34 +19,34 @@ import cryptographyBasics.MyKeyGenerator;
 public class AsymmetricEncryptionTest {
 	@Test
 	public void testEncryptionAndDecryption() {
-		String message = "This is a test message!";
+		BigInteger message = new BigInteger(1024, new SecureRandom());
 		KeyPair keyPair = MyKeyGenerator.generateAssymetricKey();
 		
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
 		
 		BigInteger cipherText = AsymmetricEncryption.encrypt(message, publicKey);
-		String clearText = AsymmetricEncryption.decrypt(cipherText, privateKey);
+		BigInteger clearText = AsymmetricEncryption.decrypt(cipherText, privateKey);
 		
 		assertEquals(message, clearText);	
 	}
 	
 	@Test
 	public void testSignatureVerification() {
-		String message = "This is a message to sign!";
+		BigInteger message = new BigInteger(1024, new SecureRandom());
 		KeyPair keyPair = MyKeyGenerator.generateAssymetricKey();
 		
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
 		
-		BigInteger signature = AsymmetricEncryption.sign(privateKey, new BigInteger(message.getBytes()));
+		BigInteger signature = AsymmetricEncryption.sign(privateKey, message);
 		
 		assertTrue(AsymmetricEncryption.signatureVerification(publicKey, message, signature));
 	}
 	
 	@Test
 	public void testBlindSignature() {
-		String message = "This is a blind test message!";
+		BigInteger message = new BigInteger(1024, new SecureRandom());
 		KeyPair keyPair = MyKeyGenerator.generateAssymetricKey();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
@@ -52,7 +56,7 @@ public class AsymmetricEncryptionTest {
 		BigInteger newMessage = AsymmetricEncryption.blind(message, publicKey, r);
 		BigInteger signature = AsymmetricEncryption.sign(privateKey, newMessage);
 		
-		BigInteger newSignature = AsymmetricEncryption.unblind(signature, privateKey, r);
+		BigInteger newSignature = AsymmetricEncryption.unblind(signature, privateKey.getModulus(), r);
 				
 		assertTrue(AsymmetricEncryption.signatureVerification(publicKey, message, newSignature));
 	}

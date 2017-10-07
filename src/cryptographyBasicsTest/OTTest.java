@@ -6,37 +6,46 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
+import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
 import cryptographyBasics.OTReceiver;
 import cryptographyBasics.OTSender;
 
 public class OTTest {
-	private final int messageSize = 1024;
-	private final int numMessages = 50;
-	
 	@Test
 	public void testObliviousTransfer() {
-		BigInteger[] messages = new BigInteger[numMessages];
-		Random rand = new Random();
-		for(int i = 0; i < numMessages; i++) {
-			messages[i] = new BigInteger(messageSize, rand);
-		}
+		Map<BigInteger, BigInteger> data = new HashMap<>();
+		data.put(BigInteger.valueOf(437128), BigInteger.valueOf(8432901));
+		data.put(BigInteger.valueOf(574890), BigInteger.valueOf(4378979));
+		data.put(BigInteger.valueOf(947439), BigInteger.valueOf(5478932));
 		
-		KeyPair keys = MyKeyGenerator.generateAssymetricKey();
+		KeyPair pair = MyKeyGenerator.generateAssymetricKey();
+		RSAPublicKey publicKey = (RSAPublicKey) pair.getPublic();
+		RSAPrivateKey privateKey = (RSAPrivateKey) pair.getPrivate();
 		
-		OTSender sender = new OTSender(messages, (RSAPrivateKey) keys.getPrivate());
-		OTReceiver receiver = new OTReceiver(5, (RSAPublicKey) keys.getPublic());
+		OTSender sender = new OTSender(data, privateKey);
+		OTReceiver receiver = new OTReceiver(BigInteger.valueOf(437128), publicKey);
 		
-		BigInteger[] randomMessages = sender.generateRandomMessages();
-		BigInteger v = receiver.generateV(randomMessages);
-		BigInteger[] encryptedMessages = sender.encryptMessages(v, randomMessages);
+		ArrayList<byte[]> e = sender.generateE();
 		
-		BigInteger finalMessage = receiver.receiveFinalMessage(encryptedMessages);
+		BigInteger r = AsymmetricEncryption.generateRForBlindSignature(publicKey.getModulus());
+		BigInteger y = receiver.generateY(r);
 		
-		assertEquals(messages[5], finalMessage);
+		BigInteger kPrime = sender.generateKprime(y);
+		
+		BigInteger k = receiver.generateK(kPrime, r);
+		
+		ArrayList<byte[]> AiBi = receiver.generateAiBi(e, k);
+		
+		BigInteger result = receiver.findValue(AiBi);
+		
+		assertEquals(result, BigInteger.valueOf(8432901));
+
 	}
 }

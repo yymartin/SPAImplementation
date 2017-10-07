@@ -1,5 +1,6 @@
 package cryptographyBasics;
 
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -13,8 +14,8 @@ import javax.crypto.SecretKey;
 
 public class SymmetricEncryption {
 	
-	public static byte[] encryptOneTimePadding(String clearText, byte[] key) {
-		byte[] textInByte = clearText.getBytes();
+	public static byte[] encryptOneTimePadding(BigInteger clearText, byte[] key) {
+		byte[] textInByte = clearText.toByteArray();
 		
 		if(textInByte.length > key.length) {
 			throw new IllegalArgumentException("Message is too long");
@@ -52,7 +53,7 @@ public class SymmetricEncryption {
 		return encoded;
 	}
 	
-	public static String decryptOneTimePadding(byte[] cipherText, byte[] key) {
+	public static BigInteger decryptOneTimePadding(byte[] cipherText, byte[] key) {
 		//We get the correct size of the message
 		Byte lastByte = cipherText[cipherText.length-1];
 		int finalLength = lastByte.intValue();
@@ -63,16 +64,16 @@ public class SymmetricEncryption {
 			decrypted[i] = (byte) (cipherText[i] ^ key[i]);
 		}
 				
-        return new String(decrypted);
+        return new BigInteger(decrypted);
 	}
 
-	public static byte[] encryptAES(String clearText, SecretKey key) {
+	public static byte[] encryptAES(BigInteger clearText, SecretKey key) {
 		Cipher encryptorAlgorithm;
 		byte[] encryptedByte = null;
 		try {
 			encryptorAlgorithm = Cipher.getInstance("AES");
 			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, key);
-			encryptedByte = encryptorAlgorithm.doFinal(clearText.getBytes());
+			encryptedByte = encryptorAlgorithm.doFinal(clearText.toByteArray());
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,7 +93,7 @@ public class SymmetricEncryption {
 		return encryptedByte;
 	}
 
-	public static String decryptAES(byte[] cipherText, SecretKey key) {
+	public static BigInteger decryptAES(byte[] cipherText, SecretKey key) {
 		Cipher decryptorAlgorithm;
 		byte[] decryptedByte = null;
 		try {
@@ -115,32 +116,32 @@ public class SymmetricEncryption {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new String(decryptedByte);
+		return new BigInteger(decryptedByte);
 	}
 
 	//Implementation of Sign(ssk, msg) equivalent for MAC (page 6)
-	public static byte[] sign(SecretKey secretSigningKey, String message) {
+	public static byte[] sign(SecretKey secretSigningKey, BigInteger message) {
 		return encryptAES(message, secretSigningKey);
 	}
 
 	//Implementation of SigVerify(svk, msg, sig) equivalent for MAC (page 6)
-	public static boolean signatureVerification(SecretKey secretVerificationKey, String message, byte[] signature) {
-		String clearText = decryptAES(signature, secretVerificationKey);
+	public static boolean signatureVerification(SecretKey secretVerificationKey, BigInteger message, byte[] signature) {
+		BigInteger clearText = decryptAES(signature, secretVerificationKey);
 		return message.equals(clearText);
 	}
 	
 	//Only use for challenge-response
-	public static boolean verifyHMac(String message, byte[] hmac, SecretKey key) {
+	public static boolean verifyHMac(BigInteger message, byte[] hmac, SecretKey key) {
 		byte[] hmacGenerated = generateHMac(message, key);
 		return Arrays.equals(hmac, hmacGenerated);
 	}
 	
-	public static byte[] generateHMac(String message, SecretKey key) {
+	public static byte[] generateHMac(BigInteger message, SecretKey key) {
 		byte[] finalHmac = null;
 		try {
 			Mac generator = Mac.getInstance("HmacSHA256");
 			generator.init(key);
-			finalHmac = generator.doFinal(message.getBytes());
+			finalHmac = generator.doFinal(message.toByteArray());
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

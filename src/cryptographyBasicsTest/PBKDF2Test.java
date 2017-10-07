@@ -1,22 +1,23 @@
 package cryptographyBasicsTest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import cryptographyBasics.PBKDF2;
+import cryptographyBasics.Hash;
 
 public class PBKDF2Test {
 	
 	@Test
 	public void test() {
 			String password = "This is a password!";
-			String hash = PBKDF2.generateHash(password);
+			String hash = Hash.generatePBKDF2WithHmacSHA1Hash(password);
 
-			boolean test = PBKDF2.validatePassword("This is a password!", hash);
+			boolean test = Hash.validatePassword("This is a password!", hash);
 			assertTrue(test);
 			
-			test = PBKDF2.validatePassword("password1", hash);
+			test = Hash.validatePassword("password1", hash);
 			assertFalse(test);
 		}
 }

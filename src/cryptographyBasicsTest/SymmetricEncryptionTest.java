@@ -1,6 +1,12 @@
 package cryptographyBasicsTest;
 
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.SecureRandom;
 
 import javax.crypto.SecretKey;
 
@@ -13,12 +19,12 @@ public class SymmetricEncryptionTest {
 	
 	@Test
 	public void testEncryptionAndDecryption() {
-		String message = "This is a test message!";
+		BigInteger message = new BigInteger(1024, new SecureRandom());
 		SecretKey keyAES = MyKeyGenerator.generateSymmetricKey();
 		byte[] keyOneTimePadding = MyKeyGenerator.getOneTimePaddingKey();
 		
 		byte[] cipherText = SymmetricEncryption.encryptAES(message, keyAES);
-		String clearText = SymmetricEncryption.decryptAES(cipherText, keyAES);
+		BigInteger clearText = SymmetricEncryption.decryptAES(cipherText, keyAES);
 		
 		assertEquals(message, clearText);
 		
@@ -30,7 +36,7 @@ public class SymmetricEncryptionTest {
 	
 	@Test
 	public void testSignatureVerification() {
-		String message = "This is a message to sign!";
+		BigInteger message = new BigInteger(1024, new SecureRandom());
 		SecretKey key = MyKeyGenerator.generateSymmetricKey();
 		byte[] signature = SymmetricEncryption.sign(key, message);
 		
@@ -39,7 +45,7 @@ public class SymmetricEncryptionTest {
 	
 	@Test
 	public void testHmacVerification() {
-		String message = "This is a hmac message!";
+		BigInteger message = new BigInteger(1024, new SecureRandom());
 		SecretKey key = MyKeyGenerator.generateHMacKey();
 		byte[] hmac = SymmetricEncryption.generateHMac(message, key);
 		

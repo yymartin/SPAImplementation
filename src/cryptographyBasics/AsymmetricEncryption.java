@@ -6,19 +6,19 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Random;
 
 public class AsymmetricEncryption {	
-	public static BigInteger encrypt(String message, RSAPublicKey key) {
-		BigInteger m = new BigInteger(message.getBytes());
+	public static BigInteger encrypt(BigInteger message, RSAPublicKey key) {
+		BigInteger m = message;
 		BigInteger e = key.getPublicExponent();
 		BigInteger N = key.getModulus();
 		
 		return m.modPow(e, N);	
 	}
 	
-	public static String decrypt(BigInteger cipherText, RSAPrivateKey key) {
+	public static BigInteger decrypt(BigInteger cipherText, RSAPrivateKey key) {
 		BigInteger d = key.getPrivateExponent();
 		BigInteger N = key.getModulus();
 		
-		return new String(cipherText.modPow(d, N).toByteArray());
+		return cipherText.modPow(d, N);
 	}
 	
 	//Implementation of Sign(ssk, msg) (page 6)
@@ -30,25 +30,23 @@ public class AsymmetricEncryption {
 	}
 	
 	//Implementation of SigVerify(svk, msg, sig) (page 6)
-	public static boolean signatureVerification(RSAPublicKey key, String message, BigInteger signature) {
+	public static boolean signatureVerification(RSAPublicKey key, BigInteger message, BigInteger signature) {
 		BigInteger e = key.getPublicExponent();
 		BigInteger N = key.getModulus();
 		
-		String clearText = new String(signature.modPow(e, N).toByteArray());
+		BigInteger clearText = signature.modPow(e, N);
 		
 		return clearText.equals(message);
 	}
 
-	public static BigInteger blind(String message, RSAPublicKey publicKey, BigInteger r) {
-		BigInteger messageAsInteger = new BigInteger(message.getBytes());
+	public static BigInteger blind(BigInteger message, RSAPublicKey publicKey, BigInteger r) {
 		BigInteger e = publicKey.getPublicExponent();
 		BigInteger N = publicKey.getModulus();
 
-		return messageAsInteger.multiply(r.modPow(e, N)).mod(N);
+		return message.multiply(r.modPow(e, N)).mod(N);
 	}
 	
-	public static BigInteger unblind(BigInteger signature, RSAPrivateKey privateKey, BigInteger r) {
-		BigInteger N = privateKey.getModulus();
+	public static BigInteger unblind(BigInteger signature, BigInteger N, BigInteger r) {
 		BigInteger rInverse = r.modInverse(N);
 		
 		return signature.multiply(rInverse).mod(N);
