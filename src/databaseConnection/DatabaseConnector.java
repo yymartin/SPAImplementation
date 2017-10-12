@@ -7,10 +7,18 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * @author yoanmartin
+ * Class representing an interface between a user and a database. It permits to connect to the database 
+ * and to execute SQL queries
+ */
 public class DatabaseConnector {
 
 	Connection connection = null;
 
+	/**
+	 * Public constructor. It immediately connects to the database
+	 */
 	public DatabaseConnector() {
 
 		// Settings
@@ -31,23 +39,39 @@ public class DatabaseConnector {
 		}
 	}
 
+	/**
+	 * Function used to insert one element in the database
+	 * @param values The corresponding values to be inserted into a single row
+	 */
 	public void insertElement(String... values){ 
 		String query = "INSERT INTO EXAMPLE VALUES (" + values[0] + ", '" + values[1]+"')";
 		executeQuery(query);
 		System.out.println("Element inserted");
 	}
 
+	/**
+	 * Function used to search an element into the database
+	 * @param elem The id of the searched row
+	 * @return The corresponding data received from the database
+	 */
 	public String searchElement(int elem){
 		String query = "SELECT * FROM EXAMPLE WHERE ID = "+ elem +";";
 		return executeQueryAndPrintResult(query);
 	}
 	
+	/**
+	 * Function used to delete an element from a database
+	 * @param elem The id corresponding to the row to be deleted
+	 */
 	public void deleteElement(int elem) {
 		String query = "DELETE FROM EXAMPLE WHERE ID = "+ elem +";";
 		executeQuery(query);
 		System.out.println("Element deleted");
 	}
 	
+	/**
+	 * Close the connection with the database
+	 */
 	public void closeConnection(){
 		try {
 			connection.close();

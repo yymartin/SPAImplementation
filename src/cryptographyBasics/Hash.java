@@ -12,8 +12,17 @@ import javax.crypto.spec.PBEKeySpec;
 
 import javax.xml.bind.DatatypeConverter;
 
+/**
+ * @author yoanmartin
+ * Library containing cryptographic functions concerning hash
+ */
 public class Hash {
-	//Source: https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+	/**
+	 * Function which generate a hash to store a password 
+	 * Source: https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+	 * @param password The String password to hash
+	 * @return A hash string of the password
+	 */
 	public static String generatePBKDF2WithHmacSHA1Hash(String password) {
 		int iterations = 1000;
 		char[] chars = password.toCharArray();
@@ -39,6 +48,12 @@ public class Hash {
 		return iterations + ":" + saltInHex + ":" + hashInHex;
 	}
 
+	/**
+	 * Function which check if a password is correct
+	 * @param originalPassword The original password as a String
+	 * @param storedPassword The hashed password as a String
+	 * @return True if the original password is correct, False otherwise
+	 */
 	public static boolean validatePassword(String originalPassword, String storedPassword) {
 		String[] parts = storedPassword.split(":");
 		int iterations = Integer.parseInt(parts[0]);
@@ -61,6 +76,11 @@ public class Hash {
 		return Arrays.equals(hash, testHash);
 	}
 	
+	/**
+	 * Function which generate a SHA256 hash
+	 * @param number The BigInteger to has
+	 * @return A hash of the number as a BigInteger
+	 */
 	public static BigInteger generateSHA256Hash(BigInteger number) {
 		MessageDigest digest = null;
 		try {

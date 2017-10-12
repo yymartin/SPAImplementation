@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * @author yoanmartin
+ * Class representing the server who send its data to a client. See page 8 from the reference document
+ */
 public class OTSender {
 	private RSAPrivateKey privateKey;
 	private ArrayList<BigInteger> w = new ArrayList<>();
@@ -15,6 +19,11 @@ public class OTSender {
 	private BigInteger N;
 	private BigInteger d;
 	
+	/**
+	 * Public constructor of the class
+	 * @param data A map containing the data 
+	 * @param privateKey The RSA private key
+	 */
 	public OTSender(Map<BigInteger, BigInteger> data, RSAPrivateKey privateKey) {
 		this.privateKey = privateKey;
 		this.N = privateKey.getModulus();
@@ -27,6 +36,10 @@ public class OTSender {
 		}
 	}
 	
+	/**
+	 * Generate an array E containing the data encrypted (Commit phase)
+	 * @return The array E 
+	 */
 	public ArrayList<byte[]> generateE() {
 		ArrayList<byte[]> e = new ArrayList<>();
 		for(int i = 0; i < w.size(); i++) {
@@ -41,8 +54,13 @@ public class OTSender {
 		return e;
 	}
 	
+	/**
+	 * Generate K' from the value Y received by the client. (Step 3)
+	 * @param y The value received from the client
+	 * @return The value K'
+	 */
 	public BigInteger generateKprime(BigInteger y) {
-		return AsymmetricEncryption.sign(privateKey, y);
+		return AsymmetricEncryption.sign(y, privateKey);
 	}
 	
 	private byte[] concatenateThreeArrays(byte[] a, byte[] b, byte[] c) {

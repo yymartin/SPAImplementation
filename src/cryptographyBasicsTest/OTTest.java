@@ -25,7 +25,7 @@ public class OTTest {
 		data.put(BigInteger.valueOf(574890), BigInteger.valueOf(4378979));
 		data.put(BigInteger.valueOf(947439), BigInteger.valueOf(5478932));
 		
-		KeyPair pair = MyKeyGenerator.generateAssymetricKey();
+		KeyPair pair = MyKeyGenerator.generateAsymmetricKey();
 		RSAPublicKey publicKey = (RSAPublicKey) pair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) pair.getPrivate();
 		

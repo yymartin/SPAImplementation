@@ -12,68 +12,58 @@ import javax.crypto.Mac;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+/**
+ * @author yoanmartin
+ * Library containing cryptographic functions concerning symmetric encryption
+ */
 public class SymmetricEncryption {
-	
-	public static byte[] encryptOneTimePadding(BigInteger clearText, byte[] key) {
-		byte[] textInByte = clearText.toByteArray();
-		
-		if(textInByte.length > key.length) {
-			throw new IllegalArgumentException("Message is too long");
-		}
-		
-		byte[] encoded = new byte[key.length+1];
-		
-		//The last byte of the encryption is the actual binary size of the message
-		String diff = Integer.toString(textInByte.length);
-		encoded[key.length] = Byte.valueOf(diff);
-		
-		if(key.length != textInByte.length) {
-			byte[] newTextInByte = new byte[key.length];
-			
-			//copy the old array in the new one
-			for(int i = 0; i < textInByte.length; i++) {
-				newTextInByte[i] = textInByte[i];
-			}
-			
-			//add 0's in the remaining places
-			for(int i = textInByte.length; i < newTextInByte.length; i++) {
-				newTextInByte[i] = 0;
-			}
-			
-			//XOR operation
-			for(int i = 0; i < newTextInByte.length; i++) {
-				encoded[i] = (byte) (newTextInByte[i] ^ key[i]);
-			}
-		} else {
-			for(int i = 0; i < textInByte.length - 1; i++) {
-				encoded[i] = (byte) (textInByte[i] ^ key[i]);
-			}
+
+	/**
+	 * Function which encrypt a message using one time padding encryption
+	 * @param message The BigInteger to be encrypted
+	 * @param key The key as a byte array
+	 * @return The message encrypted as a byte array
+	 */
+	public static byte[] encryptOneTimePadding(BigInteger message, byte[] key) {
+		byte[] textInByte = message.toByteArray();
+		byte[] encoded = new byte[key.length];
+
+		for(int i = 0; i < textInByte.length; i++) {
+			encoded[i] = (byte) (textInByte[i] ^ key[i]);
 		}	
 
 		return encoded;
 	}
-	
-	public static BigInteger decryptOneTimePadding(byte[] cipherText, byte[] key) {
-		//We get the correct size of the message
-		Byte lastByte = cipherText[cipherText.length-1];
-		int finalLength = lastByte.intValue();
-		
-		byte[] decrypted = new byte[finalLength];
 
-		for(int i = 0; i < finalLength; i++) {
+	/**
+	 * Function which decrypt a message using one time padding encryption
+	 * @param cipherText The message encrypted as a byte array
+	 * @param key The key as a byte array
+	 * @return The decrypted message as a BigInteger
+	 */
+	public static BigInteger decryptOneTimePadding(byte[] cipherText, byte[] key) {
+		byte[] decrypted = new byte[cipherText.length];
+
+		for(int i = 0; i < decrypted.length; i++) {
 			decrypted[i] = (byte) (cipherText[i] ^ key[i]);
 		}
-				
-        return new BigInteger(decrypted);
+
+		return new BigInteger(decrypted);
 	}
 
-	public static byte[] encryptAES(BigInteger clearText, SecretKey key) {
+	/**
+	 * Function which encrypt a message using AES algorithm
+	 * @param message The BigInteger to be encrypted
+	 * @param key The AES key
+	 * @return The message encrypted as a byte array
+	 */
+	public static byte[] encryptAES(BigInteger message, SecretKey key) {
 		Cipher encryptorAlgorithm;
 		byte[] encryptedByte = null;
 		try {
 			encryptorAlgorithm = Cipher.getInstance("AES");
 			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, key);
-			encryptedByte = encryptorAlgorithm.doFinal(clearText.toByteArray());
+			encryptedByte = encryptorAlgorithm.doFinal(message.toByteArray());
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,6 +83,12 @@ public class SymmetricEncryption {
 		return encryptedByte;
 	}
 
+	/**
+	 * Function which decrypt a message using AES algorithm
+	 * @param cipherText The message encrypted as a byte array
+	 * @param key The AES key
+	 * @return The decrypted message as a BigInteger
+	 */
 	public static BigInteger decryptAES(byte[] cipherText, SecretKey key) {
 		Cipher decryptorAlgorithm;
 		byte[] decryptedByte = null;
@@ -119,23 +115,34 @@ public class SymmetricEncryption {
 		return new BigInteger(decryptedByte);
 	}
 
-	//Implementation of Sign(ssk, msg) equivalent for MAC (page 6)
+	/**
+	 * Function which sign a message using HMacAES
+	 * @param secretSigningKey The AES key
+	 * @param message The BigInteger to be signed
+	 * @return The signed message as a byte array
+	 */
 	public static byte[] sign(SecretKey secretSigningKey, BigInteger message) {
 		return encryptAES(message, secretSigningKey);
 	}
 
-	//Implementation of SigVerify(svk, msg, sig) equivalent for MAC (page 6)
+	/**
+	 * Function which verify the signature of a HMacAES
+	 * @param secretVerificationKey The HMacAES key
+	 * @param message The original message
+	 * @param signature The signed message
+	 * @return True if the verification is correct, False otherwise
+	 */
 	public static boolean signatureVerification(SecretKey secretVerificationKey, BigInteger message, byte[] signature) {
 		BigInteger clearText = decryptAES(signature, secretVerificationKey);
 		return message.equals(clearText);
 	}
-	
-	//Only use for challenge-response
-	public static boolean verifyHMac(BigInteger message, byte[] hmac, SecretKey key) {
-		byte[] hmacGenerated = generateHMac(message, key);
-		return Arrays.equals(hmac, hmacGenerated);
-	}
-	
+
+	/**
+	 * Function which sign a message using HMacSHA256
+	 * @param message The message to be signed
+	 * @param key The HMacSHA256 key
+	 * @return The signed message as a byte array
+	 */
 	public static byte[] generateHMac(BigInteger message, SecretKey key) {
 		byte[] finalHmac = null;
 		try {
@@ -150,5 +157,17 @@ public class SymmetricEncryption {
 			e.printStackTrace();
 		}
 		return finalHmac;
+	}
+	
+	/**
+	 * Function which verify the signature of a HMacSHA256
+	 * @param message The original message
+	 * @param hmac The signed message
+	 * @param key The HMacSHA256 key
+	 * @return True if the verification is correct, False otherwise
+	 */
+	public static boolean verifyHMac(BigInteger message, byte[] hmac, SecretKey key) {
+		byte[] hmacGenerated = generateHMac(message, key);
+		return Arrays.equals(hmac, hmacGenerated);
 	}
 }
