@@ -1,11 +1,11 @@
 package databaseConnection;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * @author yoanmartin
@@ -43,9 +43,16 @@ public class DatabaseConnector {
 	 * Function used to insert one element in the database
 	 * @param values The corresponding values to be inserted into a single row
 	 */
-	public void insertElement(String... values){ 
-		String query = "INSERT INTO EXAMPLE VALUES (" + values[0] + ", '" + values[1]+"')";
-		executeQuery(query);
+	public void insertElement(BigInteger id, BigInteger value){ 
+		try {
+			PreparedStatement stmt = connection.prepareStatement("INSERT INTO STORAGE VALUES (?, ?);");
+			stmt.setBytes(1, id.toByteArray());
+			stmt.setBytes(2, value.toByteArray());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("Element inserted");
 	}
 
@@ -54,19 +61,38 @@ public class DatabaseConnector {
 	 * @param elem The id of the searched row
 	 * @return The corresponding data received from the database
 	 */
-	public String searchElement(int elem){
-		String query = "SELECT * FROM EXAMPLE WHERE ID = "+ elem +";";
-		return executeQueryAndPrintResult(query);
+	public byte[] searchElement(byte[] elem){
+		byte[] value = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM STORAGE WHERE ID = ?;");
+			stmt.setBytes(1, elem);
+			ResultSet result = stmt.executeQuery();
+			
+			while (result.next()) {
+				value = result.getBytes(2);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value;
 	}
 	
 	/**
 	 * Function used to delete an element from a database
 	 * @param elem The id corresponding to the row to be deleted
 	 */
-	public void deleteElement(int elem) {
-		String query = "DELETE FROM EXAMPLE WHERE ID = "+ elem +";";
-		executeQuery(query);
-		System.out.println("Element deleted");
+	public void deleteElement(BigInteger elem) {
+		PreparedStatement stmt;
+		try {
+			stmt = connection.prepareStatement("DELETE FROM STORAGE WHERE ID = ?;");
+			stmt.setBytes(1, elem.toByteArray());
+			stmt.execute();
+			System.out.println("Element deleted");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -78,40 +104,5 @@ public class DatabaseConnector {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private void executeQuery(String query) {
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.execute(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private String executeQueryAndPrintResult(String query){
-		String resultText = ""; 
-		try {
-			Statement stmt = connection.createStatement();
-			ResultSet result = stmt.executeQuery(query);
-			ResultSetMetaData rsmd = result.getMetaData();
-			int columnsNumber = rsmd.getColumnCount();
-
-			while (result.next()) {
-				for (int i = 1; i <= columnsNumber; i++) {
-					if (i > 1) {
-						resultText = resultText.concat(", ");
-					}
-					String columnValue = result.getString(i);
-					resultText = resultText + " " + rsmd.getColumnName(i) + ": " + columnValue;
-				}
-				resultText = resultText + System.lineSeparator();
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return resultText;
 	}
 }
