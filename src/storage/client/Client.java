@@ -25,7 +25,6 @@ public class Client {
 			out = new DataOutputStream(socket.getOutputStream());
 			in = new DataInputStream(socket.getInputStream());	
 
-			
 			ExecutorService ex = Executors.newFixedThreadPool(2);
 			ex.execute(new ClientSenderThread(out, BigInteger.valueOf(123456)));
 			

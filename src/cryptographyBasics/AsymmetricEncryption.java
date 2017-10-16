@@ -1,9 +1,9 @@
 package cryptographyBasics;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Random;
 
 /**
  * @author yoanmartin
@@ -37,6 +37,7 @@ public class AsymmetricEncryption {
 		return cipherText.modPow(d, N);
 	}
 	
+	
 	/**
 	 * Function which sign a message using RSA algorithm
 	 * @param message The BigInteger to sign
@@ -63,7 +64,6 @@ public class AsymmetricEncryption {
 		BigInteger N = key.getModulus();
 		
 		BigInteger clearText = signature.modPow(e, N);
-		
 		return clearText.equals(message);
 	}
 
@@ -90,7 +90,7 @@ public class AsymmetricEncryption {
 	 */
 	public static BigInteger unblind(BigInteger signature, BigInteger N, BigInteger r) {
 		BigInteger rInverse = r.modInverse(N);
-		
+
 		return signature.multiply(rInverse).mod(N);
 	}
 
@@ -102,10 +102,10 @@ public class AsymmetricEncryption {
 	 */
 	public static BigInteger generateRForBlindSignature(BigInteger mod) {
 		BigInteger r;
-		Random rand = new Random();
+		SecureRandom rand = new SecureRandom();
 		do {
-			r = new BigInteger(512, rand);
-		} while(r.gcd(mod) == BigInteger.valueOf(1));
+			r = new BigInteger(1024, rand);
+		} while(r.gcd(mod) == BigInteger.ONE);
 		
 		return r;
 	}

@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import databaseConnection.DatabaseConnector;
+import databaseConnection.DatabaseMode;
 
 public class ServerSenderThread extends Thread implements Runnable {
 	private DataOutputStream out;
@@ -16,9 +17,9 @@ public class ServerSenderThread extends Thread implements Runnable {
 
 
 	public void run() {
-			DatabaseConnector db = new DatabaseConnector();
-			byte[] result = db.searchElement(id);
-			db.closeConnection();
+			DatabaseConnector db = new DatabaseConnector(DatabaseMode.STORAGE_STORAGE_OPTIMAL);
+			db.searchElementFromStorage(id);
+			byte[] result = db.getCTextFromStorage();
 			try {
 				out.writeInt(result.length);
 				out.write(result);
@@ -27,5 +28,6 @@ public class ServerSenderThread extends Thread implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
+			db.closeConnection();
 	}
 }

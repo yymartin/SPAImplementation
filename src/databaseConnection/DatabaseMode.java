@@ -1,0 +1,5 @@
+package databaseConnection;
+
+public enum DatabaseMode {
+	STORAGE_STORAGE_OPTIMAL, STORAGE_SERVER_OPTIMAL, SERVER_STORAGE_OPTIMAL, SERVER_SERVER_OPTIMAL;
+}

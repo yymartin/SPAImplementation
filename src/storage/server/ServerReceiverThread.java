@@ -14,18 +14,25 @@ public class ServerReceiverThread extends Thread implements Runnable{
 	}
 
 	public void run() {
-			try {
-				int length = in.readInt();
-				if(length>0) {
-					byte[] id = new byte[length];
-					in.readFully(id, 0, id.length); 
-					Thread t = new Thread(new ServerSenderThread(out, id));
-					t.start();
-					Thread.currentThread().interrupt();
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		byte[] id = getData();
+		Thread t = new Thread(new ServerSenderThread(out, id));
+		t.start();
+		Thread.currentThread().interrupt();
+	}
+	
+	private byte[] getData() {
+		byte[] id = null;
+		try {
+			int length = in.readInt();
+			if(length > 0) {
+				id = new byte[length];
+				in.readFully(id, 0, id.length); 
 			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return id;
 	}
 }
