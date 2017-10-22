@@ -5,20 +5,41 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.concurrent.Callable;
 
-public class ClientReceiverThread implements Callable<BigInteger> {
-	private DataInputStream in;
+import SSLUtility.ProtocolMode;
 
-	public ClientReceiverThread(DataInputStream in) {
+public class ClientReceiverThread implements Callable<BigInteger[]> {
+	private DataInputStream in;
+	private ProtocolMode protocol;
+
+	public ClientReceiverThread(DataInputStream in, ProtocolMode protocol) {
 		this.in = in;
-		System.out.println("ClientReceiverThread created");
+		this.protocol = protocol;
 	}
 
 
 	@Override
-	public BigInteger call() throws Exception{
-		byte[] result = getData();
-		System.out.println(result);
-		return new BigInteger(result);
+	public BigInteger[] call() throws Exception{
+		BigInteger[] result = new BigInteger[2];
+		BigInteger challenge;
+		switch(protocol) {
+		case SERVER_OPTIMAL:
+			challenge = new BigInteger(getData());
+			result[0] = challenge;
+			break;
+			
+		case STORAGE_OPTIMAL:
+			BigInteger id = new BigInteger(getData());
+			challenge = new BigInteger(getData());
+			result[0] = id;
+			result[1] = challenge;
+			break;
+		
+		case PRIVACY_OPTIMAL:
+			
+			break;
+		}
+		
+		return result;
 	}
 	
 	private byte[] getData() {

@@ -32,7 +32,7 @@ public class OTSender {
 		for(Map.Entry<BigInteger, BigInteger> elem : data.entrySet()) {
 			w.add(elem.getKey());
 			c.add(elem.getValue());
-			k.add(Hash.generateSHA256Hash(elem.getKey()).modPow(d, N));
+			k.add(Hash.generateSHA256Hash(elem.getKey().toByteArray()).modPow(d, N));
 		}
 	}
 	

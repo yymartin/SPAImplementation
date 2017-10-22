@@ -81,7 +81,7 @@ public class Hash {
 	 * @param number The BigInteger to has
 	 * @return A hash of the number as a BigInteger
 	 */
-	public static BigInteger generateSHA256Hash(BigInteger number) {
+	public static BigInteger generateSHA256Hash(byte[] number) {
 		MessageDigest digest = null;
 		try {
 			digest = MessageDigest.getInstance("SHA-256");
@@ -89,7 +89,7 @@ public class Hash {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		byte[] hash = digest.digest(number.toByteArray());
+		byte[] hash = digest.digest(number);
 		return new BigInteger(hash);
 	}
 

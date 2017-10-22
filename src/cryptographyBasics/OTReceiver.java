@@ -34,7 +34,7 @@ public class OTReceiver {
 	 * @return Y as a BigInteger
 	 */
 	public BigInteger generateY(BigInteger r) {
-		BigInteger hashWj = Hash.generateSHA256Hash(wj);
+		BigInteger hashWj = Hash.generateSHA256Hash(wj.toByteArray());
 		return AsymmetricEncryption.blind(hashWj, r, publicKey);
 	}
 	

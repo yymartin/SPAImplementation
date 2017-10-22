@@ -1,6 +1,7 @@
 package server.server;
 
 import java.math.BigInteger;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -26,6 +27,7 @@ public class Client {
 	
 	private String username;
 	private PublicKey svk;
+	private PrivateKey bsk;
 	private BigInteger challenge;
 	private ClientMode mode;
 	
@@ -35,6 +37,12 @@ public class Client {
 		this.mode = ClientMode.REGISTERED;
 	}
 	
+	public Client(String username, PublicKey svk, PrivateKey bsk) {
+		this.username = username;
+		this.svk = svk;
+		this.bsk = bsk;
+	}
+
 	public void setChallenge(BigInteger challenge) {
 		this.mode = ClientMode.READYTOAUTH;
 		this.challenge = challenge;
@@ -58,6 +66,10 @@ public class Client {
 	
 	public PublicKey getSvk() {
 		return svk;
+	}
+	
+	public PrivateKey getBsk() {
+		return bsk;
 	}
 	
 	@Override
