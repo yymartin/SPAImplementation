@@ -11,6 +11,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -79,7 +81,7 @@ public class MyKeyGenerator {
 		KeyPair keys = null;
 		try {
 			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-			keyGen.initialize(2048);
+			keyGen.initialize(1024);
 			keys = keyGen.generateKeyPair();
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -183,5 +185,30 @@ public class MyKeyGenerator {
 		}
 		
 		return key;
+	}
+	
+	
+	public static RSAPrivateKey convertByteArrayIntoPrivateKey(byte[] key) {
+		RSAPrivateKey privateKey = null;
+		try {
+			privateKey =  (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(key));
+		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return privateKey;
+	}
+	
+	public static RSAPublicKey convertByteArrayIntoPublicKey(byte[] key) {
+		RSAPublicKey publicKey = null;
+		try {
+			publicKey =  (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(key));
+		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return publicKey;
 	}
 }

@@ -30,17 +30,11 @@ public class DatabaseConnector {
 		String user = "yymartin@spaimplementation";
 		String pass = "VzfPU$87FWZh2gMiN2.s7T;W";
 		switch(mode) {
-		case STORAGE_STORAGE_OPTIMAL : 
+		case STORAGE_OPTIMAL : 
 			table = "STORAGE_STORAGE_OPTIMAL";
 			break;
-		case STORAGE_SERVER_OPTIMAL : 
+		case SERVER_OPTIMAL : 
 			table = "STORAGE_SERVER_OPTIMAL";
-			break;
-		case SERVER_STORAGE_OPTIMAL :
-			table = "SERVER_STORAGE_OPTIMAL";
-			break;
-		case SERVER_SERVER_OPTIMAL :
-			table = "SERVER_SERVER_OPTIMAL"; 
 			break;
 		}
 
@@ -65,13 +59,13 @@ public class DatabaseConnector {
 		PreparedStatement stmt;
 		try {
 			switch(mode) {
-			case STORAGE_STORAGE_OPTIMAL :
+			case STORAGE_OPTIMAL :
 				stmt = connection.prepareStatement("INSERT INTO " + table + "  VALUES (?, ?);");
 				stmt.setBytes(1, values[0]);
 				stmt.setBytes(2, values[1]);
 				stmt.executeUpdate();
 				break;
-			case STORAGE_SERVER_OPTIMAL :
+			case SERVER_OPTIMAL :
 				stmt = connection.prepareStatement("INSERT INTO " + table + "  VALUES (?, ?, ?);");
 				stmt.setBytes(1, values[0]);
 				stmt.setBytes(2, values[1]);
@@ -88,37 +82,6 @@ public class DatabaseConnector {
 		System.out.println("Element inserted");
 	}
 
-	/**
-	 * Function used to insert one element in the database
-	 * @param username The username to be inserted
-	 * @param values The corresponding values to be inserted
-	 */
-	public void insertElementIntoServer(String username, byte[]... values){ 
-		PreparedStatement stmt;
-		try {
-			switch(mode) {
-			case SERVER_STORAGE_OPTIMAL :
-				stmt = connection.prepareStatement("INSERT INTO " + table + "  VALUES (?, ?, ?);");
-				stmt.setString(1, username);
-				stmt.setBytes(2, values[0]);
-				stmt.setBytes(3, values[1]);
-				stmt.executeUpdate();
-				break;
-			case SERVER_SERVER_OPTIMAL :
-				stmt = connection.prepareStatement("INSERT INTO " + table + "  VALUES (?, ?);");
-				stmt.setString(1, username);
-				stmt.setBytes(2, values[0]);
-				stmt.executeUpdate();
-				break;
-			default:
-				throw new IllegalStateException("Function called in the wrong database mode!");
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Element inserted");
-	}
 
 	/**
 	 * Function used to search an element into the storage database
@@ -129,29 +92,25 @@ public class DatabaseConnector {
 		PreparedStatement stmt = null;
 		try {
 			switch(mode) {
-			case STORAGE_STORAGE_OPTIMAL : case STORAGE_SERVER_OPTIMAL: 
+			case STORAGE_OPTIMAL : case SERVER_OPTIMAL: 
 				stmt = connection.prepareStatement("SELECT * FROM " + table + " WHERE ID = ?;");
 				stmt.setBytes(1, id);
 				break;
-			case SERVER_SERVER_OPTIMAL : case SERVER_STORAGE_OPTIMAL:
-				throw new IllegalStateException("Function called in the wrong database mode!");
 			}
 			ResultSet result = stmt.executeQuery();
 
 			switch(mode) {
-			case STORAGE_STORAGE_OPTIMAL :
+			case STORAGE_OPTIMAL :
 				while (result.next()) {
 					value[0] = result.getBytes(2);
 				}
 				break;
-			case STORAGE_SERVER_OPTIMAL:
+			case SERVER_OPTIMAL:
 				while (result.next()) {
 					value[0] = result.getBytes(2);
 					value[1] = result.getBytes(3);
 				}
 				break;
-			case SERVER_STORAGE_OPTIMAL : case SERVER_SERVER_OPTIMAL :
-				throw new IllegalStateException("Function called in the wrong database mode!");
 			}		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -167,9 +126,9 @@ public class DatabaseConnector {
 	 */
 	public byte[] getCTextFromStorage() {
 		switch(mode) {
-		case STORAGE_STORAGE_OPTIMAL :
+		case STORAGE_OPTIMAL :
 			return result[0];
-		case STORAGE_SERVER_OPTIMAL :
+		case SERVER_OPTIMAL :
 			return result[1];
 		default:
 			throw new IllegalStateException("Function called in the wrong database mode!");
@@ -183,79 +142,8 @@ public class DatabaseConnector {
 	 */
 	public byte[] getBSKFromStorage() {
 		switch(mode) {
-		case STORAGE_SERVER_OPTIMAL :
+		case SERVER_OPTIMAL :
 			return result[0];
-		default:
-			throw new IllegalStateException("Function called in the wrong database mode!");
-		}
-	}
-
-
-	/**
-	 * Function used to search an element into the server database
-	 * @param username The username of the searched row
-	 */
-	public void searchElementFromServer(String username){
-		byte[][] value = new byte[2][];
-		PreparedStatement stmt = null;
-		try {
-			switch(mode) {
-			case SERVER_STORAGE_OPTIMAL : case SERVER_SERVER_OPTIMAL: 
-				stmt = connection.prepareStatement("SELECT * FROM " + table + " WHERE USERNAME = ?;");
-				stmt.setString(1, username);
-				break;
-			case STORAGE_SERVER_OPTIMAL : case STORAGE_STORAGE_OPTIMAL:
-				throw new IllegalStateException("Function called in the wrong database mode!");
-			}
-			ResultSet result = stmt.executeQuery();
-
-			switch(mode) {
-			case SERVER_SERVER_OPTIMAL :
-				while (result.next()) {
-					value[0] = result.getBytes(2);
-				}
-				break;
-			case SERVER_STORAGE_OPTIMAL:
-				while (result.next()) {
-					value[0] = result.getBytes(2);
-					value[1] = result.getBytes(3);
-				}
-				break;
-			case STORAGE_STORAGE_OPTIMAL : case STORAGE_SERVER_OPTIMAL :
-				throw new IllegalStateException("Function called in the wrong database mode!");
-			}	
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		result = value;
-	}
-
-	/**
-	 * Function which  return the SVK value in the case of a server connection. This function must be called
-	 * only after calling searchElementFromServer(String username)
-	 * @return the SVK value
-	 */
-	public byte[] getSVKFromServer() {
-		switch(mode) {
-		case SERVER_SERVER_OPTIMAL :
-			return result[0];
-		case SERVER_STORAGE_OPTIMAL :
-			return result[0];
-		default:
-			throw new IllegalStateException("Function called in the wrong database mode!");
-		}
-	}
-
-	/**
-	 * Function which  return the BSK value in the case of a server connection. This function must be called
-	 * only after calling searchElementFromServer(String username)
-	 * @return the BSK value
-	 */
-	public byte[] getBSKFromServer() {
-		switch(mode) {
-		case SERVER_STORAGE_OPTIMAL :
-			return result[1];
 		default:
 			throw new IllegalStateException("Function called in the wrong database mode!");
 		}
@@ -269,7 +157,7 @@ public class DatabaseConnector {
 	public void deleteElementFromStorage(BigInteger elem) {
 		PreparedStatement stmt;
 		switch(mode) {
-		case STORAGE_STORAGE_OPTIMAL : case STORAGE_SERVER_OPTIMAL :
+		case STORAGE_OPTIMAL : case SERVER_OPTIMAL :
 			try {
 				stmt = connection.prepareStatement("DELETE FROM " + table + " WHERE ID = ?;");
 				stmt.setBytes(1, elem.toByteArray());
@@ -284,29 +172,7 @@ public class DatabaseConnector {
 			throw new IllegalStateException("Function called in the wrong database mode!");
 		}
 	}
-	
-	/**
-	 * Function used to delete an element from the storage database
-	 * @param username The username corresponding to the row to be deleted
-	 */
-	public void deleteElementFromServer(String username) {
-		PreparedStatement stmt;
-		switch(mode) {
-		case SERVER_STORAGE_OPTIMAL : case SERVER_SERVER_OPTIMAL :
-			try {
-				stmt = connection.prepareStatement("DELETE FROM " + table + " WHERE ID = ?;");
-				stmt.setString(1, username);
-				stmt.execute();
-				System.out.println("Element deleted");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		break;
-		default:
-			throw new IllegalStateException("Function called in the wrong database mode!");
-		}
-	}
+
 
 	/**
 	 * Close the connection with the database

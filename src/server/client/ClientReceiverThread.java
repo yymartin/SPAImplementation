@@ -1,26 +1,24 @@
-package storage.client;
+package server.client;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.concurrent.Callable;
 
-public class ClientReceiverThread implements Callable<BigInteger[]> {
+public class ClientReceiverThread implements Callable<BigInteger> {
 	private DataInputStream in;
 
 	public ClientReceiverThread(DataInputStream in) {
 		this.in = in;
+		System.out.println("ClientReceiverThread created");
 	}
 
 
 	@Override
-	public BigInteger[] call() throws Exception{
-		BigInteger[] result = new BigInteger[2];
-		BigInteger sig = new BigInteger(getData());
-		BigInteger ctext = new BigInteger(getData());
-		result[0] = sig;
-		result[1] = ctext;
-		return result;
+	public BigInteger call() throws Exception{
+		byte[] result = getData();
+		System.out.println(result);
+		return new BigInteger(result);
 	}
 	
 	private byte[] getData() {
