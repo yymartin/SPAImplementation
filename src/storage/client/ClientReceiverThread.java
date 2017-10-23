@@ -20,6 +20,7 @@ public class ClientReceiverThread implements Callable<PrivateKey> {
 	private ProtocolMode protocol;
 	private BigInteger r;
 	private PublicKey bvk;
+	private BigInteger password;
 
 	public ClientReceiverThread(DataInputStream in, ProtocolMode protocol, BigInteger r, PublicKey bvk) {
 		this.in = in;
@@ -27,28 +28,41 @@ public class ClientReceiverThread implements Callable<PrivateKey> {
 		this.r = r;
 		this.bvk = bvk;
 	}
+	
+	public ClientReceiverThread(DataInputStream in, ProtocolMode protocol, BigInteger r, PublicKey bvk, BigInteger password) {
+		this.in = in;
+		this.protocol = protocol;
+		this.r = r;
+		this.bvk = bvk;
+		this.password = password;
+	}
 
 
 	@Override
 	public PrivateKey call() throws Exception{
 	PrivateKey resultKey = null;
+	SecretKey aesKey;
+	byte[] keyAsByte;
 	byte[] ctext;
 		switch(protocol) {
 		case SERVER_OPTIMAL :
 			BigInteger sigBlinded = new BigInteger(getData());
 			BigInteger sig = AsymmetricEncryption.unblind(sigBlinded, ((RSAPublicKey) bvk).getModulus(), r);
 			ctext = getData();
-			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
+			aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
 			
-			byte[] keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
+			keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
 		
 			resultKey = MyKeyGenerator.convertByteArrayIntoPrivateKey(keyAsByte);
 			break;
 			
-//		case STORAGE_OPTIMAL :
-//			ctext = new BigInteger(getData());
-//			result[0] = ctext;
-//			break;
+		case STORAGE_OPTIMAL :
+			ctext = getData();
+			aesKey = MyKeyGenerator.generateAESKeyFromPassword(password);
+			keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
+			
+			resultKey = MyKeyGenerator.convertByteArrayIntoPrivateKey(keyAsByte);
+			break;
 			
 		case PRIVACY_OPTIMAL :
 			

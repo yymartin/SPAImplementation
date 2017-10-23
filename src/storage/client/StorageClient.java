@@ -46,6 +46,16 @@ public class StorageClient {
 		this.bsk = bsk;
 		this.ssk = ssk;
 	}
+	
+	public StorageClient(ProtocolMode protocol, BigInteger id, String password, String website, PublicKey bvk, PrivateKey bsk, PrivateKey ssk, BigInteger r) {
+		this.protocol = protocol;
+		this.id = id;
+		this.password = Hash.generateSHA256Hash(password.getBytes());
+		this.r = r;
+		this.bvk = bvk;
+		this.bsk = bsk;
+		this.ssk = ssk;
+	}
 
 	public void storeValuesToStorage() {
 		byte[] ctext;
@@ -165,8 +175,9 @@ public class StorageClient {
 		return resultKey;
 	}
 
-	private byte[] generateCText(BigInteger sig, PrivateKey ssk) {
-		// TODO Auto-generated method stub
-		return null;
+	private byte[] generateCText(BigInteger password, PrivateKey ssk) {
+		byte[] sskAsByte = ssk.getEncoded();
+		SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(password);
+		return SymmetricEncryption.encryptAES(sskAsByte, aesKey);
 	}
 }

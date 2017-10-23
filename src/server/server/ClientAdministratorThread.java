@@ -50,9 +50,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				BigInteger challenge = new BigInteger(100, new Random());
 				client = Server.clients.get(username);
 				client.setChallenge(challenge);
-				ExecutorService ex = Executors.newFixedThreadPool(20);
-				ex.execute(new ChallengeSenderThread(out, ProtocolMode.SERVER_OPTIMAL, challenge));
-				ex.shutdown();
+				Server.ex.execute(new ChallengeSenderThread(out, ProtocolMode.SERVER_OPTIMAL, challenge));
 				break;
 			case AUTH :
 				username = new String(getData());
@@ -79,6 +77,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				bsk = MyKeyGenerator.convertByteArrayIntoPrivateKey(getData());
 				client = new Client(username, svk, bsk);
 				Server.clients.put(username, client);
+				System.out.println(Server.clients.keySet());
 				break;
 			case CHALLENGE :
 				username = new String(getData());
@@ -88,9 +87,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				BigInteger id = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
 				BigInteger challenge = new BigInteger(100, new Random());
 				actualClient.setChallenge(challenge);
-				ExecutorService ex = Executors.newFixedThreadPool(20);
-				ex.execute(new ChallengeSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, id, challenge));
-				ex.shutdown();
+				Server.ex.execute(new ChallengeSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, id, challenge));
 				break;
 			case AUTH :
 				username = new String(getData());

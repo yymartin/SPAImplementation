@@ -19,6 +19,7 @@ public class Server {
 	public static DataInputStream in;
 	public static DataOutputStream out;
 	public static Map<String, Client> clients = new HashMap<>();
+	public static Executor ex = Executors.newFixedThreadPool(200);
 
 	public static void main(String[] args) {
 		try {
@@ -34,7 +35,6 @@ public class Server {
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				
-				Executor ex = Executors.newFixedThreadPool(20);
 				ex.execute(new ClientAdministratorThread(in, out));
 			}
 

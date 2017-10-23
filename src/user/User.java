@@ -29,7 +29,7 @@ import storage.client.StorageClient;
 
 public class User {
 
-	public static void main(String[] args) {
+	public static synchronized void main(String[] args) {
 		String address = System.getProperty("user.dir");
 		String username = "Yoan";
 		String password = "Martin";
@@ -42,20 +42,22 @@ public class User {
 		PublicKey svk = MyKeyGenerator.getPublicKeyFromFile(address,"digital");
 		PrivateKey ssk = MyKeyGenerator.getPrivateKeyFromFile(address,"digital");
 		
-
-		StorageClient storageConnector = new StorageClient(ProtocolMode.SERVER_OPTIMAL, username, password, website, bvk, bsk, ssk, r);
-		ServerClient serverConnector = new ServerClient(ProtocolMode.SERVER_OPTIMAL, username, password, bsk, svk);
+		ServerClient serverConnector = new ServerClient(ProtocolMode.STORAGE_OPTIMAL, username, password, bsk, svk);
 
 		//		registration phase
 //		serverConnector.registerToServer();
 //		storageConnector.storeValuesToStorage();
 
 		//		authentication phase
-		PrivateKey keyFromStorage = storageConnector.retrieveValuesFromStorage();
-		BigInteger challenge = serverConnector.askForChallengeToServer()[0];
-		System.out.println(challenge);
-		BigInteger response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-		serverConnector.executeChallengeToServer(response);
+//		PrivateKey keyFromStorage = storageConnector.retrieveValuesFromStorage();
+		BigInteger[] result = serverConnector.askForChallengeToServer();
+		BigInteger id = result[0];
+		StorageClient storageConnector = new StorageClient(ProtocolMode.STORAGE_OPTIMAL, id, password, website, bvk, bsk, ssk, r);
+
+		BigInteger challenge = result[1];
+//		System.out.println(challenge);
+//		BigInteger response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
+//		serverConnector.executeChallengeToServer(response);
 	}
 
 }

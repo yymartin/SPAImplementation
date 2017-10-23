@@ -111,6 +111,8 @@ public class ClientSenderThread extends Thread implements Runnable {
 				break;
 			case RETRIEVE:
 				try {
+					out.writeInt(protocolAsByte.length);
+					out.write(protocolAsByte);
 					out.writeInt(modeAsByte.length);
 					out.write(modeAsByte);
 					out.writeInt(id.length);

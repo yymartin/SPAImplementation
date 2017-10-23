@@ -77,7 +77,6 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 
 			case RETRIEVE :
 				id = getData();
-				hashPassword = getData();
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
 				db.searchElementFromStorage(id);
 				ctext = db.getCTextFromStorage();

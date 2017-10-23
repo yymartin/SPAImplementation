@@ -27,6 +27,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import jdk.internal.org.objectweb.asm.commons.GeneratorAdapter;
+
 /**
  * @author yoanmartin
  * Library containing functions to generate keys
