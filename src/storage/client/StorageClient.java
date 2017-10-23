@@ -52,12 +52,9 @@ public class StorageClient {
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			BigInteger sig = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
-			System.out.println("SIG: " + sig);
 			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
 			ctext = SymmetricEncryption.encryptAES(ssk.getEncoded(), aesKey);
-			
-			System.out.println("CTEXT :" + new BigInteger(ctext));
-
+		
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 				System.out.println("Ask for connection");
@@ -112,8 +109,6 @@ public class StorageClient {
 				out = new DataOutputStream(socket.getOutputStream());
 				ExecutorService ex = Executors.newFixedThreadPool(2);
 				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
-				System.out.println("HASH PASSWORD : " + password);
-				System.out.println("HASH PASSWORD BLINDED : " + passwordBlinded);
 				ex.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToStorageMode.RETRIEVE, id, passwordBlinded));
 				Future<PrivateKey> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.SERVER_OPTIMAL, r, bvk));
 				resultKey = result.get();

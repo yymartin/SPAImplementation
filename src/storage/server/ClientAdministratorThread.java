@@ -36,8 +36,6 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				id = getData();
 				bsk = getData();
 				ctext = getData();	
-				System.out.println("CTEXT: " + new BigInteger(ctext));
-				System.out.println("BSK: " + new BigInteger(bsk));
 				db = new DatabaseConnector(DatabaseMode.SERVER_OPTIMAL);
 				db.insertElementIntoStorage(new byte[][] {id, bsk, ctext});
 
@@ -46,16 +44,12 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			case RETRIEVE :
 				id = getData();
 				hashPassword = getData();
-				System.out.println("HASH PASSWORD BLINDED : " + new BigInteger(hashPassword));
 				db = new DatabaseConnector(DatabaseMode.SERVER_OPTIMAL);
 				db.searchElementFromStorage(id);
 				ctext = db.getCTextFromStorage();
-				System.out.println("CTEXT : " + new BigInteger(ctext));
-
 				bsk = db.getBSKFromStorage();
 
 				byte[] sig = generateBlindSignature(bsk, hashPassword);
-				System.out.println("SIG FROM STORAGE :" + new BigInteger(sig));
 				try {
 					out.writeInt(sig.length);
 					out.write(sig);
@@ -84,11 +78,9 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			case RETRIEVE :
 				id = getData();
 				hashPassword = getData();
-				System.out.println("HASH PASSWORD BLINDED : " + hashPassword);
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
 				db.searchElementFromStorage(id);
 				ctext = db.getCTextFromStorage();
-				System.out.println("CTEXT :" + new BigInteger(ctext));
 				try {
 					out.writeInt(ctext.length);
 					out.write(ctext);

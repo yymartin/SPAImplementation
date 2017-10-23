@@ -67,7 +67,6 @@ public class ClientSenderThread extends Thread implements Runnable {
 					out.write(id);
 					out.writeInt(bsk.length);
 					out.write(bsk);
-					System.out.println("BSK: " + bsk);
 					out.writeInt(ctext.length);
 					out.write(ctext);
 				} catch (IOException e) {

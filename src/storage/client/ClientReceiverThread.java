@@ -37,7 +37,6 @@ public class ClientReceiverThread implements Callable<PrivateKey> {
 		case SERVER_OPTIMAL :
 			BigInteger sigBlinded = new BigInteger(getData());
 			BigInteger sig = AsymmetricEncryption.unblind(sigBlinded, ((RSAPublicKey) bvk).getModulus(), r);
-			System.out.println("SIG FROM STORAGE UNBLINDED : " + sig);
 			ctext = getData();
 			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
 			
