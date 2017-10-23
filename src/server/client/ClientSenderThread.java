@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 
 import SSLUtility.ProtocolMode;
 import server.ClientToServerMode;
@@ -18,6 +19,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 
 	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk) {
 		this.out = out;
+		this.protocol = protocol;
 		this.mode = mode;
 		this.username = username.getBytes();
 		this.svk = svk.getEncoded();
@@ -25,6 +27,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 
 	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username) {
 		this.out = out;
+		this.protocol = protocol;
 		this.mode = mode;
 		this.username = username.getBytes();
 	}
@@ -56,7 +59,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 
 	@Override
 	public void run() {	
-		byte[] protocolAsByte = mode.toString().getBytes();
+		byte[] protocolAsByte = protocol.toString().getBytes();
 		byte[] modeAsByte = mode.toString().getBytes();
 		
 		switch(protocol) {

@@ -18,7 +18,7 @@ import cryptographyBasics.MyKeyGenerator;
 import server.ClientToServerMode;
 
 public class ServerClient {
-
+	private final int port = 2010;
 	public static Socket socket = null;
 	public static Thread t1, t2;
 	private static DataInputStream in;
@@ -44,11 +44,11 @@ public class ServerClient {
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 				System.out.println("Ask for connection");
-				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
 
-				ExecutorService ex = Executors.newFixedThreadPool(2);
+				ExecutorService ex = Executors.newFixedThreadPool(20);
 				ex.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.REGISTER, username, svk));
 			} catch (UnknownHostException e) {
 
@@ -61,11 +61,11 @@ public class ServerClient {
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 				System.out.println("Ask for connection");
-				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
 
-				ExecutorService ex = Executors.newFixedThreadPool(2);
+				ExecutorService ex = Executors.newFixedThreadPool(20);
 				ex.execute(new ClientSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.REGISTER, username, svk, bsk));
 			} catch (UnknownHostException e) {
 
@@ -88,12 +88,12 @@ public class ServerClient {
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 				System.out.println("Ask for connection");
-				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 
-				ExecutorService ex = Executors.newFixedThreadPool(3);
+				ExecutorService ex = Executors.newFixedThreadPool(20);
 				ex.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.CHALLENGE, username));
 				
 				Future<BigInteger[]> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.SERVER_OPTIMAL));
@@ -115,12 +115,12 @@ public class ServerClient {
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 				System.out.println("Ask for connection");
-				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 
-				ExecutorService ex = Executors.newFixedThreadPool(3);
+				ExecutorService ex = Executors.newFixedThreadPool(20);
 				ex.execute(new ClientSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.CHALLENGE, username, password));
 				
 				Future<BigInteger[]> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.STORAGE_OPTIMAL));
@@ -149,11 +149,11 @@ public class ServerClient {
 		try {
 			InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 			System.out.println("Ask for connection");
-			socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+			socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 			System.out.println("Connection established"); 
 			out = new DataOutputStream(socket.getOutputStream());
 						
-			ExecutorService ex = Executors.newSingleThreadExecutor();
+			ExecutorService ex = Executors.newFixedThreadPool(20);
 			ex.execute(new ClientSenderThread(out, ClientToServerMode.AUTH, username, response));
 		} catch (UnknownHostException e) {
 

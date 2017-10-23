@@ -24,7 +24,7 @@ public class Server {
 		try {
 			System.out.println("Server created");
 			InputStream key = new FileInputStream(new File("./PRIVATEKEY.jks"));
-			ss = SSLServerUtility.getServerSocketWithCert(2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+			ss = SSLServerUtility.getServerSocketWithCert(2010, key, "8rXbM7twa)E96xtFZmWq6/J^");
 			ArrayList<SocketAddress> clientsConnected = new ArrayList<>();
 			while(true) {
 				socket = ss.accept();
@@ -34,7 +34,7 @@ public class Server {
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				
-				Executor ex = Executors.newScheduledThreadPool(20);
+				Executor ex = Executors.newFixedThreadPool(20);
 				ex.execute(new ClientAdministratorThread(in, out));
 			}
 

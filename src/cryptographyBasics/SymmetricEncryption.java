@@ -57,13 +57,13 @@ public class SymmetricEncryption {
 	 * @param key The AES key
 	 * @return The message encrypted as a byte array
 	 */
-	public static byte[] encryptAES(BigInteger message, SecretKey key) {
+	public static byte[] encryptAES(byte[] message, SecretKey key) {
 		Cipher encryptorAlgorithm;
 		byte[] encryptedByte = null;
 		try {
 			encryptorAlgorithm = Cipher.getInstance("AES");
 			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, key);
-			encryptedByte = encryptorAlgorithm.doFinal(message.toByteArray());
+			encryptedByte = encryptorAlgorithm.doFinal(message);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,7 +89,7 @@ public class SymmetricEncryption {
 	 * @param key The AES key
 	 * @return The decrypted message as a BigInteger
 	 */
-	public static BigInteger decryptAES(byte[] cipherText, SecretKey key) {
+	public static byte[] decryptAES(byte[] cipherText, SecretKey key) {
 		Cipher decryptorAlgorithm;
 		byte[] decryptedByte = null;
 		try {
@@ -112,7 +112,7 @@ public class SymmetricEncryption {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new BigInteger(decryptedByte);
+		return decryptedByte;
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class SymmetricEncryption {
 	 * @return The signed message as a byte array
 	 */
 	public static byte[] sign(SecretKey secretSigningKey, BigInteger message) {
-		return encryptAES(message, secretSigningKey);
+		return encryptAES(message.toByteArray(), secretSigningKey);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class SymmetricEncryption {
 	 * @return True if the verification is correct, False otherwise
 	 */
 	public static boolean signatureVerification(SecretKey secretVerificationKey, BigInteger message, byte[] signature) {
-		BigInteger clearText = decryptAES(signature, secretVerificationKey);
+		BigInteger clearText = new BigInteger(decryptAES(signature, secretVerificationKey));
 		return message.equals(clearText);
 	}
 

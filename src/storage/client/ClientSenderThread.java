@@ -4,8 +4,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 
 import SSLUtility.ProtocolMode;
+import cryptographyBasics.AsymmetricEncryption;
 import storage.ClientToStorageMode;
 
 public class ClientSenderThread extends Thread implements Runnable {
@@ -64,6 +67,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 					out.write(id);
 					out.writeInt(bsk.length);
 					out.write(bsk);
+					System.out.println("BSK: " + bsk);
 					out.writeInt(ctext.length);
 					out.write(ctext);
 				} catch (IOException e) {
@@ -73,6 +77,8 @@ public class ClientSenderThread extends Thread implements Runnable {
 				break;
 			case RETRIEVE:
 				try {
+					out.writeInt(protocolAsByte.length);
+					out.write(protocolAsByte);
 					out.writeInt(modeAsByte.length);
 					out.write(modeAsByte);
 					out.writeInt(id.length);

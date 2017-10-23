@@ -26,7 +26,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 		ProtocolMode protocol = ProtocolMode.valueOf(new String(getData()));
 		ClientToStorageMode mode = ClientToStorageMode.valueOf(new String(getData()));
 		DatabaseConnector db;
-		
+
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			byte[] id, bsk, ctext, hashPassword;
@@ -35,20 +35,27 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			case STORE : 
 				id = getData();
 				bsk = getData();
-				ctext = getData();
-				
+				ctext = getData();	
+				System.out.println("CTEXT: " + new BigInteger(ctext));
+				System.out.println("BSK: " + new BigInteger(bsk));
 				db = new DatabaseConnector(DatabaseMode.SERVER_OPTIMAL);
 				db.insertElementIntoStorage(new byte[][] {id, bsk, ctext});
-			
+
+				break;
+
 			case RETRIEVE :
 				id = getData();
 				hashPassword = getData();
+				System.out.println("HASH PASSWORD BLINDED : " + new BigInteger(hashPassword));
 				db = new DatabaseConnector(DatabaseMode.SERVER_OPTIMAL);
 				db.searchElementFromStorage(id);
 				ctext = db.getCTextFromStorage();
+				System.out.println("CTEXT : " + new BigInteger(ctext));
+
 				bsk = db.getBSKFromStorage();
-				
+
 				byte[] sig = generateBlindSignature(bsk, hashPassword);
+				System.out.println("SIG FROM STORAGE :" + new BigInteger(sig));
 				try {
 					out.writeInt(sig.length);
 					out.write(sig);
@@ -58,24 +65,30 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+				break;
 			}
 			break;
-			
+
 		case STORAGE_OPTIMAL:
 			switch(mode) {
 			case STORE : 
 				id = getData();
 				ctext = getData();
-				
+
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
 				db.insertElementIntoStorage(new byte[][] {id, ctext});
-			
+
+				break;
+
 			case RETRIEVE :
 				id = getData();
 				hashPassword = getData();
+				System.out.println("HASH PASSWORD BLINDED : " + hashPassword);
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
 				db.searchElementFromStorage(id);
-				ctext = db.getCTextFromStorage();				
+				ctext = db.getCTextFromStorage();
+				System.out.println("CTEXT :" + new BigInteger(ctext));
 				try {
 					out.writeInt(ctext.length);
 					out.write(ctext);
@@ -83,14 +96,15 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				break;
 			}
 			break;
-			
+
 		case PRIVACY_OPTIMAL:
-			
+
 			break;
 		}
-		
+
 		Thread.currentThread().interrupt();
 	}
 
@@ -109,7 +123,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 
 		return id;
 	}
-	
+
 	private byte[] generateBlindSignature(byte[] bsk, byte[] hashPassword) {
 		RSAPrivateKey privateKey = MyKeyGenerator.convertByteArrayIntoPrivateKey(bsk);
 		BigInteger signature = AsymmetricEncryption.sign(new BigInteger(hashPassword), privateKey);

@@ -33,10 +33,10 @@ public class AsymmetricEncryptionTest {
 	public void testEncryptionAndDecryptionFromFile() {
 		String address = "/Users/yoanmartin/Desktop";
 		BigInteger message = new BigInteger(1024, new SecureRandom());
-		MyKeyGenerator.generateAsymmetricKeyToFile(address);
+		MyKeyGenerator.generateAsymmetricKeyToFile(address, "test");
 		
-		RSAPublicKey publicKey = (RSAPublicKey) MyKeyGenerator.getPublicKeyFromFile(address);
-		RSAPrivateKey privateKey = (RSAPrivateKey) MyKeyGenerator.getPrivateKeyFromFile(address);
+		RSAPublicKey publicKey = (RSAPublicKey) MyKeyGenerator.getPublicKeyFromFile(address,"test");
+		RSAPrivateKey privateKey = (RSAPrivateKey) MyKeyGenerator.getPrivateKeyFromFile(address,"test");
 		
 		BigInteger cipherText = AsymmetricEncryption.encrypt(message, publicKey);
 		BigInteger clearText = AsymmetricEncryption.decrypt(cipherText, privateKey);

@@ -12,14 +12,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import SSLUtility.ProtocolMode;
 import SSLUtility.SSLClientUtility;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.Hash;
+import cryptographyBasics.MyKeyGenerator;
+import cryptographyBasics.SymmetricEncryption;
 import storage.ClientToStorageMode;
 
 public class StorageClient {
-
+	
 	public static Socket socket = null;
 	public static Thread t1, t2;
 	private static DataInputStream in;
@@ -28,29 +33,31 @@ public class StorageClient {
 	private ProtocolMode protocol;
 	private BigInteger id;
 	private BigInteger password;
+	private BigInteger r;
 	private PublicKey bvk;
 	private PrivateKey bsk, ssk;
 
-	public StorageClient(ProtocolMode protocol, String username, String password, String website, PublicKey bvk, PrivateKey bsk, PrivateKey ssk) {
+	public StorageClient(ProtocolMode protocol, String username, String password, String website, PublicKey bvk, PrivateKey bsk, PrivateKey ssk, BigInteger r) {
 		this.protocol = protocol;
 		this.id = Hash.generateSHA256Hash((username+website).getBytes());
 		this.password = Hash.generateSHA256Hash(password.getBytes());
+		this.r = r;
 		this.bvk = bvk;
 		this.bsk = bsk;
 		this.ssk = ssk;
 	}
 
 	public void storeValuesToStorage() {
-		RSAPrivateKey privatekey = (RSAPrivateKey) bsk;
-		BigInteger r = AsymmetricEncryption.generateRForBlindSignature(privatekey.getModulus());
-		BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
-
 		byte[] ctext;
 		switch(protocol) {
 		case SERVER_OPTIMAL:
-			BigInteger sig = AsymmetricEncryption.sign(passwordBlinded, (RSAPrivateKey) bsk);
+			BigInteger sig = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
+			System.out.println("SIG: " + sig);
+			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
+			ctext = SymmetricEncryption.encryptAES(ssk.getEncoded(), aesKey);
+			
+			System.out.println("CTEXT :" + new BigInteger(ctext));
 
-			ctext = generateCText(sig, ssk);
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 				System.out.println("Ask for connection");
@@ -67,7 +74,7 @@ public class StorageClient {
 			}
 			break;
 		case STORAGE_OPTIMAL:
-			id = AsymmetricEncryption.sign(passwordBlinded, (RSAPrivateKey) bsk);
+			id = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
 			ctext = generateCText(password, ssk);
 			
 			try {
@@ -91,8 +98,8 @@ public class StorageClient {
 		}	
 	}
 
-	public BigInteger[] retrieveValuesFromStorage() {
-		BigInteger[] finalResult = new BigInteger[2];
+	public PrivateKey retrieveValuesFromStorage() {
+		PrivateKey resultKey = null;
 
 		switch(protocol) {
 		case SERVER_OPTIMAL:
@@ -103,12 +110,13 @@ public class StorageClient {
 				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
-
 				ExecutorService ex = Executors.newFixedThreadPool(2);
-				ex.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToStorageMode.RETRIEVE, id, password));
-
-				Future<BigInteger[]> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.SERVER_OPTIMAL));
-				finalResult = result.get();
+				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
+				System.out.println("HASH PASSWORD : " + password);
+				System.out.println("HASH PASSWORD BLINDED : " + passwordBlinded);
+				ex.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToStorageMode.RETRIEVE, id, passwordBlinded));
+				Future<PrivateKey> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.SERVER_OPTIMAL, r, bvk));
+				resultKey = result.get();
 
 				ex.shutdown();
 			} catch (UnknownHostException e) {
@@ -136,21 +144,22 @@ public class StorageClient {
 				ExecutorService ex = Executors.newFixedThreadPool(2);
 				ex.execute(new ClientSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, ClientToStorageMode.RETRIEVE, id));
 
-				Future<BigInteger[]> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.SERVER_OPTIMAL));
-				finalResult = result.get();
+//				Future<BigInteger[]> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.SERVER_OPTIMAL));
+//				finalResult = result.get();
 
 				ex.shutdown();
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
-
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (ExecutionException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			break;
 
 		case PRIVACY_OPTIMAL:
@@ -158,7 +167,7 @@ public class StorageClient {
 			break;
 		}
 
-		return finalResult;
+		return resultKey;
 	}
 
 	private byte[] generateCText(BigInteger sig, PrivateKey ssk) {
