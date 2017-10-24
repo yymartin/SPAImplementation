@@ -93,7 +93,11 @@ public class Hash {
 		return new BigInteger(hash);
 	}
 
-	private static byte[] generateSalt() {
+	/**
+	 * Function which generate random salt
+	 * @return The random salt
+	 */
+	public static byte[] generateSalt() {
 		SecureRandom sr = null;
 		try {
 			sr = SecureRandom.getInstance("SHA1PRNG");

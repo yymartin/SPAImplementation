@@ -1,5 +1,9 @@
 package SSLUtility;
 
+/**
+ * @author yoanmartin
+ * Enumeration representing the protocol used
+ */
 public enum ProtocolMode {
 	SERVER_OPTIMAL {
 		@Override

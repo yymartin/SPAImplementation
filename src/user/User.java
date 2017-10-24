@@ -36,25 +36,25 @@ public class User {
 		String website = "Bob";
 
 		
-		PublicKey bvk = MyKeyGenerator.getPublicKeyFromFile(address,"blind");
-		PrivateKey bsk = MyKeyGenerator.getPrivateKeyFromFile(address,"blind");
-		BigInteger r = AsymmetricEncryption.generateRForBlindSignature(((RSAPrivateKey) bsk).getModulus());
-		PublicKey svk = MyKeyGenerator.getPublicKeyFromFile(address,"digital");
-		PrivateKey ssk = MyKeyGenerator.getPrivateKeyFromFile(address,"digital");
+//		PublicKey bvk = MyKeyGenerator.getPublicKeyFromFile(address,"blind");
+//		PrivateKey bsk = MyKeyGenerator.getPrivateKeyFromFile(address,"blind");
+//		BigInteger r = AsymmetricEncryption.generateRForBlindSignature(((RSAPrivateKey) bsk).getModulus());
+//		PublicKey svk = MyKeyGenerator.getPublicKeyFromFile(address,"digital");
+//		PrivateKey ssk = MyKeyGenerator.getPrivateKeyFromFile(address,"digital");
 		
-		ServerClient serverConnector = new ServerClient(ProtocolMode.STORAGE_OPTIMAL, username, password, bsk, svk);
-
+//		ServerClient serverConnector = new ServerClient(ProtocolMode.STORAGE_OPTIMAL, username, password, bsk, svk);
+		
 		//		registration phase
 //		serverConnector.registerToServer();
 //		storageConnector.storeValuesToStorage();
 
 		//		authentication phase
 //		PrivateKey keyFromStorage = storageConnector.retrieveValuesFromStorage();
-		BigInteger[] result = serverConnector.askForChallengeToServer();
-		BigInteger id = result[0];
-		StorageClient storageConnector = new StorageClient(ProtocolMode.STORAGE_OPTIMAL, id, password, website, bvk, bsk, ssk, r);
+//		BigInteger[] result = serverConnector.askForChallengeToServer();
+//		BigInteger id = result[0];
+//		StorageClient storageConnector = new StorageClient(ProtocolMode.STORAGE_OPTIMAL, id, password, website, bvk, bsk, ssk, r);
 
-		BigInteger challenge = result[1];
+//		BigInteger challenge = result[1];
 //		System.out.println(challenge);
 //		BigInteger response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
 //		serverConnector.executeChallengeToServer(response);

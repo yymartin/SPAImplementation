@@ -11,6 +11,10 @@ import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
 import storage.ClientToStorageMode;
 
+/**
+ * @author yoanmartin
+ * Instantiation of a thread which sends information to a storage
+ */
 public class ClientSenderThread extends Thread implements Runnable {
 	private DataOutputStream out;
 	private ClientToStorageMode mode;
@@ -18,35 +22,59 @@ public class ClientSenderThread extends Thread implements Runnable {
 	byte[] id, bsk, ctext, sig, password;
 
 
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToStorageMode mode, BigInteger id, PrivateKey bsk, byte[] ctext) {
+	/**
+	 * Constructor used when the client registers to the storage using the Server Optimal protocol
+	 * @param out The DataOutputStream received by the client
+	 * @param id The id to be sent
+	 * @param bsk The bsk to be sent
+	 * @param ctext The ctext to be sent
+	 */
+	public ClientSenderThread(DataOutputStream out, BigInteger id, PrivateKey bsk, byte[] ctext) {
 		this.out = out;
-		this.protocol = protocol;
-		this.mode = mode;
+		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
+		this.mode = ClientToStorageMode.STORE;
 		this.id = id.toByteArray();
 		this.ctext = ctext;
 		this.bsk = bsk.getEncoded();
 	}
 
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToStorageMode mode, BigInteger id, BigInteger password) {
+	/**
+	 * Constructor used when the client retrieves information from the storage in the Server Optimal protocol
+	 * @param out The DataOutputStream received by the client
+	 * @param id The id to be sent
+	 * @param password The hashed password to be sent
+	 */
+	public ClientSenderThread(DataOutputStream out, BigInteger id, BigInteger password) {
 		this.out = out;
-		this.protocol = protocol;
-		this.mode = mode;
+		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
+		this.mode = ClientToStorageMode.RETRIEVE;
 		this.id = id.toByteArray();
 		this.password = password.toByteArray();
 	}
 
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToStorageMode mode, BigInteger id, byte[] ctext) {
+	/**
+	 * Constructor used when the client registers to the storage using the Storage Optimal protocol
+	 * @param out The DataOutputStream received by the client
+	 * @param id The id to be sent
+	 * @param ctext The ctext to be sent
+	 */
+	public ClientSenderThread(DataOutputStream out, BigInteger id, byte[] ctext) {
 		this.out = out;
-		this.protocol = protocol;
-		this.mode = mode;
+		this.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
+		this.mode = ClientToStorageMode.STORE;
 		this.id = id.toByteArray();
 		this.ctext = ctext;
 	}
 
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToStorageMode mode, BigInteger id) {
+	/**
+	 * Constructor used when the client retrieves information from the storage in the Storage Optimal protocol
+	 * @param out The DataOutputStream received by the client
+	 * @param id The id to be sent
+	 */
+	public ClientSenderThread(DataOutputStream out, BigInteger id) {
 		this.out = out;
-		this.protocol = protocol;
-		this.mode = mode;
+		this.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
+		this.mode = ClientToStorageMode.RETRIEVE;
 		this.id = id.toByteArray();
 	}
 

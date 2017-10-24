@@ -1,6 +1,10 @@
 package cryptographyBasics;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
@@ -19,6 +23,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.crypto.KeyGenerator;
@@ -26,8 +32,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import jdk.internal.org.objectweb.asm.commons.GeneratorAdapter;
 
 /**
  * @author yoanmartin
@@ -68,12 +72,10 @@ public class MyKeyGenerator {
 	 * Function which generate an AES key for symmetric encryption
 	 * @return A SecretKey for AES encryption
 	 */
-	public static SecretKey generateSymmetricKey(byte[] seed){
+	public static SecretKey generateSymmetricKey(){
 		SecretKey key = null;
 		try {
 			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-			Random rand = new Random();
-			rand.setSeed(ByteBuffer.wrap(seed).getLong());
 			keyGen.init(128);
 			key = keyGen.generateKey();
 		} catch (NoSuchAlgorithmException e) {
@@ -82,7 +84,12 @@ public class MyKeyGenerator {
 		}	
 		return key;
 	}
-	
+
+	/**
+	 * Function which generates an AES key from a given password. The password should be hashed, so it should be a BigInteger
+	 * @param password The hashed password
+	 * @return A SecretKey for AES encryption
+	 */
 	public static SecretKey generateAESKeyFromPassword(BigInteger password) {
 		String passwordAsString = new String(password.toString());
 		SecretKeyFactory f = null;
@@ -92,7 +99,7 @@ public class MyKeyGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "somepredefinedsalt".getBytes(), 10, 128);
+		KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), Hash.generateSalt(), 10, 128);
 		SecretKey s = null;
 		try {
 			s = f.generateSecret(spec);
@@ -125,8 +132,8 @@ public class MyKeyGenerator {
 	 * Function which generate an AES key for symmetric encryption and store it in a file
 	 * @param address The location where the key must be stored
 	 */
-	public static void generateSymmetricKeyToFile(String address, byte[] seed){
-		byte[] key = generateSymmetricKey(seed).getEncoded();
+	public static void generateSymmetricKeyToFile(String address){
+		byte[] key = generateSymmetricKey().getEncoded();
 		Path path = Paths.get(address+"/AES-Key");
 		try {
 			Files.write(path, key);
@@ -139,15 +146,27 @@ public class MyKeyGenerator {
 	/**
 	 * Function which generate a public and a private key for asymmetric encryption and store them in two files
 	 * @param address The location where the keys must be stored
+	 * @param title The title of the file
 	 */
 	public static void generateAsymmetricKeyToFile(String address, String title){
 		KeyPair keyPair = generateAsymmetricKey();
 		byte[] privateKey = keyPair.getPrivate().getEncoded();
 		byte[] publicKey = keyPair.getPublic().getEncoded();
-		Path privatePath = Paths.get(address+"/Private-Key-"+title);
+		byte[] r = AsymmetricEncryption.generateRForBlindSignature(((RSAPrivateKey)keyPair.getPrivate()).getModulus()).toByteArray();
+		List<byte[]> privateList = new ArrayList<>();
+		privateList.add(privateKey);
+		privateList.add(r);
+
+		ObjectOutputStream out;
+		try {
+			out = new ObjectOutputStream(new FileOutputStream(address+"/Private-Key-"+title));
+			out.writeObject(privateList);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Path publicPath = Paths.get(address+"/Public-Key-"+title);
 		try {
-			Files.write(privatePath, privateKey);
 			Files.write(publicPath, publicKey);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -177,6 +196,7 @@ public class MyKeyGenerator {
 	/**
 	 * Function which recover the RSA public key from a file for asymmetric encryption
 	 * @param address The location where the RSA public key is stored
+	 * @param title The title of the file
 	 * @return The RSA public key
 	 */
 	public static PublicKey getPublicKeyFromFile(String address, String title){
@@ -195,29 +215,64 @@ public class MyKeyGenerator {
 		return key;
 	}
 
+
 	/**
 	 * Function which recover the RSA private key from a file for asymmetric encryption
 	 * @param address The location where the RSA private key is stored
+	 * @param title the title of the file
 	 * @return The RSA private key
 	 */
+	@SuppressWarnings("unchecked")
 	public static PrivateKey getPrivateKeyFromFile(String address, String title){
 		PrivateKey key = null;
 
+		ObjectInputStream in;
+		List<byte[]> privateList = null;
 		try {
-			Path privateKeyPath = Paths.get(address+"/Private-Key-"+title);
-			byte[] encodedPrivateKey = Files.readAllBytes(privateKeyPath);
+			in = new ObjectInputStream(new FileInputStream(address+"/Private-Key-"+title));
+			privateList = (List<byte[]>) in.readObject();
 
-			KeyFactory kf = KeyFactory.getInstance("RSA"); 
-			key = kf.generatePrivate(new PKCS8EncodedKeySpec(encodedPrivateKey));
-		} catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		key = MyKeyGenerator.convertByteArrayIntoPrivateKey(privateList.get(0));
 
 		return key;
 	}
 
+	
+	/**
+	 * Function which return the blind factor contained in the private key
+	 * @param address The address of the file
+	 * @param title The name of the file
+	 * @return The blind factor as a BigInteger
+	 */
+	@SuppressWarnings("unchecked")
+	public static BigInteger getRFromFile(String address, String title){
+		BigInteger r = null;
 
+		ObjectInputStream in;
+		List<byte[]> privateList = null;
+		try {
+			in = new ObjectInputStream(new FileInputStream(address+"/Private-Key-"+title));
+			privateList = (List<byte[]>) in.readObject();
+
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		r = new BigInteger(privateList.get(1));
+
+		return r;
+	}
+
+
+	/**
+	 * Function which generate an RSAPrivateKey from a byte array. This byte array has been generated using key.getEncoded()
+	 * @param key The key as a byte array
+	 * @return The RSAPrivateKey 
+	 */
 	public static RSAPrivateKey convertByteArrayIntoPrivateKey(byte[] key) {
 		RSAPrivateKey privateKey = null;
 		try {
@@ -230,6 +285,11 @@ public class MyKeyGenerator {
 		return privateKey;
 	}
 
+	/**
+	 * Function which generate an RSAPublicKey from a byte array. This byte array has been generated using key.getEncoded()
+	 * @param key The key as a byte array
+	 * @return The RSAPublicKey 
+	 */
 	public static RSAPublicKey convertByteArrayIntoPublicKey(byte[] key) {
 		RSAPublicKey publicKey = null;
 		try {

@@ -19,6 +19,10 @@ import cryptographyBasics.Hash;
 import cryptographyBasics.MyKeyGenerator;
 import server.ClientToServerMode;
 
+/**
+ * @author yoanmartin
+ * Object which instantiate the client side of the connection with a server
+ */
 public class ServerClient {
 	private final int port = 2010;
 	public static Socket socket = null;
@@ -35,16 +39,32 @@ public class ServerClient {
 	
 	private static ExecutorService ex = Executors.newFixedThreadPool(200);
 
-	public ServerClient(ProtocolMode protocol, String username, String password, PrivateKey bsk, PublicKey svk) {
-		ServerClient.protocol = protocol;
+	/**
+	 * Constructor used when the Server Optimal protocol is used
+	 * @param username The username of the user
+	 * @param password The password of the user
+	 * @param bsk The bsk of the user
+	 * @param svk The svk of the user
+	 */
+	public ServerClient(String username, String password, PrivateKey bsk, PublicKey svk) {
+		ServerClient.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		ServerClient.username = username;
 		this.password = Hash.generateSHA256Hash(password.getBytes());
 		this.svk = svk;
 		this.bsk = bsk;
 	}
 	
-	public ServerClient(ProtocolMode protocol, String username, String password, PrivateKey bsk, PublicKey bvk, PublicKey svk, BigInteger r) {
-		ServerClient.protocol = protocol;
+	/**
+	 * Constructor used when the Storage Optimal protocol is used
+	 * @param username The username of the user
+	 * @param password The password of the user
+	 * @param bsk The bsk of the user
+	 * @param bvk The bvk of the user
+	 * @param svk The svk of the user
+	 * @param r The blind factor used in blind signature
+	 */
+	public ServerClient(String username, String password, PrivateKey bsk, PublicKey bvk, PublicKey svk, BigInteger r) {
+		ServerClient.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
 		ServerClient.username = username;
 		this.password = Hash.generateSHA256Hash(password.getBytes());
 		this.svk = svk;
@@ -53,6 +73,9 @@ public class ServerClient {
 		this.r = r;
 	}
 
+	/**
+	 * Function which registers to the server
+	 */
 	public void registerToServer() {
 		switch(protocol) {
 		case SERVER_OPTIMAL:
@@ -94,6 +117,10 @@ public class ServerClient {
 		}
 	}
 	
+	/**
+	 * Function which asks the server a challenge
+	 * @return The challenge in the case of Server Optimal protocol and the id and the challenge in the case of Storage Optimal protocol
+	 */
 	public BigInteger[] askForChallengeToServer() {
 		BigInteger[] finalChallenge = null;
 		
@@ -161,6 +188,10 @@ public class ServerClient {
 		return finalChallenge;
 	}
 
+	/**
+	 * Function which sends the calculated response to the challenge received
+	 * @param response The calculated response
+	 */
 	public void executeChallengeToServer(BigInteger response) {
 		try {
 			InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));

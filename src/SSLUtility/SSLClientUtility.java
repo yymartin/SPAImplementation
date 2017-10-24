@@ -17,6 +17,10 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 //https://github.com/gpotter2/SSLKeystoreFactories
+/**
+ * @author yoanmartin
+ * Utility class which creates an SSL connection with a server
+ */
 public class SSLClientUtility {	
 	public static SSLSocket getSocketWithCert(InetAddress ip, int port, InputStream pathToCert, String passwordFromCert) {
 		X509TrustManager[] trustManager;

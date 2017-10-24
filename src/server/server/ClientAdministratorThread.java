@@ -17,10 +17,19 @@ import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
 import server.ClientToServerMode;
 
+/**
+ * @author yoanmartin
+ * Instantiation of a thread which administrates client connection to a server and run the thread corresponding to the client state
+ */
 public class ClientAdministratorThread extends Thread implements Runnable{
 	private DataInputStream in;
 	private DataOutputStream out;
 
+	/**
+	 * General constructor of the thread
+	 * @param in The DataInputStream received by the server
+	 * @param out The DataOutputStream received by the server
+	 */
 	public ClientAdministratorThread(DataInputStream in, DataOutputStream out){
 		this.in = in;
 		this.out = out;
@@ -87,7 +96,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				BigInteger id = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
 				BigInteger challenge = new BigInteger(100, new Random());
 				actualClient.setChallenge(challenge);
-				Server.ex.execute(new ChallengeSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, id, challenge));
+				Server.ex.execute(new ChallengeSenderThread(out, id, challenge));
 				break;
 			case AUTH :
 				username = new String(getData());

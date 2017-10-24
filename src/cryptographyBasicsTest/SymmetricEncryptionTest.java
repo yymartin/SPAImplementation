@@ -21,23 +21,20 @@ public class SymmetricEncryptionTest {
 	@Test
 	public void testEncryptionAndDecryption() {
 		byte[] ssk = MyKeyGenerator.generateAsymmetricKey().getPrivate().getEncoded();
-		System.out.println(ssk);
-		System.out.println(ssk);
-		System.out.println(ssk);
-		System.out.println(ssk);
-		System.out.println(ssk);
+		
+		BigInteger message = new BigInteger(1024, new SecureRandom());
 
-		SecretKey keyAES = MyKeyGenerator.generateSymmetricKey(new BigInteger(1024, new SecureRandom()).toByteArray());
-//		byte[] keyOneTimePadding = MyKeyGenerator.getOneTimePaddingKey(message.toByteArray().length);
+		SecretKey keyAES = MyKeyGenerator.generateSymmetricKey();
+		byte[] keyOneTimePadding = MyKeyGenerator.getOneTimePaddingKey(message.toByteArray().length);
 		
 		byte[] cipherText = SymmetricEncryption.encryptAES(ssk, keyAES);
 		byte[] clearText = SymmetricEncryption.decryptAES(cipherText, keyAES);
 		assertEquals(ssk, clearText);
 		
-//		cipherText = SymmetricEncryption.encryptOneTimePadding(message, keyOneTimePadding);
-//		clearText = SymmetricEncryption.decryptOneTimePadding(cipherText, keyOneTimePadding);
-//		
-//		assertEquals(message, clearText);
+		cipherText = SymmetricEncryption.encryptOneTimePadding(message, keyOneTimePadding);
+		clearText = SymmetricEncryption.decryptOneTimePadding(cipherText, keyOneTimePadding).toByteArray();
+		
+		assertEquals(message, new BigInteger(clearText));
 	}
 	
 	@Test
@@ -45,7 +42,7 @@ public class SymmetricEncryptionTest {
 		String address = "/Users/yoanmartin/Desktop";
 		
 		BigInteger message = new BigInteger(512, new SecureRandom());
-		MyKeyGenerator.generateSymmetricKeyToFile(address, "Test".getBytes());
+		MyKeyGenerator.generateSymmetricKeyToFile(address);
 		
 		SecretKey key = MyKeyGenerator.getSymmetricKeyFromFile(address);
 		byte[] cipherText = SymmetricEncryption.encryptAES(message.toByteArray(), key);
@@ -58,7 +55,7 @@ public class SymmetricEncryptionTest {
 	@Test
 	public void testSignatureVerification() {
 		BigInteger message = new BigInteger(1024, new SecureRandom());
-		SecretKey key = MyKeyGenerator.generateSymmetricKey("Test".getBytes());
+		SecretKey key = MyKeyGenerator.generateSymmetricKey();
 		byte[] signature = SymmetricEncryption.sign(key, message);
 		
 		assertTrue(SymmetricEncryption.signatureVerification(key, message, signature));

@@ -7,10 +7,19 @@ import java.util.concurrent.Callable;
 
 import SSLUtility.ProtocolMode;
 
+/**
+ * @author yoanmartin
+ * Instantiation of a thread which receives information from a server
+ */
 public class ClientReceiverThread implements Callable<BigInteger[]> {
 	private DataInputStream in;
 	private ProtocolMode protocol;
 
+	/**
+	 * General constructor of the thread
+	 * @param in The DataInputStream given by the client
+	 * @param protocol The protocol used
+	 */
 	public ClientReceiverThread(DataInputStream in, ProtocolMode protocol) {
 		this.in = in;
 		this.protocol = protocol;

@@ -15,6 +15,10 @@ import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
 import cryptographyBasics.SymmetricEncryption;
 
+/**
+ * @author yoanmartin
+ * Instantiation of a thread which receives information from a storage
+ */
 public class ClientReceiverThread implements Callable<PrivateKey> {
 	private DataInputStream in;
 	private ProtocolMode protocol;
@@ -22,16 +26,30 @@ public class ClientReceiverThread implements Callable<PrivateKey> {
 	private PublicKey bvk;
 	private BigInteger password;
 
-	public ClientReceiverThread(DataInputStream in, ProtocolMode protocol, BigInteger r, PublicKey bvk) {
+	
+	/**
+	 * Constructor used when the Server Optimal protocol is used
+	 * @param in The DataInputStream received by the client
+	 * @param r The blind factor received by the client
+	 * @param bvk The bvk received by the client
+	 */
+	public ClientReceiverThread(DataInputStream in, BigInteger r, PublicKey bvk) {
 		this.in = in;
-		this.protocol = protocol;
+		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		this.r = r;
 		this.bvk = bvk;
 	}
 	
-	public ClientReceiverThread(DataInputStream in, ProtocolMode protocol, BigInteger r, PublicKey bvk, BigInteger password) {
+	/**
+	 * Constructor used when the Storage Optimal protocol is used
+	 * @param in The DataInputStream received by the client
+	 * @param r The blind factor received by the client
+	 * @param bvk The bvk received by the client
+	 * @param password The password received by the client
+	 */
+	public ClientReceiverThread(DataInputStream in, BigInteger r, PublicKey bvk, BigInteger password) {
 		this.in = in;
-		this.protocol = protocol;
+		this.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
 		this.r = r;
 		this.bvk = bvk;
 		this.password = password;

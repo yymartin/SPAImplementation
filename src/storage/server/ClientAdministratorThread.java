@@ -13,6 +13,10 @@ import databaseConnection.DatabaseConnector;
 import databaseConnection.DatabaseMode;
 import storage.ClientToStorageMode;
 
+/**
+ * @author yoanmartin
+ * Instantiation of a thread which administrates client connection to a storage and run the thread corresponding to the client state
+ */
 public class ClientAdministratorThread extends Thread implements Runnable{
 	private DataInputStream in;
 	private DataOutputStream out;

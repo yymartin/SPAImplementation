@@ -10,6 +10,10 @@ import java.security.interfaces.RSAPublicKey;
 import SSLUtility.ProtocolMode;
 import server.ClientToServerMode;
 
+/**
+ * @author yoanmartin
+ * Instantiation of a thread which sends information to a server
+ */
 public class ClientSenderThread extends Thread implements Runnable {
 	private DataOutputStream out;
 	ProtocolMode protocol;
@@ -17,6 +21,14 @@ public class ClientSenderThread extends Thread implements Runnable {
 	byte[] username, svk, bsk, password, challenge;
 
 
+	/**
+	 * Constructor used when the client registers to the server using the Server Optimal protocol
+	 * @param out The DataOutputStream given by the client 
+	 * @param protocol The protocol used 
+	 * @param mode The actual client state from the server point of view
+	 * @param username
+	 * @param svk
+	 */
 	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk) {
 		this.out = out;
 		this.protocol = protocol;
@@ -25,6 +37,13 @@ public class ClientSenderThread extends Thread implements Runnable {
 		this.svk = svk.getEncoded();
 	}
 
+	/**
+	 * Constuctor used when the client asks for a challenge using the Server Optimal protocol
+	 * @param out The DataOutputStream given by the server 
+	 * @param protocol The protocol used 
+	 * @param mode The actual client state from the server point of view
+	 * @param username The username of the client
+	 */
 	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username) {
 		this.out = out;
 		this.protocol = protocol;
@@ -32,6 +51,13 @@ public class ClientSenderThread extends Thread implements Runnable {
 		this.username = username.getBytes();
 	}
 
+	/**
+	 * Constructor used when the client sends the response to a challenge using the Server Optimal or Storage Optimal protocol
+	 * @param out The DataOutputStream given by the server 
+	 * @param mode The actual client state from the server point of view
+	 * @param username The username of the client
+	 * @param challenge The challenge received by the client
+	 */
 	public ClientSenderThread(DataOutputStream out, ClientToServerMode mode, String username, BigInteger challenge) {
 		this.out = out;
 		this.mode = mode;
@@ -40,6 +66,15 @@ public class ClientSenderThread extends Thread implements Runnable {
 	}
 
 
+	/**
+	 * Constructor used when the client registers to the server using the Storage Optimal protocol
+	 * @param out The DataOutputStream given by the server 
+	 * @param protocol The protocol used 
+	 * @param mode The actual client state from the server point of view
+	 * @param username The username of the client
+	 * @param svk The svk of the client
+	 * @param bsk The bsk of the client
+	 */
 	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk, PrivateKey bsk) {
 		this.out = out;
 		this.protocol = protocol;
@@ -49,6 +84,14 @@ public class ClientSenderThread extends Thread implements Runnable {
 		this.bsk = bsk.getEncoded();
 	}
 
+	/**
+	 * Constructor used when the client asks for a challenge using the Storage Optimal protocol
+	 * @param out The DataOutputStream given by the server 
+	 * @param protocol The protocol used 
+	 * @param mode The actual client state from the server point of view
+	 * @param username The username of the client
+	 * @param password The hashed password of the client
+	 */
 	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username, BigInteger password) {
 		this.out = out;
 		this.protocol = protocol;

@@ -11,6 +11,10 @@ import javax.net.ssl.SSLServerSocket;
 
 import SSLUtility.SSLServerUtility;
 
+/**
+ * @author yoanmartin
+ * Main method to run the server side of the storage connection
+ */
 public class Storage {
 	public static SSLServerSocket ss = null;
 	public static Socket socket;
