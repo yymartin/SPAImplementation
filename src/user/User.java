@@ -55,8 +55,8 @@ public class User {
 
 //		//STORAGE OPTIMAL
 //
-//		serverConnector = new ServerClient(username, password, bsk, svk, r);
-//		storageConnector = new StorageClient(password, bsk, ssk, r);
+//		serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
+//		storageConnector = new StorageClient(password, bsk, svk, ssk, r);
 //
 //		//		registration phase
 //
@@ -68,7 +68,6 @@ public class User {
 //		BigInteger[] result = serverConnector.askForChallengeToServer();
 //		BigInteger id = result[0];
 //		challenge = result[1];
-//
 //		keyFromStorage = storageConnector.retrieveValuesFromStorage(id);
 //		response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
 //		serverConnector.executeChallengeToServer(response);

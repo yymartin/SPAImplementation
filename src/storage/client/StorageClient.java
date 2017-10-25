@@ -68,7 +68,7 @@ public class StorageClient {
 	 * @param ssk The ssk of the user
 	 * @param r The blind factor of the user
 	 */
-	public StorageClient(String password, PrivateKey bsk, PrivateKey ssk, PublicKey bvk, BigInteger r) {
+	public StorageClient(String password, PrivateKey bsk, PublicKey bvk, PrivateKey ssk, BigInteger r) {
 		this.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
 		this.password = Hash.generateSHA256Hash(password.getBytes());
 		this.r = r;

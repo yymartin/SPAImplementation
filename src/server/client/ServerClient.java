@@ -58,12 +58,13 @@ public class ServerClient {
 	 * @param svk The svk of the user
 	 * @param r The blind factor used in blind signature
 	 */
-	public ServerClient(String username, String password, PrivateKey bsk, PublicKey svk, BigInteger r) {
+	public ServerClient(String username, String password, PrivateKey bsk, PublicKey bvk, PublicKey svk, BigInteger r) {
 		ServerClient.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
 		ServerClient.username = username;
 		this.password = Hash.generateSHA256Hash(password.getBytes());
 		this.svk = svk;
 		this.bsk = bsk;
+		this.bvk = bvk;
 		this.r = r;
 	}
 
@@ -165,7 +166,7 @@ public class ServerClient {
 				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
 				ExecutorService ex = Executors.newSingleThreadExecutor();
 				ex.execute(new ClientSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.CHALLENGE, username, passwordBlinded));
-				ex.awaitTermination(1, TimeUnit.MINUTES);
+				ex.awaitTermination(1, TimeUnit.SECONDS);
 				Future<BigInteger[]> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.STORAGE_OPTIMAL));
 				finalChallenge = result.get();
 				finalChallenge[0] = AsymmetricEncryption.unblind(finalChallenge[0], ((RSAPublicKey) bvk).getModulus(), r);
