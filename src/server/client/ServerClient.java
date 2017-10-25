@@ -37,7 +37,7 @@ public class ServerClient {
 	private PrivateKey bsk;
 	private BigInteger r;
 	
-	private static ExecutorService ex = Executors.newFixedThreadPool(200);
+	private ExecutorService serverPool = Executors.newFixedThreadPool(20);
 	
 	/**
 	 * Constructor used when the Server Optimal protocol is used
@@ -80,13 +80,8 @@ public class ServerClient {
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
-				ex.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.REGISTER, username, svk));
-				try {
-					ex.awaitTermination(1, TimeUnit.MINUTES);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				serverPool.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.REGISTER, username, svk));
+				serverPool.shutdown();
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
@@ -101,13 +96,7 @@ public class ServerClient {
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
-				ex.execute(new ClientSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.REGISTER, username, svk, bsk));
-				try {
-					ex.awaitTermination(1, TimeUnit.MINUTES);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				serverPool.execute(new ClientSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.REGISTER, username, svk, bsk));
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
@@ -126,6 +115,7 @@ public class ServerClient {
 	 * @return The challenge in the case of Server Optimal protocol and the id and the challenge in the case of Storage Optimal protocol
 	 */
 	public BigInteger[] askForChallengeToServer() {
+		System.out.println("La demande de challenge est lancée!");
 		BigInteger[] finalChallenge = null;
 		
 		switch(protocol) {
@@ -137,9 +127,8 @@ public class ServerClient {
 				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
-				ExecutorService ex = Executors.newSingleThreadExecutor();
-				ex.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.CHALLENGE, username));
-				Future<BigInteger[]> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.SERVER_OPTIMAL));
+				serverPool.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.CHALLENGE, username));
+				Future<BigInteger[]> result = serverPool.submit(new ClientReceiverThread(in, ProtocolMode.SERVER_OPTIMAL));
 				finalChallenge = result.get();
 			} catch (UnknownHostException e) {
 
@@ -201,14 +190,7 @@ public class ServerClient {
 			socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 			System.out.println("Connection established"); 
 			out = new DataOutputStream(socket.getOutputStream());
-			ExecutorService ex = Executors.newSingleThreadExecutor();
-			ex.execute(new ClientSenderThread(out, ClientToServerMode.AUTH, username, response));
-			try {
-				ex.awaitTermination(1, TimeUnit.MINUTES);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			serverPool.execute(new ClientSenderThread(out, ClientToServerMode.AUTH, username, response));
 		} catch (UnknownHostException e) {
 
 		} catch (IOException e) {

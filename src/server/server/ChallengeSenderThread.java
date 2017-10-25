@@ -68,7 +68,10 @@ public class ChallengeSenderThread implements Runnable{
 		case PRIVACY_OPTIMAL:
 			
 			break;
-		}		
+		}	
+		
+		Thread.currentThread().interrupt();
+		return;
 	}
 	
 }

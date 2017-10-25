@@ -36,8 +36,8 @@ public class User {
 				
 		//SERVER OPTIMAL
 
-//		serverConnector = new ServerClient(username, svk);
-//		storageConnector = new StorageClient(username, password, website, bsk, bvk, ssk, r);
+		serverConnector = new ServerClient(username, svk);
+		storageConnector = new StorageClient(username, password, website, bsk, bvk, ssk, r);
 
 
 //		//		registration phase
@@ -45,11 +45,10 @@ public class User {
 //		storageConnector.storeValuesToStorage();
 
 		//		authentication phase
-//		keyFromStorage = storageConnector.retrieveValuesFromStorage(null);
-//		challenge = serverConnector.askForChallengeToServer()[0];
-//		System.out.println(challenge);
-//		response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-//		serverConnector.executeChallengeToServer(response);
+		keyFromStorage = storageConnector.retrieveValuesFromStorage(null);
+		challenge = serverConnector.askForChallengeToServer()[0];
+		response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
+		serverConnector.executeChallengeToServer(response);
 		//should print "Connected!"
 
 

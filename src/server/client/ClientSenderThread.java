@@ -59,6 +59,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 	 */
 	public ClientSenderThread(DataOutputStream out, ClientToServerMode mode, String username, BigInteger challenge) {
 		this.out = out;
+		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		this.mode = mode;
 		this.username = username.getBytes();
 		this.challenge = challenge.toByteArray();
@@ -137,6 +138,8 @@ public class ClientSenderThread extends Thread implements Runnable {
 				break;
 			case AUTH:
 				try {
+					out.writeInt(protocolAsByte.length);
+					out.write(protocolAsByte);
 					out.writeInt(modeAsByte.length);
 					out.write(modeAsByte);
 					out.writeInt(username.length);
@@ -187,6 +190,8 @@ public class ClientSenderThread extends Thread implements Runnable {
 				break;
 			case AUTH:
 				try {
+					out.writeInt(protocolAsByte.length);
+					out.write(protocolAsByte);
 					out.writeInt(modeAsByte.length);
 					out.write(modeAsByte);
 					out.writeInt(username.length);
@@ -205,5 +210,8 @@ public class ClientSenderThread extends Thread implements Runnable {
 			
 			break;
 		}
+		
+		Thread.currentThread().interrupt();
+		return;
 	}
 }

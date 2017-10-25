@@ -98,10 +98,11 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				BigInteger id = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
 				BigInteger challenge = new BigInteger(100, new Random());
 				actualClient.setChallenge(challenge);
-				Server.ex.execute(new ChallengeSenderThread(out, id, challenge));
+				Server.clientPool.execute(new ChallengeSenderThread(out, id, challenge));
 				break;
 			case AUTH :
 				username = new String(getData());
+				System.out.println(username);
 				BigInteger challengeSigned = new BigInteger(getData());
 				client = Server.clients.get(username);
 				if(client.isReadyToAuth()) {
@@ -123,6 +124,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 		}
 
 		Thread.currentThread().interrupt();
+		return;
 	}
 
 	private byte[] getData() {
