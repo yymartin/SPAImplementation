@@ -11,9 +11,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 import SSLUtility.ProtocolMode;
 import SSLUtility.SSLClientUtility;
@@ -21,7 +21,6 @@ import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.Hash;
 import cryptographyBasics.MyKeyGenerator;
 import cryptographyBasics.SymmetricEncryption;
-import storage.ClientToStorageMode;
 
 /**
  * @author yoanmartin
@@ -33,6 +32,8 @@ public class StorageClient {
 	public static Thread t1, t2;
 	private static DataInputStream in;
 	private static DataOutputStream out;
+	
+	private static ExecutorService ex = Executors.newSingleThreadExecutor();
 
 	private ProtocolMode protocol;
 	private BigInteger id;
@@ -46,37 +47,31 @@ public class StorageClient {
 	 * @param username The username of the user
 	 * @param password The password of the user
 	 * @param website The website which the user wants to connect to
-	 * @param bvk The bvk of the user
 	 * @param bsk The bsk of the user
 	 * @param ssk The ssk of the user
 	 * @param r The blind factor of the user
 	 */
-	public StorageClient(String username, String password, String website, PublicKey bvk, PrivateKey bsk, PrivateKey ssk, BigInteger r) {
+	public StorageClient(String username, String password, String website, PrivateKey bsk, PublicKey bvk, PrivateKey ssk, BigInteger r) {
 		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		this.id = Hash.generateSHA256Hash((username+website).getBytes());
 		this.password = Hash.generateSHA256Hash(password.getBytes());
 		this.r = r;
-		this.bvk = bvk;
 		this.bsk = bsk;
+		this.bvk = bvk;
 		this.ssk = ssk;
 	}
 
 	/**
 	 * Constructor used when the Storage Optimal protocol is used
-	 * @param id The id of the user
 	 * @param password The password of the user
-	 * @param website The website which the user wants to connect to
-	 * @param bvk The bvk of the user
 	 * @param bsk The bsk of the user
 	 * @param ssk The ssk of the user
 	 * @param r The blind factor of the user
 	 */
-	public StorageClient(ProtocolMode protocol, BigInteger id, String password, String website, PublicKey bvk, PrivateKey bsk, PrivateKey ssk, BigInteger r) {
-		this.protocol = protocol;
-		this.id = id;
+	public StorageClient(String password, PrivateKey bsk, PrivateKey ssk, PublicKey bvk, BigInteger r) {
+		this.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
 		this.password = Hash.generateSHA256Hash(password.getBytes());
 		this.r = r;
-		this.bvk = bvk;
 		this.bsk = bsk;
 		this.ssk = ssk;
 	}
@@ -99,8 +94,13 @@ public class StorageClient {
 				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
 
-				ExecutorService ex = Executors.newFixedThreadPool(2);
 				ex.execute(new ClientSenderThread(out, id, bsk, ctext));
+				try {
+					ex.awaitTermination(1, TimeUnit.SECONDS);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
@@ -118,8 +118,13 @@ public class StorageClient {
 				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
 
-				ExecutorService ex = Executors.newFixedThreadPool(2);
 				ex.execute(new ClientSenderThread(out, id, ctext));
+				try {
+					ex.awaitTermination(1, TimeUnit.MINUTES);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
@@ -136,7 +141,7 @@ public class StorageClient {
 	 * Function which retrieves the values from the storage and uses them to retrieve the ssk
 	 * @return The ssk of the user
 	 */
-	public PrivateKey retrieveValuesFromStorage() {
+	public PrivateKey retrieveValuesFromStorage(BigInteger idFromStorage) {
 		PrivateKey resultKey = null;
 
 		switch(protocol) {
@@ -148,13 +153,22 @@ public class StorageClient {
 				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
-				ExecutorService ex = Executors.newFixedThreadPool(2);
 				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
 				ex.execute(new ClientSenderThread(out, id, passwordBlinded));
+				try {
+					ex.awaitTermination(1, TimeUnit.SECONDS);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Future<PrivateKey> result = ex.submit(new ClientReceiverThread(in, r, bvk));
+				try {
+					ex.awaitTermination(1, TimeUnit.SECONDS);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				resultKey = result.get();
-
-				ex.shutdown();
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
@@ -177,13 +191,22 @@ public class StorageClient {
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 
-				ExecutorService ex = Executors.newFixedThreadPool(2);
-				ex.execute(new ClientSenderThread(out, id));
+				ex.execute(new ClientSenderThread(out, idFromStorage));
+				try {
+					ex.awaitTermination(1, TimeUnit.MINUTES);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				Future<PrivateKey> result = ex.submit(new ClientReceiverThread(in, r, bvk, password));
+				try {
+					ex.awaitTermination(1, TimeUnit.MINUTES);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				resultKey = result.get();
-
-				ex.shutdown();
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {

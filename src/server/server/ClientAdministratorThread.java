@@ -6,10 +6,11 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import SSLUtility.ProtocolMode;
@@ -56,10 +57,11 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				break;
 			case CHALLENGE :
 				username = new String(getData());
-				BigInteger challenge = new BigInteger(100, new Random());
+				BigInteger challenge = new BigInteger(100, new SecureRandom());
 				client = Server.clients.get(username);
 				client.setChallenge(challenge);
-				Server.ex.execute(new ChallengeSenderThread(out, ProtocolMode.SERVER_OPTIMAL, challenge));
+				Executor ex = Executors.newFixedThreadPool(20);
+				ex.execute(new ChallengeSenderThread(out, ProtocolMode.SERVER_OPTIMAL, challenge));
 				break;
 			case AUTH :
 				username = new String(getData());

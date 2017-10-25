@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Random;
 
 /**
  * @author yoanmartin
@@ -103,10 +102,8 @@ public class AsymmetricEncryption {
 	 */
 	public static BigInteger generateRForBlindSignature(BigInteger mod) {
 		BigInteger r;
-		Random rand = new Random();
-		rand.setSeed(100L);
 		do {
-			r = new BigInteger(1024, rand);
+			r = new BigInteger(1024, new SecureRandom());
 		} while(r.gcd(mod) == BigInteger.ONE);
 		
 		return r;

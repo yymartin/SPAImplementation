@@ -20,7 +20,8 @@ public class Storage {
 	public static Socket socket;
 	public static DataInputStream in;
 	public static DataOutputStream out;
-
+	
+	private static Executor ex = Executors.newSingleThreadExecutor();
 
 	public static void main(String[] args) {
 		try {
@@ -36,7 +37,6 @@ public class Storage {
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				
-				Executor ex = Executors.newScheduledThreadPool(20);
 				ex.execute(new ClientAdministratorThread(in, out));
 			}
 

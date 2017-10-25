@@ -52,7 +52,6 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				db.searchElementFromStorage(id);
 				ctext = db.getCTextFromStorage();
 				bsk = db.getBSKFromStorage();
-
 				byte[] sig = generateBlindSignature(bsk, hashPassword);
 				try {
 					out.writeInt(sig.length);

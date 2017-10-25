@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,7 +24,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -99,7 +97,7 @@ public class MyKeyGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), Hash.generateSalt(), 10, 128);
+		KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "predefinedsalt".getBytes(), 10, 128);
 		SecretKey s = null;
 		try {
 			s = f.generateSecret(spec);
