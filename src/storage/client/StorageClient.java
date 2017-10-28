@@ -20,6 +20,7 @@ import SSLUtility.SSLClientUtility;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.Hash;
 import cryptographyBasics.MyKeyGenerator;
+import cryptographyBasics.OTReceiver;
 import cryptographyBasics.SymmetricEncryption;
 
 /**
@@ -68,8 +69,8 @@ public class StorageClient {
 	 * @param ssk The ssk of the user
 	 * @param r The blind factor of the user
 	 */
-	public StorageClient(String password, PrivateKey bsk, PublicKey bvk, PrivateKey ssk, BigInteger r) {
-		this.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
+	public StorageClient(ProtocolMode protocol, String password, PrivateKey bsk, PublicKey bvk, PrivateKey ssk, BigInteger r) {
+		this.protocol = protocol;
 		this.password = Hash.generateSHA256Hash(password.getBytes());
 		this.r = r;
 		this.bsk = bsk;
@@ -79,13 +80,16 @@ public class StorageClient {
 	/**
 	 * Function which stores the necessary values to the storage
 	 */
-	public void storeValuesToStorage() {
+	public PublicKey storeValuesToStorage() {
 		byte[] ctext;
+		PublicKey storageKey = null;
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			BigInteger sig = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
-			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
-			ctext = SymmetricEncryption.encryptAES(ssk.getEncoded(), aesKey);
+//			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
+			byte[] oneTimePadkey = MyKeyGenerator.getOneTimePaddingKeyFromPassword(sig);
+//			ctext = SymmetricEncryption.encryptAES(ssk.getEncoded(), aesKey);
+			ctext = SymmetricEncryption.encryptOneTimePadding(ssk.getEncoded(), oneTimePadkey);
 
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
@@ -95,12 +99,6 @@ public class StorageClient {
 				out = new DataOutputStream(socket.getOutputStream());
 
 				ex.execute(new ClientSenderThread(out, id, bsk, ctext));
-				try {
-					ex.awaitTermination(1, TimeUnit.SECONDS);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
@@ -109,7 +107,7 @@ public class StorageClient {
 			break;
 		case STORAGE_OPTIMAL:
 			id = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
-			ctext = generateCText(password, ssk);
+			ctext = generateCTextWithOneTimePadding(password, ssk);
 
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
@@ -118,13 +116,7 @@ public class StorageClient {
 				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
 
-				ex.execute(new ClientSenderThread(out, id, ctext));
-				try {
-					ex.awaitTermination(1, TimeUnit.MINUTES);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				ex.execute(new ClientSenderThread(out, protocol, id, ctext));
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
@@ -132,16 +124,41 @@ public class StorageClient {
 			}
 			break;
 		case PRIVACY_OPTIMAL:
+			id = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
+			ctext = generateCTextWithOneTimePadding(password, ssk);
+			System.out.println(ctext.length);
 
+			try {
+				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
+				System.out.println("Ask for connection");
+				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+				System.out.println("Connection established"); 
+				in = new DataInputStream(socket.getInputStream());
+				out = new DataOutputStream(socket.getOutputStream());
+				ex.execute(new ClientSenderThread(out, protocol, id, ctext));
+				Future<PublicKey> result = ex.submit(new ClientStorerThread(in));
+				storageKey = result.get();
+			} catch (UnknownHostException e) {
+
+			} catch (IOException e) {
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		}	
+		return storageKey;
 	}
 
 	/**
 	 * Function which retrieves the values from the storage and uses them to retrieve the ssk
 	 * @return The ssk of the user
 	 */
-	public PrivateKey retrieveValuesFromStorage(BigInteger idFromStorage) {
+	public PrivateKey retrieveValuesFromStorage(BigInteger idFromStorage, PublicKey obliviousTransferKey) {
 		PrivateKey resultKey = null;
 
 		switch(protocol) {
@@ -155,7 +172,7 @@ public class StorageClient {
 				out = new DataOutputStream(socket.getOutputStream());
 				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
 				ex.execute(new ClientSenderThread(out, id, passwordBlinded));
-				Future<PrivateKey> result = ex.submit(new ClientReceiverThread(in, r, bvk));
+				Future<PrivateKey> result = ex.submit(new ClientRetrieverThread(in, r, bvk));
 				resultKey = result.get();
 			} catch (UnknownHostException e) {
 
@@ -178,8 +195,8 @@ public class StorageClient {
 				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
-				ex.execute(new ClientSenderThread(out, idFromStorage));
-				Future<PrivateKey> result = ex.submit(new ClientReceiverThread(in, r, bvk, password));
+				ex.execute(new ClientSenderThread(out, protocol, idFromStorage));
+				Future<PrivateKey> result = ex.submit(new ClientRetrieverThread(in, r, bvk, password));
 				resultKey = result.get();
 			} catch (UnknownHostException e) {
 
@@ -195,14 +212,41 @@ public class StorageClient {
 			break;
 
 		case PRIVACY_OPTIMAL:
+			try {
+				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
+				System.out.println("Ask for connection");
+				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+				System.out.println("Connection established"); 
+				in = new DataInputStream(socket.getInputStream());
+				out = new DataOutputStream(socket.getOutputStream());
+				OTReceiver obliviousReceiver = new OTReceiver(idFromStorage, (RSAPublicKey) obliviousTransferKey);
+				BigInteger y = obliviousReceiver.generateY(r);
+				ex.execute(new ClientSenderThread(out, protocol, y));
+				Future<PrivateKey> result = ex.submit(new ClientRetrieverThread(in, obliviousReceiver, r, password));
+				resultKey = result.get();		
+			} catch (UnknownHostException e) {
 
+			} catch (IOException e) {
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 			break;
 		}
 
 		return resultKey;
 	}
 
-	private byte[] generateCText(BigInteger password, PrivateKey ssk) {
+	private byte[] generateCTextWithOneTimePadding(BigInteger password, PrivateKey ssk) {
+		byte[] sskAsByte = ssk.getEncoded();
+		byte[] oneTimePadKey = MyKeyGenerator.getOneTimePaddingKeyFromPassword(password);
+		return SymmetricEncryption.encryptOneTimePadding(sskAsByte, oneTimePadKey);
+	}
+	private byte[] generateCTextWithAES(BigInteger password, PrivateKey ssk) {
 		byte[] sskAsByte = ssk.getEncoded();
 		SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(password);
 		return SymmetricEncryption.encryptAES(sskAsByte, aesKey);

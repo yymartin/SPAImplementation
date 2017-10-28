@@ -126,8 +126,8 @@ public class DatabaseConnector {
 	 * @return A map of the elements
 	 * @throws IllegalAccessException Throw Exception if this function is used in SERVER_OPTIMAL mode
 	 */
-	public Map<byte[], byte[]> getRandomElementFromStorage() throws IllegalAccessException {
-		Map<byte[], byte[]> randomValues = new HashMap<>();
+	public Map<BigInteger, BigInteger> getRandomElementFromStorage() throws IllegalAccessException {
+		Map<BigInteger, BigInteger> randomValues = new HashMap<>();
 		PreparedStatement stmt = null;
 		try {
 			switch(mode) {
@@ -140,7 +140,7 @@ public class DatabaseConnector {
 					do {
 						byte[] key = result.getBytes(1);
 						byte[] value = result.getBytes(2);
-						randomValues.put(key, value);
+						randomValues.put(new BigInteger(key), new BigInteger(value));
 					} while (result.next());
 				}
 				break;

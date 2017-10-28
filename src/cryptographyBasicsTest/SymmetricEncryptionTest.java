@@ -28,8 +28,8 @@ public class SymmetricEncryptionTest {
 		byte[] clearText = SymmetricEncryption.decryptAES(cipherText, keyAES);
 		assertEquals(ssk, clearText);
 		
-		cipherText = SymmetricEncryption.encryptOneTimePadding(message, keyOneTimePadding);
-		clearText = SymmetricEncryption.decryptOneTimePadding(cipherText, keyOneTimePadding).toByteArray();
+		cipherText = SymmetricEncryption.encryptOneTimePadding(message.toByteArray(), keyOneTimePadding);
+		clearText = SymmetricEncryption.decryptOneTimePadding(cipherText, keyOneTimePadding);
 		
 		assertEquals(message, new BigInteger(clearText));
 	}

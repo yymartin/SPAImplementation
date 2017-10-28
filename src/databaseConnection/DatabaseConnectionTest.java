@@ -31,7 +31,7 @@ public class DatabaseConnectionTest {
 		db.closeConnection();
 
 		db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
-		Map<byte[], byte[]> fromDB = new HashMap<>();
+		Map<BigInteger, BigInteger> fromDB = new HashMap<>();
 		try {
 			fromDB = db.getRandomElementFromStorage();
 		} catch (IllegalAccessException e) {

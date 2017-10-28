@@ -12,7 +12,7 @@ import java.util.Random;
  * Class representing the client who asks for data from an id. See page 8 from the reference document
  */
 public class OTReceiver {
-	private final int l = 996; //Need to to be changed later depending on the size of the key and the id
+	private final int l = 1024; //Need to to be changed later depending on the size of the key and the id
 	private BigInteger wj;
 	private BigInteger N;
 	private RSAPublicKey publicKey;
@@ -59,11 +59,12 @@ public class OTReceiver {
 		for(int i = 0; i < eArray.size(); i++) {
 			byte[] eiLeft = eArray.get(i);
 			byte[] seed = concatenateThreeArrays(wj.toByteArray(), k.toByteArray(), BigInteger.valueOf(i).toByteArray());
-			Random rand = new Random(ByteBuffer.wrap(seed).getLong());
-			byte[] eiRight = new byte[1000];
+			Random rand = new Random(new BigInteger(seed).longValue());
+			byte[] eiRight = new byte[2048];
 			rand.nextBytes(eiRight);
 			AiBi.add(xor(eiLeft, eiRight));
 		}
+		
 		return AiBi;
 	}
 	
@@ -75,7 +76,7 @@ public class OTReceiver {
 	public BigInteger findValue(ArrayList<byte[]> AiBi) {
 		for(byte[] elem : AiBi) {
 			if(detectZeros(elem, l)) {
-				return new BigInteger(elem);
+				return new BigInteger(Arrays.copyOfRange(elem, l, elem.length));
 			}
 		}
 		return BigInteger.valueOf(-1);
@@ -85,7 +86,7 @@ public class OTReceiver {
 		byte[] result = new byte[a.length + b.length + c.length];
 		System.arraycopy(a, 0, result, 0, a.length);
 		System.arraycopy(b, 0, result, a.length, b.length);
-		System.arraycopy(c, 0, result, b.length, c.length);
+		System.arraycopy(c, 0, result, a.length + b.length, c.length);
 		
 		return result;
 	}

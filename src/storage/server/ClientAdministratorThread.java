@@ -4,12 +4,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
+import java.util.ArrayList;
 import java.util.Map;
 
 import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
+import cryptographyBasics.OTSender;
 import databaseConnection.DatabaseConnector;
 import databaseConnection.DatabaseMode;
 import storage.ClientToStorageMode;
@@ -21,10 +26,14 @@ import storage.ClientToStorageMode;
 public class ClientAdministratorThread extends Thread implements Runnable{
 	private DataInputStream in;
 	private DataOutputStream out;
+	private PublicKey storagePublicKey;
+	private PrivateKey storagePrivateKey;
 
-	public ClientAdministratorThread(DataInputStream in, DataOutputStream out){
+	public ClientAdministratorThread(DataInputStream in, DataOutputStream out, PublicKey storagePublicKey, PrivateKey storagePrivateKey){
 		this.in = in;
 		this.out = out;
+		this.storagePublicKey = storagePublicKey;
+		this.storagePrivateKey = storagePrivateKey;
 	}
 
 	public void run() {
@@ -99,17 +108,24 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			case STORE : 
 				id = getData();
 				ctext = getData();
-
+				byte[] publicKeyAsBytes = storagePublicKey.getEncoded();
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
 				db.insertElementIntoStorage(new byte[][] {id, ctext});
 				db.closeConnection();
+				try {
+					out.writeInt(publicKeyAsBytes.length);
+					out.write(publicKeyAsBytes);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 
 			case RETRIEVE :
 				id = getData();
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
 				
-				Map<byte[], byte[]> dbElements = null;
+				Map<BigInteger, BigInteger> dbElements = null;
 				try {
 					dbElements = db.getRandomElementFromStorage();
 				} catch (IllegalAccessException e1) {
@@ -117,14 +133,22 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 					e1.printStackTrace();
 				}
 				
-//				try {
-//					out.writeInt(ctext.length);
-//					out.write(ctext);
-//				} catch (IOException e) {
-					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				break;
+				OTSender obliviousSender = new OTSender(dbElements, (RSAPrivateKey) storagePrivateKey);
+				
+				ArrayList<byte[]> e = obliviousSender.generateE();
+				byte[] kPrime = obliviousSender.generateKprime(new BigInteger(id)).toByteArray();			
+				
+				try {
+					out.writeInt(kPrime.length);
+					out.write(kPrime);
+					for(byte[] elem : e) {
+						out.writeInt(elem.length);
+						out.write(elem);
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				break;
 			}
 			break;
 		}

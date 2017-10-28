@@ -3,6 +3,8 @@ package storage.server;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -10,6 +12,7 @@ import java.util.concurrent.Executors;
 import javax.net.ssl.SSLServerSocket;
 
 import SSLUtility.SSLServerUtility;
+import cryptographyBasics.MyKeyGenerator;
 
 /**
  * @author yoanmartin
@@ -24,6 +27,11 @@ public class Storage {
 	private static Executor ex = Executors.newSingleThreadExecutor();
 
 	public static void main(String[] args) {
+		String address = System.getProperty("user.dir");
+		String title = "storage";
+		MyKeyGenerator.generateAsymmetricKeyToFile(address, title);
+		PublicKey storagePublicKey = MyKeyGenerator.getPublicKeyFromFile(address, title);
+		PrivateKey storagePrivateKey = MyKeyGenerator.getPrivateKeyFromFile(address, title);
 		try {
 			System.out.println("Server created");
 			InputStream key = new FileInputStream(new File("./PRIVATEKEY.jks"));
@@ -37,7 +45,7 @@ public class Storage {
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				
-				ex.execute(new ClientAdministratorThread(in, out));
+				ex.execute(new ClientAdministratorThread(in, out, storagePublicKey, storagePrivateKey));
 			}
 
 		} catch (IOException e) {

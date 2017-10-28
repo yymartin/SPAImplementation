@@ -24,12 +24,11 @@ public class SymmetricEncryption {
 	 * @param key The key as a byte array
 	 * @return The message encrypted as a byte array
 	 */
-	public static byte[] encryptOneTimePadding(BigInteger message, byte[] key) {
-		byte[] textInByte = message.toByteArray();
+	public static byte[] encryptOneTimePadding(byte[] message, byte[] key) {
 		byte[] encoded = new byte[key.length];
 
-		for(int i = 0; i < textInByte.length; i++) {
-			encoded[i] = (byte) (textInByte[i] ^ key[i]);
+		for(int i = 0; i < message.length; i++) {
+			encoded[i] = (byte) (message[i] ^ key[i]);
 		}	
 
 		return encoded;
@@ -41,14 +40,14 @@ public class SymmetricEncryption {
 	 * @param key The key as a byte array
 	 * @return The decrypted message as a BigInteger
 	 */
-	public static BigInteger decryptOneTimePadding(byte[] cipherText, byte[] key) {
+	public static byte[] decryptOneTimePadding(byte[] cipherText, byte[] key) {
 		byte[] decrypted = new byte[cipherText.length];
 
 		for(int i = 0; i < decrypted.length; i++) {
 			decrypted[i] = (byte) (cipherText[i] ^ key[i]);
 		}
 
-		return new BigInteger(decrypted);
+		return decrypted;
 	}
 
 	/**

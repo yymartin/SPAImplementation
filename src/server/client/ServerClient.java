@@ -140,7 +140,7 @@ public class ServerClient {
 			}
 			break;
 			
-		case STORAGE_OPTIMAL:
+		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL :
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 				System.out.println("Ask for connection");
@@ -165,10 +165,6 @@ public class ServerClient {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			break;
-			
-		case PRIVACY_OPTIMAL:
-			
 			break;
 		}
 		return finalChallenge;

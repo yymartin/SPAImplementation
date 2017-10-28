@@ -44,9 +44,10 @@ public class OTSender {
 		ArrayList<byte[]> e = new ArrayList<>();
 		for(int i = 0; i < w.size(); i++) {
 			byte[] seed = concatenateThreeArrays(w.get(i).toByteArray(), k.get(i).toByteArray(), BigInteger.valueOf(i).toByteArray());
-			Random rand = new Random(ByteBuffer.wrap(seed).getLong());
-			byte[] eiLeft = new byte[1000];
+			Random rand = new Random(new BigInteger(seed).longValue());
+			byte[] eiLeft = new byte[2048];
 			rand.nextBytes(eiLeft);
+			
 			int l = 	eiLeft.length - c.get(i).toByteArray().length;
 			byte[] eiRight = concatenateTwoArrays(generateZeros(l), c.get(i).toByteArray());
 			e.add(xor(eiLeft, eiRight));
@@ -67,7 +68,7 @@ public class OTSender {
 		byte[] result = new byte[a.length + b.length + c.length];
 		System.arraycopy(a, 0, result, 0, a.length);
 		System.arraycopy(b, 0, result, a.length, b.length);
-		System.arraycopy(c, 0, result, b.length, c.length);
+		System.arraycopy(c, 0, result, a.length + b.length, c.length);
 		
 		return result;
 	}
