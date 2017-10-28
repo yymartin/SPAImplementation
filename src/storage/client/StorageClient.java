@@ -155,19 +155,7 @@ public class StorageClient {
 				out = new DataOutputStream(socket.getOutputStream());
 				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
 				ex.execute(new ClientSenderThread(out, id, passwordBlinded));
-				try {
-					ex.awaitTermination(1, TimeUnit.SECONDS);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				Future<PrivateKey> result = ex.submit(new ClientReceiverThread(in, r, bvk));
-				try {
-					ex.awaitTermination(1, TimeUnit.SECONDS);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				resultKey = result.get();
 			} catch (UnknownHostException e) {
 
@@ -190,22 +178,8 @@ public class StorageClient {
 				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
-
 				ex.execute(new ClientSenderThread(out, idFromStorage));
-				try {
-					ex.awaitTermination(1, TimeUnit.MINUTES);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 				Future<PrivateKey> result = ex.submit(new ClientReceiverThread(in, r, bvk, password));
-				try {
-					ex.awaitTermination(1, TimeUnit.MINUTES);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				resultKey = result.get();
 			} catch (UnknownHostException e) {
 

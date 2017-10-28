@@ -7,11 +7,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import SSLUtility.ProtocolMode;
 import SSLUtility.SSLClientUtility;
@@ -115,7 +113,6 @@ public class ServerClient {
 	 * @return The challenge in the case of Server Optimal protocol and the id and the challenge in the case of Storage Optimal protocol
 	 */
 	public BigInteger[] askForChallengeToServer() {
-		System.out.println("La demande de challenge est lancée!");
 		BigInteger[] finalChallenge = null;
 		
 		switch(protocol) {
@@ -153,10 +150,8 @@ public class ServerClient {
 				out = new DataOutputStream(socket.getOutputStream());
 				
 				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
-				ExecutorService ex = Executors.newSingleThreadExecutor();
-				ex.execute(new ClientSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.CHALLENGE, username, passwordBlinded));
-				ex.awaitTermination(1, TimeUnit.SECONDS);
-				Future<BigInteger[]> result = ex.submit(new ClientReceiverThread(in, ProtocolMode.STORAGE_OPTIMAL));
+				serverPool.execute(new ClientSenderThread(out, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.CHALLENGE, username, passwordBlinded));
+				Future<BigInteger[]> result = serverPool.submit(new ClientReceiverThread(in, ProtocolMode.STORAGE_OPTIMAL));
 				finalChallenge = result.get();
 				finalChallenge[0] = AsymmetricEncryption.unblind(finalChallenge[0], ((RSAPublicKey) bvk).getModulus(), r);
 			} catch (UnknownHostException e) {

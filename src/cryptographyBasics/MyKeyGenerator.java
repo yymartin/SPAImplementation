@@ -24,6 +24,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -36,6 +37,8 @@ import javax.crypto.spec.SecretKeySpec;
  * Library containing functions to generate keys
  */
 public class MyKeyGenerator {
+	
+	private static final int RSALengthKey = 1024;
 
 	/**
 	 * Function which generate a key for HMacSHA256 signature
@@ -61,8 +64,17 @@ public class MyKeyGenerator {
 	public static byte[] getOneTimePaddingKey(int length) {
 		SecureRandom random = new SecureRandom();
 		byte[] key = new byte[length];
-		random.nextBytes(key);;
+		random.nextBytes(key);
 
+		return key;
+	}
+	
+	public static byte[] getOneTimePaddingKeyFromPassword(BigInteger password) {
+		Random random = new Random();
+		random.setSeed(password.longValue());
+		byte[] key = new byte[RSALengthKey];
+		random.nextBytes(key);
+		
 		return key;
 	}
 

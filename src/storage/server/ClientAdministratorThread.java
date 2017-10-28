@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.interfaces.RSAPrivateKey;
+import java.util.Map;
 
 import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
@@ -93,9 +94,38 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				break;
 			}
 			break;
-
 		case PRIVACY_OPTIMAL:
+			switch(mode) {
+			case STORE : 
+				id = getData();
+				ctext = getData();
 
+				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
+				db.insertElementIntoStorage(new byte[][] {id, ctext});
+				db.closeConnection();
+				break;
+
+			case RETRIEVE :
+				id = getData();
+				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
+				
+				Map<byte[], byte[]> dbElements = null;
+				try {
+					dbElements = db.getRandomElementFromStorage();
+				} catch (IllegalAccessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+//				try {
+//					out.writeInt(ctext.length);
+//					out.write(ctext);
+//				} catch (IOException e) {
+					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				break;
+			}
 			break;
 		}
 

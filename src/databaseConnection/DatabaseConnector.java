@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author yoanmartin
@@ -120,7 +122,40 @@ public class DatabaseConnector {
 	}
 
 	/**
-	 * Function which  return the ctext value in the case of a storage connection. This function must be called
+	 * Function which return a Map containing all the database rows in a random order
+	 * @return A map of the elements
+	 * @throws IllegalAccessException Throw Exception if this function is used in SERVER_OPTIMAL mode
+	 */
+	public Map<byte[], byte[]> getRandomElementFromStorage() throws IllegalAccessException {
+		Map<byte[], byte[]> randomValues = new HashMap<>();
+		PreparedStatement stmt = null;
+		try {
+			switch(mode) {
+			case STORAGE_OPTIMAL :
+				stmt = connection.prepareStatement("SELECT * FROM STORAGE_STORAGE_OPTIMAL ORDER BY NEWID();");
+				ResultSet result = stmt.executeQuery();
+				if (!result.next()) {                       
+					System.out.println("No records found");
+				} else {
+					do {
+						byte[] key = result.getBytes(1);
+						byte[] value = result.getBytes(2);
+						randomValues.put(key, value);
+					} while (result.next());
+				}
+				break;
+			case SERVER_OPTIMAL :
+				throw new IllegalAccessException();
+			}		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		return randomValues;
+	}
+
+	/**
+	 * Function which return the ctext value in the case of a storage connection. This function must be called
 	 * only after calling searchElementFromStorage(byte[] id)
 	 * @return the ctext value
 	 */
@@ -167,7 +202,7 @@ public class DatabaseConnector {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		break;
+			break;
 		default:
 			throw new IllegalStateException("Function called in the wrong database mode!");
 		}
