@@ -82,14 +82,14 @@ public class User {
 		
 		//PRIVACY OPTIMAL
 		
-//		serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
-//		storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);
+		serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
+		storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);
 		
 		//		registration phase
 		
-//		serverConnector.registerToServer();
-//		PublicKey obliviousTransferKey = storageConnector.storeValuesToStorage();
-//		storePublicKeyToFile(obliviousTransferKey);
+		serverConnector.registerToServer();
+		PublicKey obliviousTransferKey = storageConnector.storeValuesToStorage();
+		storePublicKeyToFile(obliviousTransferKey);
 		
 		//		authentication phase
 

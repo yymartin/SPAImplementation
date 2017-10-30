@@ -102,14 +102,14 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 			
 		case PRIVACY_OPTIMAL :
 			byte[] kPrime = getData();
+			int numElem = in.readInt();
 			ArrayList<byte[]> e = new ArrayList<>();
-			while(in.available() > 0) {
-				e.add(getData());
+			for(int i = 0; i < numElem; i++) {
+			e.add(getData());
 			}
 			BigInteger k = receiver.generateK(new BigInteger(kPrime), r);
 			ArrayList<byte[]> AiBi = receiver.generateAiBi(e, k);
 			ctext = receiver.findValue(AiBi).toByteArray();
-			System.out.println(new BigInteger(ctext));
 //			aesKey = MyKeyGenerator.generateAESKeyFromPassword(password);
 			oneTimePadKey = MyKeyGenerator.getOneTimePaddingKeyFromPassword(password);
 			

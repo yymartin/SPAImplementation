@@ -132,7 +132,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+				int numElem = dbElements.size();
 				OTSender obliviousSender = new OTSender(dbElements, (RSAPrivateKey) storagePrivateKey);
 				
 				ArrayList<byte[]> e = obliviousSender.generateE();
@@ -141,6 +141,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				try {
 					out.writeInt(kPrime.length);
 					out.write(kPrime);
+					out.writeInt(numElem);
 					for(byte[] elem : e) {
 						out.writeInt(elem.length);
 						out.write(elem);

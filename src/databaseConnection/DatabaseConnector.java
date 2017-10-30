@@ -77,11 +77,11 @@ public class DatabaseConnector {
 			default:
 				throw new IllegalStateException("Function called in the wrong database mode!");
 			}
+			System.out.println("Element inserted");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Insertion failed");
 			e.printStackTrace();
 		}
-		System.out.println("Element inserted");
 	}
 
 

@@ -126,7 +126,6 @@ public class StorageClient {
 		case PRIVACY_OPTIMAL:
 			id = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
 			ctext = generateCTextWithOneTimePadding(password, ssk);
-			System.out.println(ctext.length);
 
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
@@ -220,9 +219,10 @@ public class StorageClient {
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				OTReceiver obliviousReceiver = new OTReceiver(idFromStorage, (RSAPublicKey) obliviousTransferKey);
-				BigInteger y = obliviousReceiver.generateY(r);
+				BigInteger obliviousR = AsymmetricEncryption.generateRForBlindSignature(((RSAPublicKey) obliviousTransferKey).getModulus());
+				BigInteger y = obliviousReceiver.generateY(obliviousR);
 				ex.execute(new ClientSenderThread(out, protocol, y));
-				Future<PrivateKey> result = ex.submit(new ClientRetrieverThread(in, obliviousReceiver, r, password));
+				Future<PrivateKey> result = ex.submit(new ClientRetrieverThread(in, obliviousReceiver, obliviousR, password));
 				resultKey = result.get();		
 			} catch (UnknownHostException e) {
 
