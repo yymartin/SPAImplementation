@@ -11,6 +11,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.crypto.SecretKey;
+
 import SSLUtility.ProtocolMode;
 import SSLUtility.SSLClientUtility;
 import cryptographyBasics.AsymmetricEncryption;
@@ -34,6 +36,8 @@ public class ServerClient {
 	private PublicKey svk, bvk;
 	private PrivateKey bsk;
 	private BigInteger r;
+	
+	private SecretKey k;
 	
 	private ExecutorService serverPool = Executors.newFixedThreadPool(20);
 	
@@ -65,6 +69,11 @@ public class ServerClient {
 		this.bvk = bvk;
 		this.r = r;
 	}
+	
+	public ServerClient(String username, SecretKey k) {
+		ServerClient.username = username;
+		this. k = k;
+	}
 
 	/**
 	 * Function which registers to the server
@@ -87,7 +96,7 @@ public class ServerClient {
 			}	
 			break;
 			
-		case STORAGE_OPTIMAL:
+		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL :
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
 				System.out.println("Ask for connection");
@@ -102,8 +111,19 @@ public class ServerClient {
 			}
 			break;
 			
-		case PRIVACY_OPTIMAL:
-			
+		case MOBILE:
+			try {
+				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
+				System.out.println("Ask for connection");
+				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
+				System.out.println("Connection established"); 
+				out = new DataOutputStream(socket.getOutputStream());
+				serverPool.execute(new ClientSenderThread(out, ProtocolMode.MOBILE, ClientToServerMode.REGISTER, username, k));
+			} catch (UnknownHostException e) {
+
+			} catch (IOException e) {
+
+			}
 			break;
 		}
 	}
@@ -154,6 +174,29 @@ public class ServerClient {
 				Future<BigInteger[]> result = serverPool.submit(new ClientReceiverThread(in, ProtocolMode.STORAGE_OPTIMAL));
 				finalChallenge = result.get();
 				finalChallenge[0] = AsymmetricEncryption.unblind(finalChallenge[0], ((RSAPublicKey) bvk).getModulus(), r);
+			} catch (UnknownHostException e) {
+
+			} catch (IOException e) {
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case MOBILE:
+			try {
+				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
+				System.out.println("Ask for connection");
+				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
+				System.out.println("Connection established"); 
+				in = new DataInputStream(socket.getInputStream());
+				out = new DataOutputStream(socket.getOutputStream());
+				serverPool.execute(new ClientSenderThread(out, ProtocolMode.MOBILE, ClientToServerMode.CHALLENGE, username));
+				Future<BigInteger[]> result = serverPool.submit(new ClientReceiverThread(in, ProtocolMode.MOBILE));
+				finalChallenge = result.get();
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {

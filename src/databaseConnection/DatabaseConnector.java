@@ -22,7 +22,7 @@ public class DatabaseConnector {
 
 	/**
 	 * Public constructor. It immediately connects to the database
-	 * @param mode The corresponding protocol option choosed to access the database
+	 * @param mode The corresponding protocol option chose to access the database
 	 */
 	public DatabaseConnector(DatabaseMode mode) {
 		this.mode = mode;

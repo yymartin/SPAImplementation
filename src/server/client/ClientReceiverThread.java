@@ -36,15 +36,16 @@ public class ClientReceiverThread implements Callable<BigInteger[]> {
 			result[0] = challenge;
 			break;
 			
-		case STORAGE_OPTIMAL:
+		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL:
 			BigInteger id = new BigInteger(getData());
 			challenge = new BigInteger(getData());
 			result[0] = id;
 			result[1] = challenge;
 			break;
 		
-		case PRIVACY_OPTIMAL:
-			
+		case MOBILE:
+			challenge = new BigInteger(getData());
+			result[0] = challenge;
 			break;
 		}
 		

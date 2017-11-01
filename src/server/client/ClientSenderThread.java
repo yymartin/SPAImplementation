@@ -6,6 +6,8 @@ import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import javax.crypto.SecretKey;
+
 import SSLUtility.ProtocolMode;
 import server.ClientToServerMode;
 
@@ -17,7 +19,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 	private DataOutputStream out;
 	ProtocolMode protocol;
 	ClientToServerMode mode;
-	byte[] username, svk, bsk, password, challenge;
+	byte[] username, svk, bsk, password, challenge, k;
 
 
 	/**
@@ -100,6 +102,11 @@ public class ClientSenderThread extends Thread implements Runnable {
 		this.password = password.toByteArray();
 	}
 
+	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode register, String username, SecretKey k) {
+		this.username = username.getBytes();
+		this.k = k.getEncoded();
+	}
+
 	@Override
 	public void run() {	
 		byte[] protocolAsByte = protocol.toString().getBytes();
@@ -154,8 +161,8 @@ public class ClientSenderThread extends Thread implements Runnable {
 			}
 			break;
 			
-		case STORAGE_OPTIMAL:
-			switch(mode) {
+		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL:
+			switch(mode) { 
 			case REGISTER:
 				try {
 					out.writeInt(protocolAsByte.length);
@@ -206,8 +213,41 @@ public class ClientSenderThread extends Thread implements Runnable {
 			}
 			break;
 			
-		case PRIVACY_OPTIMAL:
-			
+		case MOBILE:
+			switch(mode) {
+			case REGISTER:
+				try {
+					out.writeInt(protocolAsByte.length);
+					out.write(protocolAsByte);
+					out.writeInt(modeAsByte.length);
+					out.write(modeAsByte);
+					out.writeInt(username.length);
+					out.write(username);
+					out.writeInt(k.length);
+					out.write(k);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case CHALLENGE:
+				try {
+					out.writeInt(protocolAsByte.length);
+					out.write(protocolAsByte);
+					out.writeInt(modeAsByte.length);
+					out.write(modeAsByte);
+					out.writeInt(username.length);
+					out.write(username);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case AUTH:
+				break;
+			default:
+				break;
+			}
 			break;
 		}
 		

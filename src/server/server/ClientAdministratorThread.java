@@ -13,6 +13,9 @@ import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
@@ -43,6 +46,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 		BigInteger password;
 		PublicKey svk;
 		PrivateKey bsk;
+		SecretKey k;
 		Client client;
 		
 		switch(protocol) {
@@ -80,7 +84,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			}
 			break;
 				
-		case STORAGE_OPTIMAL:
+		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL:
 			switch(mode) {
 			case REGISTER : 
 				username = new String(getData());
@@ -118,8 +122,28 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			}
 			break;
 			
-		case PRIVACY_OPTIMAL:
-			
+		case MOBILE:
+			switch(mode) {
+			case REGISTER:
+				username = new String(getData());
+				byte[] kAsBytes = getData();
+				k = new SecretKeySpec(kAsBytes, 0, kAsBytes.length, "AES");
+				client = new Client(username, k);
+				Server.clients.put(username, client);
+				System.out.println(Server.clients.keySet());
+				break;
+			case CHALLENGE:
+				username = new String(getData());
+				if(Server.clients.containsKey(username)) {
+					client = Server.clients.get(username);
+					BigInteger challenge = new BigInteger(100, new Random());
+					client.setChallenge(challenge);
+					Server.clientPool.execute(new ChallengeSenderThread(out, challenge));
+				}
+				break;
+			case AUTH:
+				break;			
+			}
 			break;
 		}
 

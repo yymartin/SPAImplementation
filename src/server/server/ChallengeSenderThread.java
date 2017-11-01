@@ -40,6 +40,12 @@ public class ChallengeSenderThread implements Runnable{
 		this.challenge = challenge.toByteArray();
 	}
 
+	public ChallengeSenderThread(DataOutputStream out, BigInteger challenge) {
+		this.out = out;
+		this.protocol = SSLUtility.ProtocolMode.MOBILE;
+		this.challenge = challenge.toByteArray();
+	}
+
 	@Override
 	public void run() {
 		switch(protocol) {
@@ -53,7 +59,7 @@ public class ChallengeSenderThread implements Runnable{
 			}
 			break;
 			
-		case STORAGE_OPTIMAL: 
+		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL:
 			try {
 				out.writeInt(id.length);
 				out.write(id);
@@ -65,8 +71,14 @@ public class ChallengeSenderThread implements Runnable{
 			}
 			break;
 			
-		case PRIVACY_OPTIMAL:
-			
+		case MOBILE:
+			try {
+				out.writeInt(challenge.length);
+				out.write(challenge);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		}	
 		

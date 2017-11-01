@@ -5,6 +5,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 
+import javax.crypto.SecretKey;
+
 /**
  * @author yoanmartin
  * Object which represents a client for the server
@@ -35,6 +37,7 @@ public class Client {
 	private String username;
 	private PublicKey svk;
 	private PrivateKey bsk;
+	private SecretKey k;
 	private BigInteger challenge;
 	private ClientMode mode;
 	
@@ -59,6 +62,11 @@ public class Client {
 		this.username = username;
 		this.svk = svk;
 		this.bsk = bsk;
+	}
+
+	public Client(String username, SecretKey k) {
+		this.username = username;
+		this.k = k;
 	}
 
 	/**
@@ -115,6 +123,10 @@ public class Client {
 	 */
 	public PrivateKey getBsk() {
 		return bsk;
+	}
+	
+	public SecretKey getK() {
+		return k;
 	}
 	
 	@Override

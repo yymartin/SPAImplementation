@@ -24,5 +24,12 @@ public enum ProtocolMode {
 		public String toString() {
 			return "PRIVACY_OPTIMAL";
 		}
+	},
+	
+	MOBILE {
+		@Override
+		public String toString() {
+			return "MOBILE";
+		}
 	}
 }
