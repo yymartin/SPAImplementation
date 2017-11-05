@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.0.aar/fd53c57d3000ce65ca23dab9236b55f5/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/SPAImplementation/MobileProtocolApp/app/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.0.aar/fd53c57d3000ce65ca23dab9236b55f5/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}
