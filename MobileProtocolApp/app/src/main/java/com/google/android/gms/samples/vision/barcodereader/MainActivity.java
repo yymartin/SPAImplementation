@@ -21,7 +21,8 @@ public class MainActivity extends Activity{
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Registration register = new Registration();
+                register.execute();
             }
         });
 
