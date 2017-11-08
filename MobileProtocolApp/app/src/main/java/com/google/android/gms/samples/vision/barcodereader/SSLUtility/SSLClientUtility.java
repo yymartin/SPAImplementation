@@ -27,7 +27,7 @@ public class SSLClientUtility {
         KeyStore keyStore;
         SSLSocket socket = null;
         try {
-            keyStore = KeyStore.getInstance("JKS");
+            keyStore = KeyStore.getInstance("BKS");
             keyStore.load(pathToCert, passwordFromCert.toCharArray());
             trustManager = getTrustManager(keyStore);
             SSLContext context = SSLContext.getInstance("SSL");

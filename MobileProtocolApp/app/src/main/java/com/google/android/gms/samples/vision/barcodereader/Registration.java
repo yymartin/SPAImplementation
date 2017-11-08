@@ -1,37 +1,56 @@
 package com.google.android.gms.samples.vision.barcodereader;
 
+import android.content.Context;
 import android.content.SyncStatusObserver;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.samples.vision.barcodereader.SSLUtility.SSLClientUtility;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+
+import javax.net.ssl.SSLSocket;
 
 /**
  * Created by yoanmartin on 07.11.17.
  */
 
-public class Registration extends AsyncTask<Void,Void,Void> {
+public class Registration extends AsyncTask<Void,Void,String> {
     DataInputStream in;
+    InputStream key;
+
+    public Registration(InputStream key){
+        this.key = key;
+    }
 
     @Override
-    protected Void doInBackground(Void... voids) {
-        Socket socket;
+    protected String doInBackground(Void... voids) {
+        SSLSocket socket;
 
         String address = "172.22.22.58";
         int port = 1234;
 
+        String result = "";
+
         try {
-            socket = new Socket(address, port);
+            socket = SSLClientUtility.getSocketWithCert(InetAddress.getByName(address), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 	        in = new DataInputStream(socket.getInputStream());
+
+            result = new String(getData());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
     }
 
     private byte[] getData() {

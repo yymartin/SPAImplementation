@@ -31,14 +31,12 @@ public class MobileClient {
 	public static void main(String[] args) {
 	try {
 		System.out.println("Server created");
-		server = new ServerSocket(1234);
-//		InputStream key = new FileInputStream(new File("./PRIVATEKEY.jks"));
-//		ss = SSLServerUtility.getServerSocketWithCert(2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
+		InputStream key = new FileInputStream(new File("./PRIVATEKEYMOBILE.jks"));
+		ss = SSLServerUtility.getServerSocketWithCert(1234, key, "8rXbM7twa)E96xtFZmWq6/J^");
 		ArrayList<SocketAddress> clientsConnected = new ArrayList<>();
 		while(true) {
-//			socket = ss.accept();
+			socket = ss.accept();
 			System.out.println(InetAddress.getLocalHost());
-			socket = server.accept();
 			SocketAddress clientAddress = socket.getRemoteSocketAddress();
 			System.out.println(clientAddress);
 			clientsConnected.add(clientAddress);
@@ -48,7 +46,6 @@ public class MobileClient {
 			out.writeInt(message.length);
 			out.write(message);
 			out.close();
-			System.out.println("Message sent");
 		}
 
 	} catch (IOException e) {
