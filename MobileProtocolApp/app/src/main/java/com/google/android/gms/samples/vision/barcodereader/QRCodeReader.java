@@ -23,7 +23,14 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.samples.vision.barcodereader.cryptography.Hash;
 import com.google.android.gms.vision.barcode.Barcode;
+
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -35,6 +42,9 @@ public class QRCodeReader extends Activity {
     private TextView statusMessage;
     private TextView barcodeValue;
 
+    private byte[] K;
+    private byte[] password;
+
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
 
@@ -42,6 +52,12 @@ public class QRCodeReader extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qrcode_reader_activity);
+
+        Intent intentLauncher = getIntent();
+        byte[] ctext = intentLauncher.getByteArrayExtra("ctext");
+        password = intentLauncher.getByteArrayExtra("password");
+
+        K = Hash.decryptOneTimePadding(password, ctext);
 
         statusMessage = (TextView)findViewById(R.id.status_message);
         barcodeValue = (TextView)findViewById(R.id.barcode_value);
@@ -79,7 +95,13 @@ public class QRCodeReader extends Activity {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     statusMessage.setText(R.string.barcode_success);
-                    barcodeValue.setText(barcode.displayValue);
+                    String valueOfQRCode = barcode.displayValue;
+                    BigInteger challenge = new BigInteger(valueOfQRCode);
+                    SecretKey keyForChallenge = Hash.generateHMacKeyFromChallenge(challenge);
+                    BigInteger response = Hash.generateHMac(new BigInteger(K), keyForChallenge);
+                    int valueToDisplay = response.abs().hashCode();
+
+                    barcodeValue.setText(String.valueOf(valueToDisplay));
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);

@@ -182,6 +182,10 @@ public class ClientSenderThread extends Thread implements Runnable {
 				break;
 			}
 			break;
+		case MOBILE:
+			break;
+		default:
+			break;
 		}
 	}
 }

@@ -118,6 +118,10 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 
 			resultKey = MyKeyGenerator.convertByteArrayIntoPrivateKey(keyAsByte);
 			break;
+	case MOBILE:
+		break;
+	default:
+		break;
 		}
 		return resultKey;
 	}

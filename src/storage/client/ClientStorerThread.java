@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.security.PublicKey;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 import cryptographyBasics.MyKeyGenerator;
 
@@ -17,7 +16,6 @@ public class ClientStorerThread implements Callable<PublicKey>{
 
 	@Override
 	public PublicKey call() throws Exception {
-        TimeUnit.MILLISECONDS.sleep(20);
 		byte[] keyAsBytes = getData();
 		return MyKeyGenerator.convertByteArrayIntoPublicKey(keyAsBytes);
 	}

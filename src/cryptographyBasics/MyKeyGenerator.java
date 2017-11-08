@@ -52,7 +52,7 @@ public class MyKeyGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		keyGen.init(128);
+		keyGen.init(256);
 		return keyGen.generateKey();
 	}
 
@@ -77,7 +77,7 @@ public class MyKeyGenerator {
 		
 		return key;
 	}
-
+	
 	/**
 	 * Function which generate an AES key for symmetric encryption
 	 * @return A SecretKey for AES encryption
@@ -144,11 +144,22 @@ public class MyKeyGenerator {
 	 */
 	public static void generateSymmetricKeyToFile(String address){
 		byte[] key = generateSymmetricKey().getEncoded();
-		Path path = Paths.get(address+"/AES-Key");
+		Path path = Paths.get(address+"/AES-Mobile");
 		try {
 			Files.write(path, key);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void generateOneTimePaddingKeyToFile(String address) {
+		byte[] key = getOneTimePaddingKey(32);
+		
+		Path path = Paths.get(address+"/OneTimeKey-Mobile");
+		try {
+			Files.write(path, key);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -192,9 +203,27 @@ public class MyKeyGenerator {
 	public static SecretKey getSymmetricKeyFromFile(String address){
 		SecretKey key = null;
 		try {
-			Path keyPath = Paths.get(address+"/AES-Key");
+			Path keyPath = Paths.get(address+"/AES-Mobile");
 			byte[] encodedKey = Files.readAllBytes(keyPath);
 			key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return key;
+	}
+	
+	/**
+	 * Function which recover the AES key from a file for symmetric encryption
+	 * @param address The location where the key is stored
+	 * @return The AES key
+	 */
+	public static byte[] getOneTimePaddingKeyFromFile(String address){
+		byte[] key = null;
+		try {
+			Path keyPath = Paths.get(address+"/OneTimeKey-Mobile");
+			key = Files.readAllBytes(keyPath);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -311,4 +340,29 @@ public class MyKeyGenerator {
 
 		return publicKey;
 	}
+	
+    /**
+     * Function which generates an AES key from a given password. The password should be hashed, so it should be a BigInteger
+     * @param password The hashed password
+     * @return A SecretKey for AES encryption
+     */
+    public static SecretKey generateHMacKeyFromChallenge(BigInteger password) {
+        String passwordAsString = String.valueOf(password);
+        SecretKeyFactory f = null;
+        try {
+            f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "predefinedsalt".getBytes(), 10, 128);
+        SecretKey s = null;
+        try {
+            s = f.generateSecret(spec);
+        } catch (InvalidKeySpecException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return new SecretKeySpec(s.getEncoded(), "HMacSHA256");
+    }
 }

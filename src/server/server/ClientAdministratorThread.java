@@ -14,11 +14,11 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
 import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
+import cryptographyBasics.SymmetricEncryption;
+import qrcode.QRCode;
 import server.ClientToServerMode;
 
 /**
@@ -46,7 +46,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 		BigInteger password;
 		PublicKey svk;
 		PrivateKey bsk;
-		SecretKey k;
+		byte[] k;
 		Client client;
 		
 		switch(protocol) {
@@ -126,8 +126,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			switch(mode) {
 			case REGISTER:
 				username = new String(getData());
-				byte[] kAsBytes = getData();
-				k = new SecretKeySpec(kAsBytes, 0, kAsBytes.length, "AES");
+				k = getData();
 				client = new Client(username, k);
 				Server.clients.put(username, client);
 				System.out.println(Server.clients.keySet());
@@ -138,7 +137,12 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 					client = Server.clients.get(username);
 					BigInteger challenge = new BigInteger(100, new Random());
 					client.setChallenge(challenge);
-					Server.clientPool.execute(new ChallengeSenderThread(out, challenge));
+					QRCode.generateQRCodeFromData(challenge.toString().getBytes(), System.getProperty("user.dir"));
+					byte[] KFromClient = client.getK();
+					SecretKey keyFromChallenge = MyKeyGenerator.generateHMacKeyFromChallenge(challenge);
+					byte[] response = SymmetricEncryption.generateHMac(new BigInteger(KFromClient), keyFromChallenge);
+					int responseTrimed = new BigInteger(response).abs().hashCode();
+					System.out.println(responseTrimed);
 				}
 				break;
 			case AUTH:

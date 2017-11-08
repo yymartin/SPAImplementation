@@ -11,8 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javax.crypto.SecretKey;
-
 import SSLUtility.ProtocolMode;
 import SSLUtility.SSLClientUtility;
 import cryptographyBasics.AsymmetricEncryption;
@@ -37,20 +35,10 @@ public class ServerClient {
 	private PrivateKey bsk;
 	private BigInteger r;
 	
-	private SecretKey k;
+	private byte[] k;
 	
 	private ExecutorService serverPool = Executors.newFixedThreadPool(20);
 	
-	/**
-	 * Constructor used when the Server Optimal protocol is used
-	 * @param username The username of the user
-	 * @param svk The svk of the user
-	 */
-	public ServerClient(String username, PublicKey svk) {
-		ServerClient.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
-		ServerClient.username = username;
-		this.svk = svk;
-	}
 	
 	/**
 	 * Constructor used when the Storage Optimal protocol is used
@@ -70,9 +58,16 @@ public class ServerClient {
 		this.r = r;
 	}
 	
-	public ServerClient(String username, SecretKey k) {
+	public ServerClient(String username, PublicKey svk) {
+		ServerClient.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		ServerClient.username = username;
-		this. k = k;
+		this.svk = svk;
+	}
+	
+	public ServerClient(String username, byte[] k) {
+		ServerClient.protocol = SSLUtility.ProtocolMode.MOBILE;
+		ServerClient.username = username;
+		this.k = k;
 	}
 
 	/**
@@ -195,19 +190,11 @@ public class ServerClient {
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				serverPool.execute(new ClientSenderThread(out, ProtocolMode.MOBILE, ClientToServerMode.CHALLENGE, username));
-				Future<BigInteger[]> result = serverPool.submit(new ClientReceiverThread(in, ProtocolMode.MOBILE));
-				finalChallenge = result.get();
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
 
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
 			break;
 		}
 		return finalChallenge;

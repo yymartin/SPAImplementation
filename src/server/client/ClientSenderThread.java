@@ -6,8 +6,6 @@ import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import javax.crypto.SecretKey;
-
 import SSLUtility.ProtocolMode;
 import server.ClientToServerMode;
 
@@ -102,9 +100,12 @@ public class ClientSenderThread extends Thread implements Runnable {
 		this.password = password.toByteArray();
 	}
 
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode register, String username, SecretKey k) {
+	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode register, String username, byte[] k) {
+		this.out = out;
+		this.protocol = protocol;
+		this.mode = ClientToServerMode.REGISTER;
 		this.username = username.getBytes();
-		this.k = k.getEncoded();
+		this.k = k;
 	}
 
 	@Override

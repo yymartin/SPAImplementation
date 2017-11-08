@@ -17,6 +17,8 @@ import javax.crypto.SecretKey;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.Hash;
 import cryptographyBasics.MyKeyGenerator;
+import cryptographyBasics.SymmetricEncryption;
+import qrcode.QRCode;
 import server.client.ServerClient;
 import storage.client.StorageClient;
 
@@ -39,8 +41,9 @@ public class User {
 		BigInteger challenge;
 		BigInteger response;
 		PrivateKey keyFromStorage;
+								
+		byte[] K = MyKeyGenerator.getOneTimePaddingKeyFromFile(System.getProperty("user.dir"));
 		
-				
 //		//SERVER OPTIMAL
 //
 //		serverConnector = new ServerClient(username, svk);
@@ -86,7 +89,7 @@ public class User {
 //		storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);
 //		
 //		//		registration phase
-//		
+////		
 //		serverConnector.registerToServer();
 //		PublicKey obliviousTransferKey = storageConnector.storeValuesToStorage();
 //		storePublicKeyToFile(obliviousTransferKey);
@@ -101,6 +104,19 @@ public class User {
 //		response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
 //		serverConnector.executeChallengeToServer(response);
 		//should print "Connected!"
+		
+		
+		//MOBILE PROCOTOL
+		
+//		serverConnector = new ServerClient(username, K);
+		
+		//		registration phase
+		
+//		serverConnector.registerToServer();
+		
+		//		authentication phase
+		
+//		serverConnector.askForChallengeToServer();
 
 	}
 	

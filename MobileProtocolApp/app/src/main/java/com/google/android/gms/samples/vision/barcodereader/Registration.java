@@ -24,7 +24,7 @@ import javax.net.ssl.SSLSocket;
  * Created by yoanmartin on 07.11.17.
  */
 
-public class Registration extends AsyncTask<Void,Void,String> {
+public class Registration extends AsyncTask<Void,Void,byte[]> {
     DataInputStream in;
     InputStream key;
 
@@ -33,19 +33,19 @@ public class Registration extends AsyncTask<Void,Void,String> {
     }
 
     @Override
-    protected String doInBackground(Void... voids) {
+    protected byte[] doInBackground(Void... voids) {
         SSLSocket socket;
 
         String address = "172.22.22.58";
         int port = 1234;
 
-        String result = "";
+        byte[] result = null;
 
         try {
             socket = SSLClientUtility.getSocketWithCert(InetAddress.getByName(address), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 	        in = new DataInputStream(socket.getInputStream());
 
-            result = new String(getData());
+            result = getData();
 
         } catch (IOException e) {
             e.printStackTrace();

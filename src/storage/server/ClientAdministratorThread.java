@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -151,6 +150,10 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				}
 				break;
 			}
+			break;
+		case MOBILE:
+			break;
+		default:
 			break;
 		}
 

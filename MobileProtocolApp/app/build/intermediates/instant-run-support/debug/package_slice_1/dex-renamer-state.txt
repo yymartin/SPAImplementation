@@ -1,4 +1,4 @@
-#Sun Nov 05 11:57:37 CET 2017
+#Wed Nov 08 15:06:22 CET 2017
 base.0=/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/build/intermediates/transforms/dexMerger/debug/1
 renamed.0=classes.dex
 file.0=/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/build/intermediates/transforms/dexMerger/debug/1/classes.dex
