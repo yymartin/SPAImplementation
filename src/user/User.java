@@ -18,13 +18,14 @@ import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.Hash;
 import cryptographyBasics.MyKeyGenerator;
 import cryptographyBasics.SymmetricEncryption;
+import mobile.MobileClient;
 import qrcode.QRCode;
 import server.client.ServerClient;
 import storage.client.StorageClient;
 
 public class User {
 
-	public static synchronized void main(String[] args) {
+	public static void main(String[] args) {
 		String address = System.getProperty("user.dir");
 		String username = "Yoan";
 		String password = "Martin";
@@ -43,6 +44,8 @@ public class User {
 		PrivateKey keyFromStorage;
 								
 		byte[] K = MyKeyGenerator.getOneTimePaddingKeyFromFile(System.getProperty("user.dir"));
+		
+		MobileClient.executeRegistration();
 		
 //		//SERVER OPTIMAL
 //

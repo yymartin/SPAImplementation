@@ -22,10 +22,6 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        BigInteger test = BigInteger.valueOf(102334);
-
-        Log.d("DEBUG", String.valueOf(Hash.trim(test)));
-
         Button submitButton = (Button) findViewById(R.id.btnSubmit);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
