@@ -27,7 +27,7 @@ public class MobileClientRegistrationThread extends Thread implements Runnable{
 	public static DataOutputStream out;
 
 	public void run() {
-		byte[] K = MyKeyGenerator.getOneTimePaddingKeyFromFile(System.getProperty("user.dir"));
+		byte[] K = MyKeyGenerator.getOneTimePaddingKeyFromFile(System.getProperty("user.dir"), "mobile");
 		String password = "Martin";
 		BigInteger hashPassword = Hash.generateSHA256Hash(password.getBytes());
 

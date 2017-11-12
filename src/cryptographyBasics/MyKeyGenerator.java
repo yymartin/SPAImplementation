@@ -39,6 +39,36 @@ import javax.crypto.spec.SecretKeySpec;
 public class MyKeyGenerator {
 	
 	private static final int RSALengthKey = 1024;
+	private static final int AESLengthKey = 128;
+	
+	/**
+	 * Function which generate a key for AES256 signature
+	 * @return The SecretKey for the signature
+	 */
+	public static SecretKey generateAESKey() {
+		KeyGenerator keyGen = null;
+		try {
+			keyGen = KeyGenerator.getInstance("AES");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		keyGen.init(AESLengthKey);
+		return keyGen.generateKey();
+	}
+	
+	/**
+	 * Function which generate a key for one time padding encryption
+	 * @param length The length of the key 
+	 * @return The key as a byte array
+	 */
+	public static byte[] getOneTimePaddingKey(int length) {
+		SecureRandom random = new SecureRandom();
+		byte[] key = new byte[length];
+		random.nextBytes(key);
+
+		return key;
+	}
 
 	/**
 	 * Function which generate a key for HMacSHA256 signature
@@ -55,46 +85,7 @@ public class MyKeyGenerator {
 		keyGen.init(256);
 		return keyGen.generateKey();
 	}
-
-	/**
-	 * Function which generate a key for one time padding encryption
-	 * @param length The length of the key 
-	 * @return The key as a byte array
-	 */
-	public static byte[] getOneTimePaddingKey(int length) {
-		SecureRandom random = new SecureRandom();
-		byte[] key = new byte[length];
-		random.nextBytes(key);
-
-		return key;
-	}
 	
-	public static byte[] getOneTimePaddingKeyFromPassword(BigInteger password) {
-		Random random = new Random();
-		random.setSeed(password.longValue());
-		byte[] key = new byte[RSALengthKey];
-		random.nextBytes(key);
-		
-		return key;
-	}
-	
-	/**
-	 * Function which generate an AES key for symmetric encryption
-	 * @return A SecretKey for AES encryption
-	 */
-	public static SecretKey generateSymmetricKey(){
-		SecretKey key = null;
-		try {
-			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-			keyGen.init(128);
-			key = keyGen.generateKey();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-		return key;
-	}
-
 	/**
 	 * Function which generates an AES key from a given password. The password should be hashed, so it should be a BigInteger
 	 * @param password The hashed password
@@ -109,7 +100,7 @@ public class MyKeyGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "predefinedsalt".getBytes(), 10, 128);
+		KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "predefinedsalt".getBytes(), 10, AESLengthKey);
 		SecretKey s = null;
 		try {
 			s = f.generateSecret(spec);
@@ -119,32 +110,86 @@ public class MyKeyGenerator {
 		}
 		return new SecretKeySpec(s.getEncoded(), "AES");
 	}
-
+	
 	/**
-	 * Function which generate a public and a private key for asymmetric encryption
-	 * @return A KeyPair containing the RSA public and private key
+	 * Function which generates an OneTime padding key from a given password. The password should be hashed, so it should be a BigInteger
+	 * @param password The hashed password
+	 * @return A byte array representing the key
 	 */
-	public static KeyPair generateAsymmetricKey(){
-		KeyPair keys = null;
-		try {
-			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-			keyGen.initialize(1024);
-			keys = keyGen.generateKeyPair();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return keys;
+	public static byte[] generateOneTimePaddingKeyFromPassword(BigInteger password) {
+		Random random = new Random();
+		random.setSeed(password.longValue());
+		byte[] key = new byte[RSALengthKey];
+		random.nextBytes(key);
+		
+		return key;
 	}
-
+	
+    /**
+     * Function which generates an HMacSHA256 key from a given password. The password should be hashed, so it should be a BigInteger
+     * @param password The hashed password
+     * @return A SecretKey for HMacSHA256 encryption
+     */
+    public static SecretKey generateHMacKeyFromPassword(BigInteger password) {
+        String passwordAsString = String.valueOf(password);
+        SecretKeyFactory f = null;
+        try {
+            f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "predefinedsalt".getBytes(), 10, 256);
+        SecretKey s = null;
+        try {
+            s = f.generateSecret(spec);
+        } catch (InvalidKeySpecException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return new SecretKeySpec(s.getEncoded(), "HMacSHA256");
+    }
+    
 	/**
 	 * Function which generate an AES key for symmetric encryption and store it in a file
 	 * @param address The location where the key must be stored
+	 * @param title The title of the file
 	 */
-	public static void generateSymmetricKeyToFile(String address){
-		byte[] key = generateSymmetricKey().getEncoded();
-		Path path = Paths.get(address+"/AES-Mobile");
+	public static void generateAESKeyToFile(String address, String title){
+		byte[] key = generateAESKey().getEncoded();
+		Path path = Paths.get(address+"/AES-"+title);
+		try {
+			Files.write(path, key);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+    
+	/**
+	 * Function which generate a OneTime padding key for symmetric encryption and store it in a file
+	 * @param address The location where the key must be stored
+	 * @param title The title of the file
+	 */
+	public static void generateOneTimePaddingKeyToFile(String address, String title, int length) {
+		byte[] key = getOneTimePaddingKey(length);
+		
+		Path path = Paths.get(address+"/OneTimeKey-"+title);
+		try {
+			Files.write(path, key);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Function which generate a HMacSHA256 key for symmetric encryption and store it in a file
+	 * @param address The location where the key must be stored
+	 * @param title The title of the file
+	 */
+	public static void generateHMacKeyToFile(String address, String title){
+		byte[] key = generateHMacKey().getEncoded();
+		Path path = Paths.get(address+"/HMac-"+title);
 		try {
 			Files.write(path, key);
 		} catch (IOException e) {
@@ -153,16 +198,83 @@ public class MyKeyGenerator {
 		}
 	}
 	
-	public static void generateOneTimePaddingKeyToFile(String address) {
-		byte[] key = getOneTimePaddingKey(32);
-		
-		Path path = Paths.get(address+"/OneTimeKey-Mobile");
+	/**
+	 * Function which recover the AES key from a file for symmetric encryption
+	 * @param address The location where the key is stored
+	 * @param title The title of the file
+	 * @return The AES key
+	 */
+	public static SecretKey getAESKeyFromFile(String address, String title){
+		SecretKey key = null;
 		try {
-			Files.write(path, key);
+			Path keyPath = Paths.get(address+"/AES-"+title);
+			byte[] encodedKey = Files.readAllBytes(keyPath);
+			key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return key;
 	}
+	
+	/**
+	 * Function which recover the OneTime Padding key from a file for symmetric encryption
+	 * @param address The location where the key is stored
+	 * @param title The title of the file
+	 * @return The OneTimePadding key
+	 */
+	public static byte[] getOneTimePaddingKeyFromFile(String address, String title){
+		byte[] key = null;
+		try {
+			Path keyPath = Paths.get(address+"/OneTimeKey-"+title);
+			key = Files.readAllBytes(keyPath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return key;
+	}
+	
+	/**
+	 * Function which recover the HMacSHA256 key from a file for symmetric encryption
+	 * @param address The location where the key is stored
+	 * @param title The title of the file
+	 * @return The HMacSHA256 key
+	 */
+	public static SecretKey getHMacKeyFromFile(String address, String title){
+		SecretKey key = null;
+		try {
+			Path keyPath = Paths.get(address+"/HMac-"+title);
+			byte[] encodedKey = Files.readAllBytes(keyPath);
+			key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "HMacSHA256");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return key;
+	}
+	
+	/**
+	 * Function which generate a public and a private key for asymmetric encryption
+	 * @return A KeyPair containing the RSA public and private key
+	 */
+	public static KeyPair generateAsymmetricKey(){
+		KeyPair keys = null;
+		try {
+			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+			keyGen.initialize(RSALengthKey);
+			keys = keyGen.generateKeyPair();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return keys;
+	}
+	
 
 	/**
 	 * Function which generate a public and a private key for asymmetric encryption and store them in two files
@@ -194,58 +306,21 @@ public class MyKeyGenerator {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Function which recover the AES key from a file for symmetric encryption
-	 * @param address The location where the key is stored
-	 * @return The AES key
-	 */
-	public static SecretKey getSymmetricKeyFromFile(String address){
-		SecretKey key = null;
-		try {
-			Path keyPath = Paths.get(address+"/AES-Mobile");
-			byte[] encodedKey = Files.readAllBytes(keyPath);
-			key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return key;
-	}
 	
-	/**
-	 * Function which recover the AES key from a file for symmetric encryption
-	 * @param address The location where the key is stored
-	 * @return The AES key
-	 */
-	public static byte[] getOneTimePaddingKeyFromFile(String address){
-		byte[] key = null;
-		try {
-			Path keyPath = Paths.get(address+"/OneTimeKey-Mobile");
-			key = Files.readAllBytes(keyPath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return key;
-	}
-
 	/**
 	 * Function which recover the RSA public key from a file for asymmetric encryption
 	 * @param address The location where the RSA public key is stored
 	 * @param title The title of the file
 	 * @return The RSA public key
 	 */
-	public static PublicKey getPublicKeyFromFile(String address, String title){
-		PublicKey key = null;
+	public static RSAPublicKey getPublicKeyFromFile(String address, String title){
+		RSAPublicKey key = null;
 		try {			
 			Path publicKeyPath = Paths.get(address+"/Public-Key-"+title);
 			byte[] encodedPublicKey = Files.readAllBytes(publicKeyPath);
 
 			KeyFactory kf = KeyFactory.getInstance("RSA"); 
-			key = kf.generatePublic(new X509EncodedKeySpec(encodedPublicKey));
+			key = (RSAPublicKey) kf.generatePublic(new X509EncodedKeySpec(encodedPublicKey));
 		} catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -262,8 +337,8 @@ public class MyKeyGenerator {
 	 * @return The RSA private key
 	 */
 	@SuppressWarnings("unchecked")
-	public static PrivateKey getPrivateKeyFromFile(String address, String title){
-		PrivateKey key = null;
+	public static RSAPrivateKey getPrivateKeyFromFile(String address, String title){
+		RSAPrivateKey key = null;
 
 		ObjectInputStream in;
 		List<byte[]> privateList = null;
@@ -340,29 +415,4 @@ public class MyKeyGenerator {
 
 		return publicKey;
 	}
-	
-    /**
-     * Function which generates an AES key from a given password. The password should be hashed, so it should be a BigInteger
-     * @param password The hashed password
-     * @return A SecretKey for AES encryption
-     */
-    public static SecretKey generateHMacKeyFromChallenge(BigInteger password) {
-        String passwordAsString = String.valueOf(password);
-        SecretKeyFactory f = null;
-        try {
-            f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "predefinedsalt".getBytes(), 10, 128);
-        SecretKey s = null;
-        try {
-            s = f.generateSecret(spec);
-        } catch (InvalidKeySpecException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return new SecretKeySpec(s.getEncoded(), "HMacSHA256");
-    }
 }

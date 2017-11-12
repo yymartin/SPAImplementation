@@ -43,7 +43,7 @@ public class User {
 		BigInteger response;
 		PrivateKey keyFromStorage;
 								
-		byte[] K = MyKeyGenerator.getOneTimePaddingKeyFromFile(System.getProperty("user.dir"));
+		byte[] K = MyKeyGenerator.getOneTimePaddingKeyFromFile(System.getProperty("user.dir"), "mobile");
 		
 		MobileClient.executeRegistration();
 		

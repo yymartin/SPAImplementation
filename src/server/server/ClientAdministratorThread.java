@@ -139,7 +139,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 					client.setChallenge(challenge);
 					QRCode.generateQRCodeFromData(challenge.toString().getBytes(), System.getProperty("user.dir"));
 					byte[] KFromClient = client.getK();
-					SecretKey keyFromChallenge = MyKeyGenerator.generateHMacKeyFromChallenge(challenge);
+					SecretKey keyFromChallenge = MyKeyGenerator.generateHMacKeyFromPassword(challenge);
 					byte[] response = SymmetricEncryption.generateHMac(new BigInteger(KFromClient), keyFromChallenge);
 					int responseTrimed = new BigInteger(response).abs().hashCode();
 					System.out.println(responseTrimed);

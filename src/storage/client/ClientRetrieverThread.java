@@ -81,7 +81,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 			BigInteger sig = AsymmetricEncryption.unblind(sigBlinded, ((RSAPublicKey) bvk).getModulus(), r);
 			ctext = getData();
 //			aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
-			oneTimePadKey = MyKeyGenerator.getOneTimePaddingKeyFromPassword(sig);
+			oneTimePadKey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(sig);
 			
 //			keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
 			keyAsByte = SymmetricEncryption.decryptOneTimePadding(ctext, oneTimePadKey);
@@ -92,7 +92,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 		case STORAGE_OPTIMAL :
 			ctext = getData();
 //			aesKey = MyKeyGenerator.generateAESKeyFromPassword(password);
-			oneTimePadKey = MyKeyGenerator.getOneTimePaddingKeyFromPassword(password);
+			oneTimePadKey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(password);
 
 //			keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
 			keyAsByte = SymmetricEncryption.decryptOneTimePadding(ctext, oneTimePadKey);
@@ -111,7 +111,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 			ArrayList<byte[]> AiBi = receiver.generateAiBi(e, k);
 			ctext = receiver.findValue(AiBi).toByteArray();
 //			aesKey = MyKeyGenerator.generateAESKeyFromPassword(password);
-			oneTimePadKey = MyKeyGenerator.getOneTimePaddingKeyFromPassword(password);
+			oneTimePadKey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(password);
 			
 //			keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
 			keyAsByte = SymmetricEncryption.decryptOneTimePadding(ctext, oneTimePadKey);

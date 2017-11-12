@@ -11,7 +11,7 @@ import java.util.Random;
  * Class representing the client who asks for data from an id. See page 8 from the reference document
  */
 public class OTReceiver {
-	private final int l = 1024; //Need to to be changed later depending on the size of the key and the id
+	private final int l = 1024; //The length of the RSA key
 	private BigInteger wj;
 	private BigInteger N;
 	private RSAPublicKey publicKey;

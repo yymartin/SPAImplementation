@@ -17,7 +17,7 @@ import cryptographyBasics.MyKeyGenerator;
 public class AsymmetricEncryptionTest {	
 	@Test
 	public void testEncryptionAndDecryption() {
-		BigInteger message = new BigInteger(1024, new SecureRandom());
+		BigInteger message = new BigInteger(10, new SecureRandom());
 		KeyPair keyPair = MyKeyGenerator.generateAsymmetricKey();
 		
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
@@ -32,11 +32,11 @@ public class AsymmetricEncryptionTest {
 	@Test
 	public void testEncryptionAndDecryptionFromFile() {
 		String address = "/Users/yoanmartin/Desktop";
-		BigInteger message = new BigInteger(1024, new SecureRandom());
+		BigInteger message = new BigInteger(10, new SecureRandom());
 		MyKeyGenerator.generateAsymmetricKeyToFile(address, "test");
 		
-		RSAPublicKey publicKey = (RSAPublicKey) MyKeyGenerator.getPublicKeyFromFile(address,"test");
-		RSAPrivateKey privateKey = (RSAPrivateKey) MyKeyGenerator.getPrivateKeyFromFile(address,"test");
+		RSAPublicKey publicKey = MyKeyGenerator.getPublicKeyFromFile(address,"test");
+		RSAPrivateKey privateKey = MyKeyGenerator.getPrivateKeyFromFile(address,"test");
 		
 		BigInteger cipherText = AsymmetricEncryption.encrypt(message, publicKey);
 		BigInteger clearText = AsymmetricEncryption.decrypt(cipherText, privateKey);
@@ -46,7 +46,7 @@ public class AsymmetricEncryptionTest {
 	
 	@Test
 	public void testSignatureVerification() {
-		BigInteger message = new BigInteger(1024, new SecureRandom());
+		BigInteger message = new BigInteger(10, new SecureRandom());
 		KeyPair keyPair = MyKeyGenerator.generateAsymmetricKey();
 		
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
@@ -65,7 +65,7 @@ public class AsymmetricEncryptionTest {
 		BigInteger N = publicKey.getModulus();
 
 		
-		BigInteger message = new BigInteger(1024, new SecureRandom());
+		BigInteger message = new BigInteger(10, new SecureRandom());
 		BigInteger r = AsymmetricEncryption.generateRForBlindSignature(N);
 		
 		BigInteger messageBlinded = AsymmetricEncryption.blind(message, r, publicKey);

@@ -86,7 +86,7 @@ public class StorageClient {
 		case SERVER_OPTIMAL:
 			BigInteger sig = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
 //			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
-			byte[] oneTimePadkey = MyKeyGenerator.getOneTimePaddingKeyFromPassword(sig);
+			byte[] oneTimePadkey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(sig);
 //			ctext = SymmetricEncryption.encryptAES(ssk.getEncoded(), aesKey);
 			ctext = SymmetricEncryption.encryptOneTimePadding(ssk.getEncoded(), oneTimePadkey);
 
@@ -250,7 +250,7 @@ public class StorageClient {
 
 	private byte[] generateCTextWithOneTimePadding(BigInteger password, PrivateKey ssk) {
 		byte[] sskAsByte = ssk.getEncoded();
-		byte[] oneTimePadKey = MyKeyGenerator.getOneTimePaddingKeyFromPassword(password);
+		byte[] oneTimePadKey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(password);
 		return SymmetricEncryption.encryptOneTimePadding(sskAsByte, oneTimePadKey);
 	}
 	private byte[] generateCTextWithAES(BigInteger password, PrivateKey ssk) {
