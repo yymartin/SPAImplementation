@@ -1,0 +1,21 @@
+--Table creation
+
+Create Table STORAGE_SERVER_OPTIMAL (ID varbinary(256), BSK varbinary(256), CTEXT varbinary(256) );
+
+Create Table STORAGE_SERVER_OPTIMAL (ID varbinary(256), CTEXT varbinary(256) );
+
+-- Table selection
+
+Select * From ? Where ID = ?;
+
+Select * From STORAGE_STORAGE_OPTIMAL ORDER BY NEWID();
+
+-- Table deletion
+
+Delete * From ? Where ID = ?;
+
+--Table insertion 
+
+Insert Into STORAGE_SERVER_OPTIMAL VALUES (?, ?, ?);
+
+Insert Into STORAGE_STORAGE_OPTIMAL VALUES (?, ?);
