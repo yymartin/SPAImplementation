@@ -27,22 +27,23 @@ import javax.net.ssl.SSLSocket;
 public class Registration extends AsyncTask<Void,Void,byte[]> {
     DataInputStream in;
     InputStream key;
+    String ipAddress;
 
-    public Registration(InputStream key){
+    public Registration(InputStream key, String ipAddress){
         this.key = key;
+        this.ipAddress = ipAddress;
     }
 
     @Override
     protected byte[] doInBackground(Void... voids) {
         SSLSocket socket;
 
-        String address = "172.22.22.58";
         int port = 1234;
 
         byte[] result = null;
 
         try {
-            socket = SSLClientUtility.getSocketWithCert(InetAddress.getByName(address), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
+            socket = SSLClientUtility.getSocketWithCert(InetAddress.getByName(ipAddress), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 	        in = new DataInputStream(socket.getInputStream());
 
             result = getData();

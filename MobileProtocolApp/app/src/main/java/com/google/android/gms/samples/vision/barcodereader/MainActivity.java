@@ -47,6 +47,14 @@ public class MainActivity extends Activity{
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditText ipAddressFromUser = (EditText) findViewById(R.id.ipAddress);
+                String ipAddress = ipAddressFromUser.getText().toString();
+
+                if (ipAddress.equals("")){
+                    createDialog("Bad login, you are not registered");
+                    return;
+                }
+
                 byte[] result = null;
                 InputStream key = null;
                 try {
@@ -54,7 +62,7 @@ public class MainActivity extends Activity{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Registration register = new Registration(key);
+                Registration register = new Registration(key, ipAddress);
                 try {
                     result = register.execute().get();
                 } catch (InterruptedException e) {
@@ -63,7 +71,7 @@ public class MainActivity extends Activity{
                     e.printStackTrace();
                 }
 
-                if(result.equals("")) {
+                if(result == null || result.equals("")) {
                     createDialog("Something went wrong, you are not registered");
                 } else {
 

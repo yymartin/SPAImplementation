@@ -1,198 +1,274 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
-MERGED from [com.android.support:design:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-24.2.0.aar/1275cc9f1d275b0b50a38a62904acf4d/AndroidManifest.xml:17:1-24:12
-MERGED from [com.google.android.gms:play-services-vision:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-9.4.0.aar/c001d333341f5df26a5fc624de574b83/AndroidManifest.xml:2:1-6:12
-MERGED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:16:1-24:12
-MERGED from [com.google.android.gms:play-services-tasks:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-9.4.0.aar/aa47d37df37aab333ba95d9b9d3827df/AndroidManifest.xml:2:1-6:12
-MERGED from [com.google.android.gms:play-services-basement:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-9.4.0.aar/513bc2f6a2136c7677e6c759b5131264/AndroidManifest.xml:16:1-26:12
-MERGED from [com.android.support:appcompat-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.0.aar/fd53c57d3000ce65ca23dab9236b55f5/AndroidManifest.xml:17:1-27:12
-MERGED from [com.android.support:support-v4:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-24.2.0.aar/3de4d5b82855aae90928d4fd09a176e6/AndroidManifest.xml:17:1-27:12
-MERGED from [com.android.support:recyclerview-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-24.2.0.aar/1c0cabaad5f891a0af17c21128675de4/AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-fragment:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-24.2.0.aar/f7dc5915a03e008d7394014d7dd4eabe/AndroidManifest.xml:17:1-27:12
-MERGED from [com.android.support:support-core-ui:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-24.2.0.aar/cae7fe0a4f942f86deacaf5e2faf1959/AndroidManifest.xml:17:1-27:12
-MERGED from [com.android.support:animated-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-24.2.0.aar/aa8ae2405b6163cde7b137d31d42d02f/AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.support:support-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-24.2.0.aar/b062084d8b9067bc0b885e6ca4e46af7/AndroidManifest.xml:17:1-25:12
-MERGED from [com.android.support:support-core-utils:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-24.2.0.aar/f7e0c5f3f284701288d68468434e4c63/AndroidManifest.xml:17:1-27:12
-MERGED from [com.android.support:support-media-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-24.2.0.aar/1bd0024ef0a29f1c539cb06f9dd3af55/AndroidManifest.xml:17:1-27:12
-MERGED from [com.android.support:support-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-24.2.0.aar/94b95e16f75a6c2b4cbe432a808e6151/AndroidManifest.xml:17:1-27:12
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+MERGED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/ade17a3aaa953ba6abccbd2c470404dd/AndroidManifest.xml:17:1-31:12
+MERGED from [com.google.android.gms:play-services-vision:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-11.6.0.aar/7f4a4a55353e2f4634f4e633493dfa7d/AndroidManifest.xml:2:1-5:12
+MERGED from [com.google.android.gms:play-services-vision-common:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-11.6.0.aar/4510034da008425560357523f079a494/AndroidManifest.xml:2:1-5:12
+MERGED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:16:1-21:12
+MERGED from [com.google.android.gms:play-services-tasks:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.6.0.aar/36de47e42fe49bc0c9fcdb9da52c48f3/AndroidManifest.xml:2:1-5:12
+MERGED from [com.google.android.gms:play-services-basement:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.0.aar/02083747691ac0deadd372ba49f044d0/AndroidManifest.xml:16:1-23:12
+MERGED from [com.android.support:transition:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/transition-26.1.0.aar/77719063cf8b26c9ecf301f3cd5928a3/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:support-v4:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/a8fe1ab1b4766dac84c2799163d74c15/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/ea88dc104ee070bd22d9bef4d3f82b66/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/aa016a017af234a4817b1b445e84c9f8/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/8e20bea21b7bbec83d9c24f22989895c/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/6f94186cdba37ec80c050c3e287b68a6/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/d3b665f9aace3ad27ad5b13979a4777b/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/a66511806da2903b44ff21ab402d3316/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/bab0706f342b9ad6b112b10165405d79/AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/09264c6f3fe2f63100486a2e110721df/AndroidManifest.xml:17:1-31:12
+MERGED from [com.google.android.gms:play-services-vision-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-license-11.6.0.aar/09f84776e3cc7d31a31955cb1cd727d0/AndroidManifest.xml:2:1-6:12
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/badb9d75572714ea0a1fbcd04979b735/AndroidManifest.xml:17:1-30:12
+MERGED from [com.google.android.gms:play-services-base-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.6.0.aar/1d95fd32c7c93deccf96eb52236fb3c0/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-basement-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.6.0.aar/4dab55f1fb61ccf4f8788ec53ab8e491/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-vision-common-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-license-11.6.0.aar/baa011ec65fe09e032962b12ed192cc9/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-tasks-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.6.0.aar/b90ddc98e2db2743480fc5a1cbf9e265/AndroidManifest.xml:2:1-6:12
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
 	package
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:3:5-66
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:3:5-66
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
 	android:versionName
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
 	android:versionCode
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:1-42:12
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:11-69
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:2:11-69
 	android:installLocation
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:4:5-35
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:4:5-35
 uses-feature#android.hardware.camera
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:6:5-60
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:6:5-60
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:6:19-57
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:6:19-57
 uses-permission#android.permission.CAMERA
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:8:5-65
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:8:5-65
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:8:22-62
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:8:22-62
 uses-permission#android.permission.INTERNET
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:9:5-66
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:9:5-66
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:9:22-64
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:9:22-64
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:10:5-81
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:10:5-81
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:10:22-78
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:10:22-78
 application
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:12:5-40:19
-MERGED from [com.android.support:design:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-24.2.0.aar/1275cc9f1d275b0b50a38a62904acf4d/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:design:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-24.2.0.aar/1275cc9f1d275b0b50a38a62904acf4d/AndroidManifest.xml:22:5-20
-MERGED from [com.google.android.gms:play-services-vision:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-9.4.0.aar/c001d333341f5df26a5fc624de574b83/AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-vision:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-9.4.0.aar/c001d333341f5df26a5fc624de574b83/AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:19:5-23:19
-MERGED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:19:5-23:19
-MERGED from [com.google.android.gms:play-services-tasks:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-9.4.0.aar/aa47d37df37aab333ba95d9b9d3827df/AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-tasks:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-9.4.0.aar/aa47d37df37aab333ba95d9b9d3827df/AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-basement:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-9.4.0.aar/513bc2f6a2136c7677e6c759b5131264/AndroidManifest.xml:20:5-24:19
-MERGED from [com.google.android.gms:play-services-basement:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-9.4.0.aar/513bc2f6a2136c7677e6c759b5131264/AndroidManifest.xml:20:5-24:19
-MERGED from [com.android.support:appcompat-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.0.aar/fd53c57d3000ce65ca23dab9236b55f5/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:appcompat-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.0.aar/fd53c57d3000ce65ca23dab9236b55f5/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-v4:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-24.2.0.aar/3de4d5b82855aae90928d4fd09a176e6/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-v4:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-24.2.0.aar/3de4d5b82855aae90928d4fd09a176e6/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-fragment:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-24.2.0.aar/f7dc5915a03e008d7394014d7dd4eabe/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-fragment:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-24.2.0.aar/f7dc5915a03e008d7394014d7dd4eabe/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-core-ui:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-24.2.0.aar/cae7fe0a4f942f86deacaf5e2faf1959/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-core-ui:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-24.2.0.aar/cae7fe0a4f942f86deacaf5e2faf1959/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:animated-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-24.2.0.aar/aa8ae2405b6163cde7b137d31d42d02f/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:animated-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-24.2.0.aar/aa8ae2405b6163cde7b137d31d42d02f/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:support-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-24.2.0.aar/b062084d8b9067bc0b885e6ca4e46af7/AndroidManifest.xml:23:5-20
-MERGED from [com.android.support:support-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-24.2.0.aar/b062084d8b9067bc0b885e6ca4e46af7/AndroidManifest.xml:23:5-20
-MERGED from [com.android.support:support-core-utils:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-24.2.0.aar/f7e0c5f3f284701288d68468434e4c63/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-core-utils:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-24.2.0.aar/f7e0c5f3f284701288d68468434e4c63/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-media-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-24.2.0.aar/1bd0024ef0a29f1c539cb06f9dd3af55/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-media-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-24.2.0.aar/1bd0024ef0a29f1c539cb06f9dd3af55/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-24.2.0.aar/94b95e16f75a6c2b4cbe432a808e6151/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-24.2.0.aar/94b95e16f75a6c2b4cbe432a808e6151/AndroidManifest.xml:25:5-20
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:12:5-40:19
+MERGED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/ade17a3aaa953ba6abccbd2c470404dd/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/ade17a3aaa953ba6abccbd2c470404dd/AndroidManifest.xml:25:5-29:19
+MERGED from [com.google.android.gms:play-services-vision:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-11.6.0.aar/7f4a4a55353e2f4634f4e633493dfa7d/AndroidManifest.xml:4:5-19
+MERGED from [com.google.android.gms:play-services-vision:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-11.6.0.aar/7f4a4a55353e2f4634f4e633493dfa7d/AndroidManifest.xml:4:5-19
+MERGED from [com.google.android.gms:play-services-vision-common:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-11.6.0.aar/4510034da008425560357523f079a494/AndroidManifest.xml:4:5-19
+MERGED from [com.google.android.gms:play-services-vision-common:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-11.6.0.aar/4510034da008425560357523f079a494/AndroidManifest.xml:4:5-19
+MERGED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:18:5-20:19
+MERGED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:18:5-20:19
+MERGED from [com.google.android.gms:play-services-tasks:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.6.0.aar/36de47e42fe49bc0c9fcdb9da52c48f3/AndroidManifest.xml:4:5-19
+MERGED from [com.google.android.gms:play-services-tasks:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.6.0.aar/36de47e42fe49bc0c9fcdb9da52c48f3/AndroidManifest.xml:4:5-19
+MERGED from [com.google.android.gms:play-services-basement:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.0.aar/02083747691ac0deadd372ba49f044d0/AndroidManifest.xml:19:5-21:19
+MERGED from [com.google.android.gms:play-services-basement:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.0.aar/02083747691ac0deadd372ba49f044d0/AndroidManifest.xml:19:5-21:19
+MERGED from [com.android.support:transition:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/transition-26.1.0.aar/77719063cf8b26c9ecf301f3cd5928a3/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:transition:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/transition-26.1.0.aar/77719063cf8b26c9ecf301f3cd5928a3/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:support-v4:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/a8fe1ab1b4766dac84c2799163d74c15/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-v4:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/a8fe1ab1b4766dac84c2799163d74c15/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/ea88dc104ee070bd22d9bef4d3f82b66/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/ea88dc104ee070bd22d9bef4d3f82b66/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/aa016a017af234a4817b1b445e84c9f8/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/aa016a017af234a4817b1b445e84c9f8/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/8e20bea21b7bbec83d9c24f22989895c/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/8e20bea21b7bbec83d9c24f22989895c/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/6f94186cdba37ec80c050c3e287b68a6/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/6f94186cdba37ec80c050c3e287b68a6/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/d3b665f9aace3ad27ad5b13979a4777b/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/d3b665f9aace3ad27ad5b13979a4777b/AndroidManifest.xml:22:5-26:19
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/a66511806da2903b44ff21ab402d3316/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/a66511806da2903b44ff21ab402d3316/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/bab0706f342b9ad6b112b10165405d79/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/bab0706f342b9ad6b112b10165405d79/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/09264c6f3fe2f63100486a2e110721df/AndroidManifest.xml:25:5-29:19
+MERGED from [com.android.support:support-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/09264c6f3fe2f63100486a2e110721df/AndroidManifest.xml:25:5-29:19
+MERGED from [com.google.android.gms:play-services-vision-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-license-11.6.0.aar/09f84776e3cc7d31a31955cb1cd727d0/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-vision-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-license-11.6.0.aar/09f84776e3cc7d31a31955cb1cd727d0/AndroidManifest.xml:5:5-20
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/badb9d75572714ea0a1fbcd04979b735/AndroidManifest.xml:24:5-28:19
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/badb9d75572714ea0a1fbcd04979b735/AndroidManifest.xml:24:5-28:19
+MERGED from [com.google.android.gms:play-services-base-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.6.0.aar/1d95fd32c7c93deccf96eb52236fb3c0/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-base-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.6.0.aar/1d95fd32c7c93deccf96eb52236fb3c0/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-basement-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.6.0.aar/4dab55f1fb61ccf4f8788ec53ab8e491/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-basement-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.6.0.aar/4dab55f1fb61ccf4f8788ec53ab8e491/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-vision-common-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-license-11.6.0.aar/baa011ec65fe09e032962b12ed192cc9/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-vision-common-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-license-11.6.0.aar/baa011ec65fe09e032962b12ed192cc9/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-tasks-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.6.0.aar/b90ddc98e2db2743480fc5a1cbf9e265/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-tasks-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.6.0.aar/b90ddc98e2db2743480fc5a1cbf9e265/AndroidManifest.xml:5:5-20
 	android:supportsRtl
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:17:9-37
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:17:9-37
 	android:label
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:16:9-40
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:16:9-40
 	android:fullBackupContent
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:14:9-42
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:14:9-42
 	android:icon
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:15:9-38
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:15:9-38
 	android:allowBackup
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:13:9-35
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:13:9-35
 	android:theme
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:18:9-47
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:18:9-47
 meta-data#com.google.android.gms.version
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:19:9-21:69
-MERGED from [com.google.android.gms:play-services-basement:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-9.4.0.aar/513bc2f6a2136c7677e6c759b5131264/AndroidManifest.xml:21:9-23:69
-MERGED from [com.google.android.gms:play-services-basement:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-9.4.0.aar/513bc2f6a2136c7677e6c759b5131264/AndroidManifest.xml:21:9-23:69
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:19:9-21:69
+MERGED from [com.google.android.gms:play-services-basement:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.0.aar/02083747691ac0deadd372ba49f044d0/AndroidManifest.xml:20:9-121
+MERGED from [com.google.android.gms:play-services-basement:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.0.aar/02083747691ac0deadd372ba49f044d0/AndroidManifest.xml:20:9-121
 	android:value
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:21:13-66
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:21:13-66
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:20:13-58
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:20:13-58
 meta-data#com.google.android.gms.vision.DEPENDENCIES
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:22:9-24:39
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:22:9-24:39
 	android:value
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:24:13-36
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:24:13-36
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:23:13-70
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:23:13-70
 activity#com.google.android.gms.samples.vision.barcodereader.LoginActivity
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:26:9-34:20
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:26:9-34:20
 	android:label
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:28:13-56
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:28:13-56
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:27:13-42
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:27:13-42
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:29:13-33:29
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:29:13-33:29
 action#android.intent.action.MAIN
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:30:17-69
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:30:17-69
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:30:25-66
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:30:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:32:17-77
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:32:17-77
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:32:27-74
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:32:27-74
 activity#com.google.android.gms.samples.vision.barcodereader.MainActivity
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:35:9-49
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:35:9-49
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:35:19-47
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:35:19-47
 activity#com.google.android.gms.samples.vision.barcodereader.QRCodeReader
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:36:9-37:58
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:36:9-37:58
 	android:label
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:37:13-56
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:37:13-56
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:36:19-47
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:36:19-47
 activity#com.google.android.gms.samples.vision.barcodereader.BarcodeCaptureActivity
-ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:38:9-39:43
+ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:38:9-39:43
 	android:label
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:39:13-41
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:39:13-41
 	android:name
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:38:19-57
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:38:19-57
 uses-sdk
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-MERGED from [com.android.support:design:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-24.2.0.aar/1275cc9f1d275b0b50a38a62904acf4d/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:design:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-24.2.0.aar/1275cc9f1d275b0b50a38a62904acf4d/AndroidManifest.xml:20:5-43
-MERGED from [com.google.android.gms:play-services-vision:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-9.4.0.aar/c001d333341f5df26a5fc624de574b83/AndroidManifest.xml:4:5-42
-MERGED from [com.google.android.gms:play-services-vision:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-9.4.0.aar/c001d333341f5df26a5fc624de574b83/AndroidManifest.xml:4:5-42
-MERGED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:18:5-42
-MERGED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:18:5-42
-MERGED from [com.google.android.gms:play-services-tasks:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-9.4.0.aar/aa47d37df37aab333ba95d9b9d3827df/AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-tasks:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-9.4.0.aar/aa47d37df37aab333ba95d9b9d3827df/AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-basement:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-9.4.0.aar/513bc2f6a2136c7677e6c759b5131264/AndroidManifest.xml:18:5-42
-MERGED from [com.google.android.gms:play-services-basement:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-9.4.0.aar/513bc2f6a2136c7677e6c759b5131264/AndroidManifest.xml:18:5-42
-MERGED from [com.android.support:appcompat-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.0.aar/fd53c57d3000ce65ca23dab9236b55f5/AndroidManifest.xml:21:5-23:78
-MERGED from [com.android.support:appcompat-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.0.aar/fd53c57d3000ce65ca23dab9236b55f5/AndroidManifest.xml:21:5-23:78
-MERGED from [com.android.support:support-v4:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-24.2.0.aar/3de4d5b82855aae90928d4fd09a176e6/AndroidManifest.xml:21:5-23:54
-MERGED from [com.android.support:support-v4:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-24.2.0.aar/3de4d5b82855aae90928d4fd09a176e6/AndroidManifest.xml:21:5-23:54
-MERGED from [com.android.support:recyclerview-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-24.2.0.aar/1c0cabaad5f891a0af17c21128675de4/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:recyclerview-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-24.2.0.aar/1c0cabaad5f891a0af17c21128675de4/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-fragment:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-24.2.0.aar/f7dc5915a03e008d7394014d7dd4eabe/AndroidManifest.xml:21:5-23:60
-MERGED from [com.android.support:support-fragment:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-24.2.0.aar/f7dc5915a03e008d7394014d7dd4eabe/AndroidManifest.xml:21:5-23:60
-MERGED from [com.android.support:support-core-ui:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-24.2.0.aar/cae7fe0a4f942f86deacaf5e2faf1959/AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:support-core-ui:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-24.2.0.aar/cae7fe0a4f942f86deacaf5e2faf1959/AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:animated-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-24.2.0.aar/aa8ae2405b6163cde7b137d31d42d02f/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-24.2.0.aar/aa8ae2405b6163cde7b137d31d42d02f/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-24.2.0.aar/b062084d8b9067bc0b885e6ca4e46af7/AndroidManifest.xml:21:5-43
-MERGED from [com.android.support:support-vector-drawable:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-24.2.0.aar/b062084d8b9067bc0b885e6ca4e46af7/AndroidManifest.xml:21:5-43
-MERGED from [com.android.support:support-core-utils:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-24.2.0.aar/f7e0c5f3f284701288d68468434e4c63/AndroidManifest.xml:21:5-23:61
-MERGED from [com.android.support:support-core-utils:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-24.2.0.aar/f7e0c5f3f284701288d68468434e4c63/AndroidManifest.xml:21:5-23:61
-MERGED from [com.android.support:support-media-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-24.2.0.aar/1bd0024ef0a29f1c539cb06f9dd3af55/AndroidManifest.xml:21:5-23:63
-MERGED from [com.android.support:support-media-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-24.2.0.aar/1bd0024ef0a29f1c539cb06f9dd3af55/AndroidManifest.xml:21:5-23:63
-MERGED from [com.android.support:support-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-24.2.0.aar/94b95e16f75a6c2b4cbe432a808e6151/AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:support-compat:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-24.2.0.aar/94b95e16f75a6c2b4cbe432a808e6151/AndroidManifest.xml:21:5-23:58
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+MERGED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:21:5-23:62
+MERGED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:21:5-23:62
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/ade17a3aaa953ba6abccbd2c470404dd/AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/ade17a3aaa953ba6abccbd2c470404dd/AndroidManifest.xml:21:5-23:78
+MERGED from [com.google.android.gms:play-services-vision:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-11.6.0.aar/7f4a4a55353e2f4634f4e633493dfa7d/AndroidManifest.xml:3:5-43
+MERGED from [com.google.android.gms:play-services-vision:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-11.6.0.aar/7f4a4a55353e2f4634f4e633493dfa7d/AndroidManifest.xml:3:5-43
+MERGED from [com.google.android.gms:play-services-vision-common:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-11.6.0.aar/4510034da008425560357523f079a494/AndroidManifest.xml:3:5-43
+MERGED from [com.google.android.gms:play-services-vision-common:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-11.6.0.aar/4510034da008425560357523f079a494/AndroidManifest.xml:3:5-43
+MERGED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:17:5-43
+MERGED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:17:5-43
+MERGED from [com.google.android.gms:play-services-tasks:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.6.0.aar/36de47e42fe49bc0c9fcdb9da52c48f3/AndroidManifest.xml:3:5-43
+MERGED from [com.google.android.gms:play-services-tasks:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.6.0.aar/36de47e42fe49bc0c9fcdb9da52c48f3/AndroidManifest.xml:3:5-43
+MERGED from [com.google.android.gms:play-services-basement:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.0.aar/02083747691ac0deadd372ba49f044d0/AndroidManifest.xml:17:5-43
+MERGED from [com.google.android.gms:play-services-basement:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.0.aar/02083747691ac0deadd372ba49f044d0/AndroidManifest.xml:17:5-43
+MERGED from [com.android.support:transition:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/transition-26.1.0.aar/77719063cf8b26c9ecf301f3cd5928a3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/transition-26.1.0.aar/77719063cf8b26c9ecf301f3cd5928a3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/a8fe1ab1b4766dac84c2799163d74c15/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-v4:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/a8fe1ab1b4766dac84c2799163d74c15/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/ea88dc104ee070bd22d9bef4d3f82b66/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/ea88dc104ee070bd22d9bef4d3f82b66/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/aa016a017af234a4817b1b445e84c9f8/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/aa016a017af234a4817b1b445e84c9f8/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/8e20bea21b7bbec83d9c24f22989895c/AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/8e20bea21b7bbec83d9c24f22989895c/AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/6f94186cdba37ec80c050c3e287b68a6/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/6f94186cdba37ec80c050c3e287b68a6/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/d3b665f9aace3ad27ad5b13979a4777b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/d3b665f9aace3ad27ad5b13979a4777b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/a66511806da2903b44ff21ab402d3316/AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/a66511806da2903b44ff21ab402d3316/AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/bab0706f342b9ad6b112b10165405d79/AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/bab0706f342b9ad6b112b10165405d79/AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:support-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/09264c6f3fe2f63100486a2e110721df/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/09264c6f3fe2f63100486a2e110721df/AndroidManifest.xml:21:5-23:58
+MERGED from [com.google.android.gms:play-services-vision-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-license-11.6.0.aar/09f84776e3cc7d31a31955cb1cd727d0/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-vision-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-license-11.6.0.aar/09f84776e3cc7d31a31955cb1cd727d0/AndroidManifest.xml:4:5-43
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/badb9d75572714ea0a1fbcd04979b735/AndroidManifest.xml:20:5-22:41
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/badb9d75572714ea0a1fbcd04979b735/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.gms:play-services-base-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.6.0.aar/1d95fd32c7c93deccf96eb52236fb3c0/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-base-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.6.0.aar/1d95fd32c7c93deccf96eb52236fb3c0/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-basement-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.6.0.aar/4dab55f1fb61ccf4f8788ec53ab8e491/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-basement-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.6.0.aar/4dab55f1fb61ccf4f8788ec53ab8e491/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-vision-common-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-license-11.6.0.aar/baa011ec65fe09e032962b12ed192cc9/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-vision-common-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-vision-common-license-11.6.0.aar/baa011ec65fe09e032962b12ed192cc9/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-tasks-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.6.0.aar/b90ddc98e2db2743480fc5a1cbf9e265/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-tasks-license:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.6.0.aar/b90ddc98e2db2743480fc5a1cbf9e265/AndroidManifest.xml:4:5-43
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
 	tools:overrideLibrary
-		ADDED from [com.android.support:appcompat-v7:24.2.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.0.aar/fd53c57d3000ce65ca23dab9236b55f5/AndroidManifest.xml:23:9-75
+		ADDED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:23:9-59
 	android:targetSdkVersion
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
-activity#com.google.android.gms.common.api.GoogleApiActivity
-ADDED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:20:9-22:45
-	android:exported
-		ADDED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:22:19-43
-	android:theme
-		ADDED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:21:19-78
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		ADDED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/yoanmartin/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml
+meta-data#android.support.VERSION
+ADDED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/ade17a3aaa953ba6abccbd2c470404dd/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/ade17a3aaa953ba6abccbd2c470404dd/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:transition:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/transition-26.1.0.aar/77719063cf8b26c9ecf301f3cd5928a3/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:transition:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/transition-26.1.0.aar/77719063cf8b26c9ecf301f3cd5928a3/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:support-v4:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/a8fe1ab1b4766dac84c2799163d74c15/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-v4:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/a8fe1ab1b4766dac84c2799163d74c15/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/ea88dc104ee070bd22d9bef4d3f82b66/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/ea88dc104ee070bd22d9bef4d3f82b66/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/aa016a017af234a4817b1b445e84c9f8/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/aa016a017af234a4817b1b445e84c9f8/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/8e20bea21b7bbec83d9c24f22989895c/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-fragment:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/8e20bea21b7bbec83d9c24f22989895c/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/6f94186cdba37ec80c050c3e287b68a6/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-core-ui:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/6f94186cdba37ec80c050c3e287b68a6/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/d3b665f9aace3ad27ad5b13979a4777b/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/d3b665f9aace3ad27ad5b13979a4777b/AndroidManifest.xml:23:9-25:38
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/a66511806da2903b44ff21ab402d3316/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-media-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/a66511806da2903b44ff21ab402d3316/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/bab0706f342b9ad6b112b10165405d79/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-core-utils:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/bab0706f342b9ad6b112b10165405d79/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/09264c6f3fe2f63100486a2e110721df/AndroidManifest.xml:26:9-28:38
+MERGED from [com.android.support:support-compat:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/09264c6f3fe2f63100486a2e110721df/AndroidManifest.xml:26:9-28:38
+	android:value
+		ADDED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:28:13-35
 	android:name
-		ADDED from [com.google.android.gms:play-services-base:9.4.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-9.4.0.aar/4fd39d4878c5a246189023431c17e965/AndroidManifest.xml:20:19-85
+		ADDED from [com.android.support:design:26.1.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/design-26.1.0.aar/dec63d04fc02fbe5837f02974e78987d/AndroidManifest.xml:27:13-51
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:19:9-172
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:19:146-170
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:19:86-145
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:11.6.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/play-services-base-11.6.0.aar/49bccdbfd151ce0a83ad6c46d7213dec/AndroidManifest.xml:19:19-85
+meta-data#android.arch.lifecycle.VERSION
+ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/badb9d75572714ea0a1fbcd04979b735/AndroidManifest.xml:25:9-27:47
+	android:value
+		ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/badb9d75572714ea0a1fbcd04979b735/AndroidManifest.xml:27:13-44
+	android:name
+		ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/yoanmartin/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/badb9d75572714ea0a1fbcd04979b735/AndroidManifest.xml:26:13-58
