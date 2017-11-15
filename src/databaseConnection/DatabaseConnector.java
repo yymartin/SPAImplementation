@@ -62,16 +62,21 @@ public class DatabaseConnector {
 		try {
 			switch(mode) {
 			case STORAGE_OPTIMAL :
-				stmt = connection.prepareStatement("INSERT INTO " + table + "  VALUES (?, ?);");
-				stmt.setBytes(1, values[0]);
-				stmt.setBytes(2, values[1]);
+				stmt = connection.prepareStatement("UPDATE " + table + " SET CTEXT = ? WHERE ID = ? IF @@ROWCOUNT = 0 INSERT INTO " + table + " VALUES (?, ?)");
+				stmt.setBytes(1, values[1]);
+				stmt.setBytes(2, values[0]);
+				stmt.setBytes(3, values[0]);
+				stmt.setBytes(4, values[1]);
 				stmt.executeUpdate();
 				break;
 			case SERVER_OPTIMAL :
-				stmt = connection.prepareStatement("INSERT INTO " + table + "  VALUES (?, ?, ?);");
-				stmt.setBytes(1, values[0]);
-				stmt.setBytes(2, values[1]);
-				stmt.setBytes(3, values[2]);
+				stmt = connection.prepareStatement("UPDATE " + table + " SET BSK = ?, CTEXT = ? WHERE ID = ? IF @@ROWCOUNT = 0 INSERT INTO " + table + " VALUES (?, ?, ?)");
+				stmt.setBytes(1, values[1]);
+				stmt.setBytes(2, values[2]);
+				stmt.setBytes(3, values[0]);
+				stmt.setBytes(4, values[0]);
+				stmt.setBytes(5, values[1]);
+				stmt.setBytes(6, values[2]);
 				stmt.executeUpdate();
 				break;
 			default:

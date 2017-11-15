@@ -45,7 +45,7 @@ public class User {
 								
 		byte[] K = MyKeyGenerator.getOneTimePaddingKeyFromFile(System.getProperty("user.dir"), "mobile");
 		
-		MobileClient.executeRegistration();
+//		MobileClient.executeRegistration();
 		
 //		//SERVER OPTIMAL
 //
@@ -92,7 +92,7 @@ public class User {
 //		storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);
 //		
 //		//		registration phase
-////		
+//		
 //		serverConnector.registerToServer();
 //		PublicKey obliviousTransferKey = storageConnector.storeValuesToStorage();
 //		storePublicKeyToFile(obliviousTransferKey);
