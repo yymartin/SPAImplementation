@@ -21,6 +21,7 @@ import cryptographyBasics.Hash;
 import cryptographyBasics.MyKeyGenerator;
 import cryptographyBasics.OTReceiver;
 import cryptographyBasics.SymmetricEncryption;
+import user.UserApplication;
 
 /**
  * @author yoanmartin
@@ -167,9 +168,11 @@ public class StorageClient {
 		case SERVER_OPTIMAL:
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection");
+				System.out.println("Ask for connection to the storage");
+				UserApplication.output = UserApplication.output + "\n Ask for connection to the storage";
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established"); 
+				System.out.println("Connection established with the storage"); 
+				UserApplication.output = UserApplication.output + "\n Storage connection establised";
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);

@@ -70,7 +70,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 	@Override
 	public PrivateKey call() throws Exception{
 	PrivateKey resultKey = null;
-	SecretKey aesKey;
+//	SecretKey aesKey;
 	byte[] oneTimePadKey;
 	byte[] keyAsByte;
 	byte[] ctext;

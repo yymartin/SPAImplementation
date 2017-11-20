@@ -161,7 +161,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			int length = in.readInt();
 			if(length > 0) {
 				id = new byte[length];
-				in.readFully(id, 0, id.length); 
+				in.readFully(id); 
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

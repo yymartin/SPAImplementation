@@ -16,6 +16,7 @@ import SSLUtility.SSLClientUtility;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.Hash;
 import server.ClientToServerMode;
+import user.UserApplication;
 
 /**
  * @author yoanmartin
@@ -78,9 +79,11 @@ public class ServerClient {
 		case SERVER_OPTIMAL:
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection");
+				System.out.println("Ask for connection with the server");
+				UserApplication.output = UserApplication.output + "\n Ask for connection with the server";
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established"); 
+				System.out.println("Server connection established"); 
+				UserApplication.output = UserApplication.output + "\n Server connection established";
 				out = new DataOutputStream(socket.getOutputStream());
 				serverPool.execute(new ClientSenderThread(out, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.REGISTER, username, svk));
 				serverPool.shutdown();

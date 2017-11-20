@@ -1,7 +1,10 @@
 package cryptographyBasicsTest;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.math.BigInteger;
 
 import org.junit.Test;
 
@@ -11,13 +14,11 @@ public class HashTest {
 	
 	@Test
 	public void test() {
-			String password = "This is a password!";
-			String hashPBKDF2 = Hash.generatePBKDF2WithHmacSHA1Hash(password);
-
-			boolean test = Hash.validatePassword("This is a password!", hashPBKDF2);
-			assertTrue(test);
+			BigInteger message = BigInteger.valueOf(123);
+			BigInteger hash = Hash.generateSHA256Hash(message.toByteArray());
 			
-			test = Hash.validatePassword("password1", hashPBKDF2);
-			assertFalse(test);
+			BigInteger realHash = new BigInteger("960651239372262155457909151379123018551187498045146330307848435673183387030");
+			
+			assertEquals(hash, realHash);
 		}
 }
