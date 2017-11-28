@@ -40,10 +40,10 @@ public class ChallengeSenderThread implements Runnable{
 		this.challenge = challenge.toByteArray();
 	}
 
-	public ChallengeSenderThread(DataOutputStream out, BigInteger challenge) {
+	public ChallengeSenderThread(DataOutputStream out, String challenge) {
 		this.out = out;
 		this.protocol = SSLUtility.ProtocolMode.MOBILE;
-		this.challenge = challenge.toByteArray();
+		this.challenge = challenge.getBytes();
 	}
 
 	@Override

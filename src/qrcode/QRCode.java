@@ -15,12 +15,11 @@ import com.google.zxing.qrcode.QRCodeWriter;
 public class QRCode {
 	public static void generateQRCodeFromData(byte[] data, String address) {
 		BitMatrix matrix = generateMatrix(data);
-		
-		FileOutputStream out;
+		FileOutputStream fileOut;
 		try {
-			out = new FileOutputStream(new File(address+"/qrcode.png"));
-			MatrixToImageWriter.writeToStream(matrix, "png", out);
-			out.close();
+			fileOut = new FileOutputStream(new File(address+"/qrcode.png"));
+			MatrixToImageWriter.writeToStream(matrix, "png", fileOut);
+			fileOut.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -29,7 +28,6 @@ public class QRCode {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	private static BitMatrix generateMatrix(byte[] data) {
 		BigInteger dataAsString = new BigInteger(data);

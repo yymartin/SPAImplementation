@@ -10,10 +10,13 @@ import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
@@ -28,6 +31,7 @@ import server.ClientToServerMode;
 public class ClientAdministratorThread extends Thread implements Runnable{
 	private DataInputStream in;
 	private DataOutputStream out;
+	private Scanner reader;
 
 	/**
 	 * General constructor of the thread
@@ -137,12 +141,17 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 					client = Server.clients.get(username);
 					BigInteger challenge = new BigInteger(100, new Random());
 					client.setChallenge(challenge);
-					QRCode.generateQRCodeFromData(challenge.toString().getBytes(), System.getProperty("user.dir"));
+					Server.clientPool.execute(new ChallengeSenderThread(out, challenge.toString()));
 					byte[] KFromClient = client.getK();
-					SecretKey keyFromChallenge = MyKeyGenerator.generateHMacKeyFromPassword(challenge);
-					byte[] response = SymmetricEncryption.generateHMac(new BigInteger(KFromClient), keyFromChallenge);
-					int responseTrimed = new BigInteger(response).abs().hashCode();
-					System.out.println(responseTrimed);
+					SecretKey K = new SecretKeySpec(KFromClient, 0, KFromClient.length, "HmacSHA256");
+					byte[] response = SymmetricEncryption.generateHMac(challenge, K);
+					String waitValue  = trim(new BigInteger(response));
+					reader = new Scanner(System.in);
+					String userValue = reader.nextLine();
+					
+					if(waitValue.equals(userValue)) {
+						System.out.println("Connected!");
+					}
 				}
 				break;
 			case AUTH:
@@ -170,5 +179,15 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 
 		return id;
 	}
+	
+    private String trim(BigInteger data) {
+        Random rand = new Random(data.longValue());
+        String result = "";
+        for(int i = 0; i < 7; i++) {
+            result = result + Integer.toString(rand.nextInt(10));
+        }
+
+        return result;
+    }
 
 }

@@ -7,6 +7,7 @@ import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
 import mobile.MobileClient;
+import qrcode.QRCode;
 import server.client.ServerClient;
 import storage.client.StorageClient;
 
@@ -23,9 +24,11 @@ import java.security.interfaces.RSAPrivateKey;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Label;
 
 public class UserApplication {
 
@@ -41,7 +44,7 @@ public class UserApplication {
 	private static byte[] K;
 	private Text textConsole;
 	
-	public static String output;
+	public static String output = "no output";
 
 	/**
 	 * Launch the application.
@@ -58,7 +61,9 @@ public class UserApplication {
 		r = MyKeyGenerator.getRFromFile(address, "blind");
 		svk = MyKeyGenerator.getPublicKeyFromFile(address,"digital");
 		ssk = MyKeyGenerator.getPrivateKeyFromFile(address,"digital");
-		K = MyKeyGenerator.getOneTimePaddingKeyFromFile(address, "mobile");
+		
+		K = MyKeyGenerator.getHMacKeyFromFile(address, "mobile").getEncoded();
+		QRCode.generateQRCodeFromData(BigInteger.valueOf(12345).toByteArray(), System.getProperty("user.home")+"/Desktop");
 
 		try {
 			UserApplication window = new UserApplication();
@@ -88,8 +93,12 @@ public class UserApplication {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(450, 300);
+		shell.setSize(1000, 1000);
 		shell.setText("SWT Application");
+		
+		Label qrcode = new Label(shell, SWT.NONE);
+		qrcode.setBounds(491, 40, 400, 400);
+		qrcode.setVisible(false);
 
 		List list = new List(shell, SWT.BORDER);
 		String[] protocols = new String[] {"Server optimal", "Storage optimal", "Privacy optimal", "Mobile"};
@@ -166,6 +175,8 @@ public class UserApplication {
 				PrivateKey keyFromStorage;
 				switch(protocol) {
 				case SERVER_OPTIMAL:
+					serverConnector = new ServerClient(username, svk);
+					storageConnector = new StorageClient(username, password, website, bsk, bvk, ssk, r);
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(null, null);
 					challenge = serverConnector.askForChallengeToServer()[0];
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
@@ -173,6 +184,8 @@ public class UserApplication {
 
 					break;
 				case STORAGE_OPTIMAL:
+					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
+					storageConnector = new StorageClient(SSLUtility.ProtocolMode.STORAGE_OPTIMAL, password, bsk, svk, ssk, r);
 					result = serverConnector.askForChallengeToServer();
 					id = result[0];
 					challenge = result[1];
@@ -181,6 +194,8 @@ public class UserApplication {
 					serverConnector.executeChallengeToServer(response);
 					break;
 				case PRIVACY_OPTIMAL:
+					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
+					storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);		
 					result = serverConnector.askForChallengeToServer();
 					id = result[0];
 					challenge = result[1];
@@ -191,7 +206,10 @@ public class UserApplication {
 
 					break;
 				case MOBILE:
-					serverConnector.askForChallengeToServer();
+					challenge = serverConnector.askForChallengeToServer()[0];
+					QRCode.generateQRCodeFromData(challenge.toByteArray(), System.getProperty("user.home")+"/Desktop");
+					qrcode.setVisible(true);
+					qrcode.setImage(new Image(Display.getDefault(), System.getProperty("user.home") + "/Desktop/qrcode.png"));
 					break;
 				default:
 					break;
@@ -204,7 +222,6 @@ public class UserApplication {
 		textConsole = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
 		textConsole.setBounds(10, 155, 430, 113);
 		textConsole.setText(output);
-
 	}
 
 	public void storePublicKeyToFile(PublicKey key) {

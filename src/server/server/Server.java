@@ -38,7 +38,6 @@ public class Server {
 				System.out.println("Client accepted");
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
-				
 				clientPool.execute(new ClientAdministratorThread(in, out));
 			}
 

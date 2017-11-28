@@ -32,7 +32,6 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity{
 
-    private final String filename = "userinfo";
     private byte[] password = null;
 
     @Override

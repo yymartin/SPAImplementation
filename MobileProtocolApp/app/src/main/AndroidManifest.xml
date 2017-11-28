@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:icon="@drawable/icon"
-        android:label="MultiTrackerApp"
+        android:label="SPApp"
         android:supportsRtl = "true"
         android:theme="@style/Theme.AppCompat" >
         <meta-data

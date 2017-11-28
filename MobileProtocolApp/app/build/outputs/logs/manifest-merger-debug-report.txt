@@ -113,7 +113,7 @@ MERGED from [com.google.android.gms:play-services-tasks-license:11.6.0] /Users/y
 	android:supportsRtl
 		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:17:9-37
 	android:label
-		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:16:9-40
+		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:16:9-30
 	android:fullBackupContent
 		ADDED from /Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/MobileProtocolApp/app/src/main/AndroidManifest.xml:14:9-42
 	android:icon

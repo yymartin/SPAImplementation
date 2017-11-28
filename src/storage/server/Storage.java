@@ -24,7 +24,7 @@ public class Storage {
 	public static DataInputStream in;
 	public static DataOutputStream out;
 	
-	private static Executor ex = Executors.newSingleThreadExecutor();
+	private static Executor ex = Executors.newFixedThreadPool(200);
 
 	public static void main(String[] args) {
 		String address = System.getProperty("user.dir");

@@ -27,11 +27,11 @@ public class MobileClientRegistrationThread extends Thread implements Runnable{
 	public static DataOutputStream out;
 
 	public void run() {
-		byte[] K = MyKeyGenerator.getOneTimePaddingKeyFromFile(System.getProperty("user.dir"), "mobile");
+		byte[] K = MyKeyGenerator.getHMacKeyFromFile(System.getProperty("user.dir"), "mobile").getEncoded();
 		String password = "Martin";
 		BigInteger hashPassword = Hash.generateSHA256Hash(password.getBytes());
 
-		byte[] ctext = SymmetricEncryption.encryptOneTimePadding(hashPassword.toByteArray(), K);
+		byte[] ctext = SymmetricEncryption.encryptOneTimePadding(K, hashPassword.toByteArray());
 
 		try {
 			System.out.println("Server created");

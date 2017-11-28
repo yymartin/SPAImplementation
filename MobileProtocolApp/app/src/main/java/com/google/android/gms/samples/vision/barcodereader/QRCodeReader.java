@@ -17,6 +17,7 @@
 package com.google.android.gms.samples.vision.barcodereader;
 
 import android.content.Intent;
+import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.util.Random;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -42,8 +44,10 @@ public class QRCodeReader extends Activity {
     private TextView statusMessage;
     private TextView barcodeValue;
 
-    private byte[] K;
+    private byte[] KAsBytes;
     private byte[] password;
+
+    private SecretKey K;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -57,7 +61,9 @@ public class QRCodeReader extends Activity {
         byte[] ctext = intentLauncher.getByteArrayExtra("ctext");
         password = intentLauncher.getByteArrayExtra("password");
 
-        K = Hash.decryptOneTimePadding(password, ctext);
+        KAsBytes = Hash.decryptOneTimePadding(ctext, password);
+
+        K = new SecretKeySpec(KAsBytes, 0, KAsBytes.length, "HmacSHA256");
 
         statusMessage = (TextView)findViewById(R.id.status_message);
         barcodeValue = (TextView)findViewById(R.id.barcode_value);
@@ -97,15 +103,11 @@ public class QRCodeReader extends Activity {
                     statusMessage.setText(R.string.barcode_success);
                     String valueOfQRCode = barcode.displayValue;
                     BigInteger challenge = new BigInteger(valueOfQRCode);
-                    SecretKey keyForChallenge = Hash.generateHMacKeyFromChallenge(challenge);
-                    BigInteger response = Hash.generateHMac(new BigInteger(K), keyForChallenge);
-                    int valueToDisplay = response.abs().hashCode();
-
-                    barcodeValue.setText(String.valueOf(valueToDisplay));
-                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    BigInteger response = Hash.generateHMac(challenge, K);
+                    String responseTrimmed = trim(response);
+                    barcodeValue.setText(String.valueOf(responseTrimmed));
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
-                    Log.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
                 statusMessage.setText(String.format(getString(R.string.barcode_error),
@@ -115,5 +117,15 @@ public class QRCodeReader extends Activity {
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private String trim(BigInteger data) {
+        Random rand = new Random(data.longValue());
+        String result = "";
+        for(int i = 0; i < 7; i++) {
+            result = result + Integer.toString(rand.nextInt(10));
+        }
+
+        return result;
     }
 }

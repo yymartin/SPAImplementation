@@ -193,10 +193,18 @@ public class ServerClient {
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				serverPool.execute(new ClientSenderThread(out, ProtocolMode.MOBILE, ClientToServerMode.CHALLENGE, username));
+				Future<BigInteger[]> result = serverPool.submit(new ClientReceiverThread(in, ProtocolMode.MOBILE));
+				finalChallenge = result.get();
 			} catch (UnknownHostException e) {
 
 			} catch (IOException e) {
 
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} 
 			break;
 		}
