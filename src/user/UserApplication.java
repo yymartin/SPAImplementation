@@ -63,7 +63,6 @@ public class UserApplication {
 		ssk = MyKeyGenerator.getPrivateKeyFromFile(address,"digital");
 		
 		K = MyKeyGenerator.getHMacKeyFromFile(address, "mobile").getEncoded();
-		QRCode.generateQRCodeFromData(BigInteger.valueOf(12345).toByteArray(), System.getProperty("user.home")+"/Desktop");
 
 		try {
 			UserApplication window = new UserApplication();
@@ -93,7 +92,7 @@ public class UserApplication {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(1000, 1000);
+		shell.setSize(1000, 600);
 		shell.setText("SWT Application");
 		
 		Label qrcode = new Label(shell, SWT.NONE);
@@ -158,7 +157,7 @@ public class UserApplication {
 				case MOBILE:
 					serverConnector = new ServerClient(username, K);
 					serverConnector.registerToServer();
-					MobileClient.executeRegistration();
+//					MobileClient.executeRegistration();
 					break;
 				default:
 					break;
@@ -181,7 +180,6 @@ public class UserApplication {
 					challenge = serverConnector.askForChallengeToServer()[0];
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
 					serverConnector.executeChallengeToServer(response);
-
 					break;
 				case STORAGE_OPTIMAL:
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);

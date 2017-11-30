@@ -5,7 +5,12 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
+import SSLUtility.HTTPUtility;
 import SSLUtility.ProtocolMode;
 import server.ClientToServerMode;
 
@@ -13,11 +18,13 @@ import server.ClientToServerMode;
  * @author yoanmartin
  * Instantiation of a thread which sends information to a server
  */
-public class ClientSenderThread extends Thread implements Runnable {
-	private DataOutputStream out;
-	ProtocolMode protocol;
-	ClientToServerMode mode;
-	byte[] username, svk, bsk, password, challenge, k;
+public class ClientSenderThread implements Callable<String> {
+	private ProtocolMode protocol;
+	private ClientToServerMode mode;
+	private String username, password, challenge, k, svk, bsk;
+	private Map<String, String> dataToSend;
+	
+	private String address = "http://localhost:8080/pro/register";
 
 
 	/**
@@ -28,12 +35,11 @@ public class ClientSenderThread extends Thread implements Runnable {
 	 * @param username
 	 * @param svk
 	 */
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk) {
-		this.out = out;
+	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk) {
 		this.protocol = protocol;
 		this.mode = mode;
-		this.username = username.getBytes();
-		this.svk = svk.getEncoded();
+		this.username = username;
+		this.svk = Base64.getEncoder().encodeToString(svk.getEncoded());
 	}
 
 	/**
@@ -43,11 +49,10 @@ public class ClientSenderThread extends Thread implements Runnable {
 	 * @param mode The actual client state from the server point of view
 	 * @param username The username of the client
 	 */
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username) {
-		this.out = out;
+	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode mode, String username) {
 		this.protocol = protocol;
 		this.mode = mode;
-		this.username = username.getBytes();
+		this.username = username;
 	}
 
 	/**
@@ -57,12 +62,11 @@ public class ClientSenderThread extends Thread implements Runnable {
 	 * @param username The username of the client
 	 * @param challenge The challenge received by the client
 	 */
-	public ClientSenderThread(DataOutputStream out, ClientToServerMode mode, String username, BigInteger challenge) {
-		this.out = out;
+	public ClientSenderThread(ClientToServerMode mode, String username, BigInteger challenge) {
 		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		this.mode = mode;
-		this.username = username.getBytes();
-		this.challenge = challenge.toByteArray();
+		this.username = username;
+		this.challenge = challenge.toString();
 	}
 
 
@@ -75,13 +79,12 @@ public class ClientSenderThread extends Thread implements Runnable {
 	 * @param svk The svk of the client
 	 * @param bsk The bsk of the client
 	 */
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk, PrivateKey bsk) {
-		this.out = out;
+	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk, PrivateKey bsk) {
 		this.protocol = protocol;
 		this.mode = mode;
-		this.username = username.getBytes();
-		this.svk = svk.getEncoded();
-		this.bsk = bsk.getEncoded();
+		this.username = username;
+		this.svk = Base64.getEncoder().encodeToString(svk.getEncoded());
+		this.bsk = Base64.getEncoder().encodeToString(bsk.getEncoded());
 	}
 
 	/**
@@ -92,40 +95,35 @@ public class ClientSenderThread extends Thread implements Runnable {
 	 * @param username The username of the client
 	 * @param password The hashed password of the client
 	 */
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode mode, String username, BigInteger password) {
-		this.out = out;
+	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode mode, String username, BigInteger password) {
 		this.protocol = protocol;
 		this.mode = mode;
-		this.username = username.getBytes();
-		this.password = password.toByteArray();
+		this.username = username;
+		this.password = password.toString();
 	}
 
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, ClientToServerMode register, String username, byte[] k) {
-		this.out = out;
+	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode register, String username, byte[] k) {
 		this.protocol = protocol;
 		this.mode = ClientToServerMode.REGISTER;
-		this.username = username.getBytes();
-		this.k = k;
+		this.username = username;
+		this.k = new String(k);
 	}
 
 	@Override
-	public void run() {	
-		byte[] protocolAsByte = protocol.toString().getBytes();
-		byte[] modeAsByte = mode.toString().getBytes();
-		
+	public String call() {			
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			switch(mode) {
 			case REGISTER:
 				try {
-					out.writeInt(protocolAsByte.length);
-					out.write(protocolAsByte);
-					out.writeInt(modeAsByte.length);
-					out.write(modeAsByte);
-					out.writeInt(username.length);
-					out.write(username);
-					out.writeInt(svk.length);
-					out.write(svk);
+					dataToSend = new HashMap<>();
+					dataToSend.put("protocol", protocol.toString());
+					dataToSend.put("mode", mode.toString());
+					dataToSend.put("username", username);
+					dataToSend.put("svk", svk);
+					
+					String response = HTTPUtility.executePost(address, dataToSend);
+					return response;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -133,12 +131,13 @@ public class ClientSenderThread extends Thread implements Runnable {
 				break;
 			case CHALLENGE:
 				try {
-					out.writeInt(protocolAsByte.length);
-					out.write(protocolAsByte);
-					out.writeInt(modeAsByte.length);
-					out.write(modeAsByte);
-					out.writeInt(username.length);
-					out.write(username);
+					dataToSend = new HashMap<>();
+					dataToSend.put("protocol", protocol.toString());
+					dataToSend.put("mode", mode.toString());
+					dataToSend.put("username", username);
+					
+					String challenge = HTTPUtility.executePost(address, dataToSend);
+					return challenge;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -146,14 +145,14 @@ public class ClientSenderThread extends Thread implements Runnable {
 				break;
 			case AUTH:
 				try {
-					out.writeInt(protocolAsByte.length);
-					out.write(protocolAsByte);
-					out.writeInt(modeAsByte.length);
-					out.write(modeAsByte);
-					out.writeInt(username.length);
-					out.write(username);
-					out.writeInt(challenge.length);
-					out.write(challenge);
+					dataToSend = new HashMap<>();
+					dataToSend.put("protocol", protocol.toString());
+					dataToSend.put("mode", mode.toString());
+					dataToSend.put("username", username);
+					dataToSend.put("challenge", challenge);
+					
+					String response = HTTPUtility.executePost(address, dataToSend);
+					return response;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -166,16 +165,16 @@ public class ClientSenderThread extends Thread implements Runnable {
 			switch(mode) { 
 			case REGISTER:
 				try {
-					out.writeInt(protocolAsByte.length);
-					out.write(protocolAsByte);
-					out.writeInt(modeAsByte.length);
-					out.write(modeAsByte);
-					out.writeInt(username.length);
-					out.write(username);
-					out.writeInt(svk.length);
-					out.write(svk);
-					out.writeInt(bsk.length);
-					out.write(bsk);
+					dataToSend = new HashMap<>();
+					
+					dataToSend.put("protocol", ProtocolMode.STORAGE_OPTIMAL.toString());
+					dataToSend.put("mode", mode.toString());
+					dataToSend.put("username", username);
+					dataToSend.put("svk", svk);
+					dataToSend.put("bsk", bsk);
+					
+					String response = HTTPUtility.executePost(address, dataToSend);
+					return response;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -183,33 +182,34 @@ public class ClientSenderThread extends Thread implements Runnable {
 				break;
 			case CHALLENGE:
 				try {
-					out.writeInt(protocolAsByte.length);
-					out.write(protocolAsByte);
-					out.writeInt(modeAsByte.length);
-					out.write(modeAsByte);
-					out.writeInt(username.length);
-					out.write(username);
-					out.writeInt(password.length);
-					out.write(password);
+					dataToSend = new HashMap<>();
+					
+					dataToSend.put("protocol", ProtocolMode.STORAGE_OPTIMAL.toString());
+					dataToSend.put("mode", mode.toString());
+					dataToSend.put("username", username);
+					dataToSend.put("password", password);
+					
+					String response = HTTPUtility.executePost(address, dataToSend);
+					return response;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			case AUTH:
-				try {
-					out.writeInt(protocolAsByte.length);
-					out.write(protocolAsByte);
-					out.writeInt(modeAsByte.length);
-					out.write(modeAsByte);
-					out.writeInt(username.length);
-					out.write(username);
-					out.writeInt(challenge.length);
-					out.write(challenge);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					out.writeInt(protocolAsByte.length);
+//					out.write(protocolAsByte);
+//					out.writeInt(modeAsByte.length);
+//					out.write(modeAsByte);
+//					out.writeInt(username.length);
+//					out.write(username);
+//					out.writeInt(challenge.length);
+//					out.write(challenge);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				break;
 			}
 			break;
@@ -218,31 +218,32 @@ public class ClientSenderThread extends Thread implements Runnable {
 			switch(mode) {
 			case REGISTER:
 				try {
-					out.writeInt(protocolAsByte.length);
-					out.write(protocolAsByte);
-					out.writeInt(modeAsByte.length);
-					out.write(modeAsByte);
-					out.writeInt(username.length);
-					out.write(username);
-					out.writeInt(k.length);
-					out.write(k);
+					dataToSend = new HashMap<>();
+					
+					dataToSend.put("protocol", protocol.toString());
+					dataToSend.put("mode", mode.toString());
+					dataToSend.put("username", username);
+					dataToSend.put("k", k);
+					
+					String response = HTTPUtility.executePost(address, dataToSend);
+					return response;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			case CHALLENGE:
-				try {
-					out.writeInt(protocolAsByte.length);
-					out.write(protocolAsByte);
-					out.writeInt(modeAsByte.length);
-					out.write(modeAsByte);
-					out.writeInt(username.length);
-					out.write(username);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					out.writeInt(protocolAsByte.length);
+//					out.write(protocolAsByte);
+//					out.writeInt(modeAsByte.length);
+//					out.write(modeAsByte);
+//					out.writeInt(username.length);
+//					out.write(username);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				break;
 			case AUTH:
 				break;
@@ -253,6 +254,6 @@ public class ClientSenderThread extends Thread implements Runnable {
 		}
 		
 		Thread.currentThread().interrupt();
-		return;
+		return "";
 	}
 }

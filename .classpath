@@ -3,9 +3,19 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="libs/mssql-jdbc-6.2.1.jre8.jar"/>
-	<classpathentry kind="lib" path="libs/core-3.3.1.jar"/>
-	<classpathentry kind="lib" path="libs/javase-3.3.1-20160916.143839-1.jar"/>
 	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/swt.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/core-3.3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/fluent-hc-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/httpclient-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/httpclient-cache-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/httpclient-win-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/httpcore-4.4.6.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/httpmime-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/javase-3.3.1-20160916.143839-1.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/jna-platform-4.1.0.jar"/>
+	<classpathentry kind="lib" path="/Users/yoanmartin/Desktop/Google Drive/EPFL/Bachelor V/Projet de Bachelor/SPAImplementation/libs/mssql-jdbc-6.2.1.jre8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
