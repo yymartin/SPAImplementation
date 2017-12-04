@@ -1,6 +1,5 @@
 package server.client;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.PrivateKey;
@@ -9,6 +8,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import javax.crypto.SecretKey;
 
 import SSLUtility.HTTPUtility;
 import SSLUtility.ProtocolMode;
@@ -102,11 +103,11 @@ public class ClientSenderThread implements Callable<String> {
 		this.password = password.toString();
 	}
 
-	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode register, String username, byte[] k) {
+	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode register, String username, SecretKey k) {
 		this.protocol = protocol;
 		this.mode = ClientToServerMode.REGISTER;
 		this.username = username;
-		this.k = new String(k);
+		this.k = Base64.getEncoder().encodeToString(k.getEncoded());
 	}
 
 	@Override
@@ -197,19 +198,6 @@ public class ClientSenderThread implements Callable<String> {
 				}
 				break;
 			case AUTH:
-//				try {
-//					out.writeInt(protocolAsByte.length);
-//					out.write(protocolAsByte);
-//					out.writeInt(modeAsByte.length);
-//					out.write(modeAsByte);
-//					out.writeInt(username.length);
-//					out.write(username);
-//					out.writeInt(challenge.length);
-//					out.write(challenge);
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
 				break;
 			}
 			break;
@@ -233,17 +221,19 @@ public class ClientSenderThread implements Callable<String> {
 				}
 				break;
 			case CHALLENGE:
-//				try {
-//					out.writeInt(protocolAsByte.length);
-//					out.write(protocolAsByte);
-//					out.writeInt(modeAsByte.length);
-//					out.write(modeAsByte);
-//					out.writeInt(username.length);
-//					out.write(username);
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				try {
+					dataToSend = new HashMap<>();
+					
+					dataToSend.put("protocol", protocol.toString());
+					dataToSend.put("mode", mode.toString());
+					dataToSend.put("username", username);
+					
+					String response = HTTPUtility.executePost(address, dataToSend);
+					return response;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 			case AUTH:
 				break;

@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.crypto.SecretKey;
+
 import SSLUtility.ProtocolMode;
 import SSLUtility.SSLClientUtility;
 import cryptographyBasics.AsymmetricEncryption;
@@ -37,7 +39,7 @@ public class ServerClient {
 	private PrivateKey bsk;
 	private BigInteger r;
 
-	private byte[] k;
+	private SecretKey k;
 
 	private ExecutorService serverPool = Executors.newFixedThreadPool(20);
 
@@ -66,7 +68,7 @@ public class ServerClient {
 		this.svk = svk;
 	}
 
-	public ServerClient(String username, byte[] k) {
+	public ServerClient(String username, SecretKey k) {
 		ServerClient.protocol = SSLUtility.ProtocolMode.MOBILE;
 		ServerClient.username = username;
 		this.k = k;
@@ -147,27 +149,13 @@ public class ServerClient {
 			}
 			break;
 		case MOBILE:
+			response = serverPool.submit(new ClientSenderThread(ProtocolMode.MOBILE, ClientToServerMode.CHALLENGE, username));
 			try {
-				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection");
-				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established"); 
-				in = new DataInputStream(socket.getInputStream());
-				out = new DataOutputStream(socket.getOutputStream());
-				//				serverPool.execute(new ClientSenderThread(out, ProtocolMode.MOBILE, ClientToServerMode.CHALLENGE, username));
-				//				Future<BigInteger[]> result = serverPool.submit(new ClientReceiverThread(in, ProtocolMode.MOBILE));
-				//				finalChallenge = result.get();
-			} catch (UnknownHostException e) {
-
-			} catch (IOException e) {
-
-				//			} catch (InterruptedException e) {
-				//				// TODO Auto-generated catch block
-				//				e.printStackTrace();
-				//			} catch (ExecutionException e) {
-				//				// TODO Auto-generated catch block
-				//				e.printStackTrace();
-			} 
+				finalChallenge[0] = new BigInteger(response.get());
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		}
 		return finalChallenge;

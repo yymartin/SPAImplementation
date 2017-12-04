@@ -13,6 +13,9 @@ import storage.client.StorageClient;
 
 import org.eclipse.swt.widgets.List;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
@@ -21,6 +24,9 @@ import java.nio.file.Paths;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
+import java.util.Scanner;
+
+import javax.crypto.SecretKey;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -41,10 +47,15 @@ public class UserApplication {
 	private static PublicKey bvk, svk;
 	private static PrivateKey bsk, ssk;
 	private static BigInteger r;
-	private static byte[] K;
+	private static SecretKey K;
 	private Text textConsole;
 	
 	public static String output = "no output";
+	private Text textUsername;
+	private Text textPassword;
+	private Label responseText;
+	
+	private final String clipboard = "Response is copied!";
 
 	/**
 	 * Launch the application.
@@ -52,8 +63,6 @@ public class UserApplication {
 	 */
 	public static void main(String[] args) {
 		address = System.getProperty("user.dir");
-		username = "Yoan";
-		password = "Martin";
 		website = "Bob";
 
 		bvk = MyKeyGenerator.getPublicKeyFromFile(address, "blind");
@@ -62,7 +71,7 @@ public class UserApplication {
 		svk = MyKeyGenerator.getPublicKeyFromFile(address,"digital");
 		ssk = MyKeyGenerator.getPrivateKeyFromFile(address,"digital");
 		
-		K = MyKeyGenerator.getHMacKeyFromFile(address, "mobile").getEncoded();
+		K = MyKeyGenerator.getHMacKeyFromFile(address, "mobile");
 
 		try {
 			UserApplication window = new UserApplication();
@@ -95,6 +104,22 @@ public class UserApplication {
 		shell.setSize(1000, 600);
 		shell.setText("SWT Application");
 		
+		textUsername = new Text(shell, SWT.BORDER);
+		textUsername.setBounds(238, 21, 82, 28);
+		textUsername.setMessage("Username");
+						
+		textPassword = new Text(shell, SWT.BORDER);
+		textPassword.setBounds(238, 56, 82, 28);
+		textPassword.setMessage("Password");
+		
+		textConsole = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
+		textConsole.setBounds(31, 210, 430, 113);
+		textConsole.setText(output);
+		
+		responseText = new Label(shell, SWT.BORDER);
+		responseText.setBounds(272, 130, 189, 28);
+		responseText.setVisible(false);
+						
 		Label qrcode = new Label(shell, SWT.NONE);
 		qrcode.setBounds(491, 40, 400, 400);
 		qrcode.setVisible(false);
@@ -129,11 +154,15 @@ public class UserApplication {
 		});
 
 		Button btnRegister = new Button(shell, SWT.NONE);
-		btnRegister.setBounds(282, 26, 94, 28);
+		btnRegister.setBounds(35, 130, 94, 28);
 		btnRegister.setText("Register");
 		btnRegister.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				username = textUsername.getText();
+				password = textPassword.getText();
+			
+
 				switch(protocol) {
 				case SERVER_OPTIMAL:
 					serverConnector = new ServerClient(username, svk);
@@ -157,7 +186,12 @@ public class UserApplication {
 				case MOBILE:
 					serverConnector = new ServerClient(username, K);
 					serverConnector.registerToServer();
-//					MobileClient.executeRegistration();
+					String address = MobileClient.executeRegistration();
+					if(address == null) {
+						textConsole.setText("Error with mobile registration");
+					} else {
+						textConsole.setText("Please connect to: " + address);
+					}
 					break;
 				default:
 					break;
@@ -169,6 +203,9 @@ public class UserApplication {
 		btnConnect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				username = textUsername.getText();
+				password = textPassword.getText();
+
 				BigInteger challenge, response, id;
 				BigInteger[] result;
 				PrivateKey keyFromStorage;
@@ -179,7 +216,10 @@ public class UserApplication {
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(null, null);
 					challenge = serverConnector.askForChallengeToServer()[0];
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-					serverConnector.executeChallengeToServer(response);
+//					serverConnector.executeChallengeToServer(response);
+					responseText.setText(clipboard);
+					responseText.setVisible(true);
+					copyTextToClipboard(response.toString());
 					break;
 				case STORAGE_OPTIMAL:
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
@@ -189,7 +229,10 @@ public class UserApplication {
 					challenge = result[1];
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(id, null);
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-					serverConnector.executeChallengeToServer(response);
+//					serverConnector.executeChallengeToServer(response);
+					responseText.setText(clipboard);
+					responseText.setVisible(true);
+					copyTextToClipboard(response.toString());
 					break;
 				case PRIVACY_OPTIMAL:
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
@@ -200,12 +243,14 @@ public class UserApplication {
 					PublicKey obliviousTransferKey = getPublicKeyFromFile();
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(id, obliviousTransferKey);
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-					serverConnector.executeChallengeToServer(response);
-
+//					serverConnector.executeChallengeToServer(response);
+					responseText.setText(clipboard);
+					responseText.setVisible(true);
+					copyTextToClipboard(response.toString());
 					break;
 				case MOBILE:
 					challenge = serverConnector.askForChallengeToServer()[0];
-					QRCode.generateQRCodeFromData(challenge.toByteArray(), System.getProperty("user.home")+"/Desktop");
+					QRCode.generateQRCodeFromData(challenge.toString().getBytes(), System.getProperty("user.home")+"/Desktop");
 					qrcode.setVisible(true);
 					qrcode.setImage(new Image(Display.getDefault(), System.getProperty("user.home") + "/Desktop/qrcode.png"));
 					break;
@@ -214,12 +259,9 @@ public class UserApplication {
 				}
 			}
 		});
-		btnConnect.setBounds(282, 60, 94, 28);
+		btnConnect.setBounds(148, 130, 94, 28);
 		btnConnect.setText("Connect");
-		
-		textConsole = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
-		textConsole.setBounds(10, 155, 430, 113);
-		textConsole.setText(output);
+	
 	}
 
 	public void storePublicKeyToFile(PublicKey key) {
@@ -245,5 +287,12 @@ public class UserApplication {
 		}
 
 		return MyKeyGenerator.convertByteArrayIntoPublicKey(key);
+	}
+	
+	private void copyTextToClipboard(String message) {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Clipboard clipboard = toolkit.getSystemClipboard();
+		StringSelection strSel = new StringSelection(message);
+		clipboard.setContents(strSel, null);	
 	}
 }
