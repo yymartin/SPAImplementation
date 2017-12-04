@@ -60,7 +60,7 @@ public class QRCodeReader extends Activity {
         Intent intentLauncher = getIntent();
         byte[] ctext = intentLauncher.getByteArrayExtra("ctext");
         password = intentLauncher.getByteArrayExtra("password");
-
+        
         KAsBytes = Hash.decryptOneTimePadding(ctext, password);
 
         K = new SecretKeySpec(KAsBytes, 0, KAsBytes.length, "HmacSHA256");
