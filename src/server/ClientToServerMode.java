@@ -5,17 +5,17 @@ package server;
  * Enumeration representing the different state of a user from the server point of view
  */
 public enum ClientToServerMode {
-	REGISTER {
+	REGISTERED {
 		@Override
 		public String toString() {
-			return "REGISTER";
+			return "REGISTERED";
 		}
 	},
 	
-	CHALLENGE {
+	READYTOAUTH {
 		@Override
 		public String toString() {
-			return "CHALLENGE";
+			return "READYTOAUTH";
 		}
 	},
 	

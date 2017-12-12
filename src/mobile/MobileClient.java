@@ -4,19 +4,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
+import javax.crypto.SecretKey;
 public class MobileClient{
 	
-	public static String executeRegistration() {
+	public static void executeRegistration(SecretKey K, String password) {
 		ExecutorService ex = Executors.newSingleThreadExecutor();
-		Future<String> address = ex.submit(new MobileClientRegistrationThread());
-		String addressValue = null;
-		try {
-			addressValue = address.get();
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return addressValue;
+		ex.execute(new MobileClientRegistrationThread(K, password));
 	}
 }

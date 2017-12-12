@@ -18,13 +18,14 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
-import java.util.Scanner;
 
 import javax.crypto.SecretKey;
 
@@ -35,6 +36,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Combo;
 
 public class UserApplication {
 
@@ -50,10 +52,9 @@ public class UserApplication {
 	private static SecretKey K;
 	private Text textConsole;
 	
-	public static String output = "no output";
+	public static String output = "";
 	private Text textUsername;
 	private Text textPassword;
-	private Label responseText;
 	
 	private final String clipboard = "Response is copied!";
 
@@ -105,20 +106,21 @@ public class UserApplication {
 		shell.setText("SWT Application");
 		
 		textUsername = new Text(shell, SWT.BORDER);
-		textUsername.setBounds(238, 21, 82, 28);
+		textUsername.setBounds(238, 21, 82, 22);
 		textUsername.setMessage("Username");
+		
+		Combo comboWebsite = new Combo(shell, SWT.NONE);
+		comboWebsite.setBounds(238, 90, 82, 40);
+		comboWebsite.setText("Website");
+		comboWebsite.add("Bob.com");
 						
 		textPassword = new Text(shell, SWT.BORDER);
-		textPassword.setBounds(238, 56, 82, 28);
+		textPassword.setBounds(238, 56, 82, 22);
 		textPassword.setMessage("Password");
 		
-		textConsole = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
+		textConsole = new Text(shell, SWT.BORDER | SWT.READ_ONLY | SWT.V_SCROLL);
 		textConsole.setBounds(31, 210, 430, 113);
 		textConsole.setText(output);
-		
-		responseText = new Label(shell, SWT.BORDER);
-		responseText.setBounds(272, 130, 189, 28);
-		responseText.setVisible(false);
 						
 		Label qrcode = new Label(shell, SWT.NONE);
 		qrcode.setBounds(491, 40, 400, 400);
@@ -161,8 +163,22 @@ public class UserApplication {
 			public void widgetSelected(SelectionEvent arg0) {
 				username = textUsername.getText();
 				password = textPassword.getText();
-			
-
+				website = comboWebsite.getText();
+				if(username.equals("")) {
+					output = output + "\n Please enter correct username";
+					return;
+				}
+				
+				if(password.equals("")) {
+					output = output + "\n Please enter correct password";
+					return;
+				}
+				
+				if(website.equals("")) {
+					output = output + "\n Please enter correct website";
+					return;
+				}
+				
 				switch(protocol) {
 				case SERVER_OPTIMAL:
 					serverConnector = new ServerClient(username, svk);
@@ -181,21 +197,24 @@ public class UserApplication {
 					storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);		
 					serverConnector.registerToServer();
 					PublicKey obliviousTransferKey = storageConnector.storeValuesToStorage();
-					storePublicKeyToFile(obliviousTransferKey);
+					storePublicKeyToFile(obliviousTransferKey, address, "OT");
 					break;
 				case MOBILE:
 					serverConnector = new ServerClient(username, K);
 					serverConnector.registerToServer();
-					String address = MobileClient.executeRegistration();
-					if(address == null) {
-						textConsole.setText("Error with mobile registration");
-					} else {
-						textConsole.setText("Please connect to: " + address);
+					try {
+						output = output + "/n Please connect to: " + InetAddress.getLocalHost().getHostAddress();
+					} catch (UnknownHostException e) {
+						output = output + "/n Impossible to execute mobile registration";
+						e.printStackTrace();
 					}
+					textConsole.setText(output);
+					MobileClient.executeRegistration(K, password);
 					break;
 				default:
 					break;
 				}
+				textConsole.setText(output);
 			}
 		});
 
@@ -204,24 +223,44 @@ public class UserApplication {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				username = textUsername.getText();
-				password = textPassword.getText();
+				website = comboWebsite.getText();
+				
+				if(username.equals("")) {
+					output = output + "\n Please enter correct username";
+					return;
+				}
+				
+				if(website.equals("")) {
+					output = output + "\n Please enter correct website";
+					return;
+				}
 
 				BigInteger challenge, response, id;
 				BigInteger[] result;
 				PrivateKey keyFromStorage;
 				switch(protocol) {
 				case SERVER_OPTIMAL:
+					password = textPassword.getText();
+					
+					if(password.equals("")) {
+						output = output + "\n Please enter correct password";
+						return;
+					}
 					serverConnector = new ServerClient(username, svk);
 					storageConnector = new StorageClient(username, password, website, bsk, bvk, ssk, r);
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(null, null);
 					challenge = serverConnector.askForChallengeToServer()[0];
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-//					serverConnector.executeChallengeToServer(response);
-					responseText.setText(clipboard);
-					responseText.setVisible(true);
+					output = output + "\n" + clipboard;
 					copyTextToClipboard(response.toString());
 					break;
 				case STORAGE_OPTIMAL:
+					password = textPassword.getText();
+					
+					if(password.equals("")) {
+						output = output + "\n Please enter correct password";
+						return;
+					}
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
 					storageConnector = new StorageClient(SSLUtility.ProtocolMode.STORAGE_OPTIMAL, password, bsk, svk, ssk, r);
 					result = serverConnector.askForChallengeToServer();
@@ -229,23 +268,24 @@ public class UserApplication {
 					challenge = result[1];
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(id, null);
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-//					serverConnector.executeChallengeToServer(response);
-					responseText.setText(clipboard);
-					responseText.setVisible(true);
+					output = output + "\n" + clipboard;
 					copyTextToClipboard(response.toString());
 					break;
 				case PRIVACY_OPTIMAL:
+					password = textPassword.getText();
+					if(password.equals("")) {
+						output = output + "\n Please enter correct password";
+						return;
+					}
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
 					storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);		
 					result = serverConnector.askForChallengeToServer();
 					id = result[0];
 					challenge = result[1];
-					PublicKey obliviousTransferKey = getPublicKeyFromFile();
+					PublicKey obliviousTransferKey = MyKeyGenerator.getPublicKeyFromFile(address, "OT");
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(id, obliviousTransferKey);
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-//					serverConnector.executeChallengeToServer(response);
-					responseText.setText(clipboard);
-					responseText.setVisible(true);
+					output = output + "\n" + clipboard;
 					copyTextToClipboard(response.toString());
 					break;
 				case MOBILE:
@@ -257,16 +297,16 @@ public class UserApplication {
 				default:
 					break;
 				}
+				textConsole.setText(output);
 			}
 		});
-		btnConnect.setBounds(148, 130, 94, 28);
+		btnConnect.setBounds(127, 130, 94, 28);
 		btnConnect.setText("Connect");
 	
 	}
 
-	public void storePublicKeyToFile(PublicKey key) {
-		String address = "/Users/yoanmartin/Desktop";
-		Path path = Paths.get(address+"/Server-Key");
+	public void storePublicKeyToFile(PublicKey key, String address, String title) {
+		Path path = Paths.get(address+"/Public-Key-"+title);
 		try {
 			Files.write(path, key.getEncoded());
 		} catch (IOException e) {
@@ -275,19 +315,6 @@ public class UserApplication {
 		}
 	}
 
-	public static PublicKey getPublicKeyFromFile() {
-		String address = "/Users/yoanmartin/Desktop";
-		Path path = Paths.get(address+"/Server-Key");
-		byte[] key = null;
-		try {
-			key = Files.readAllBytes(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return MyKeyGenerator.convertByteArrayIntoPublicKey(key);
-	}
 	
 	private void copyTextToClipboard(String message) {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();

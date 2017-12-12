@@ -39,7 +39,6 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 		ProtocolMode protocol = ProtocolMode.valueOf(new String(getData()));
 		ClientToStorageMode mode = ClientToStorageMode.valueOf(new String(getData()));
 		DatabaseConnector db;
-
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			byte[] id, bsk, ctext, hashPassword;
@@ -51,7 +50,6 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				ctext = getData();	
 				db = new DatabaseConnector(DatabaseMode.SERVER_OPTIMAL);
 				db.insertElementIntoStorage(new byte[][] {id, bsk, ctext});
-
 				break;
 
 			case RETRIEVE :
@@ -84,7 +82,6 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
 				db.insertElementIntoStorage(new byte[][] {id, ctext});
-
 				break;
 
 			case RETRIEVE :

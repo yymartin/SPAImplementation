@@ -1,6 +1,5 @@
 package server.client;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -24,8 +23,8 @@ public class ClientSenderThread implements Callable<String> {
 	private ClientToServerMode mode;
 	private String username, password, challenge, k, svk, bsk;
 	private Map<String, String> dataToSend;
-	
-	private String address = "http://localhost:8080/pro/register";
+
+	private String address = "https://localhost:8443/pro/register";
 
 
 	/**
@@ -105,136 +104,95 @@ public class ClientSenderThread implements Callable<String> {
 
 	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode register, String username, SecretKey k) {
 		this.protocol = protocol;
-		this.mode = ClientToServerMode.REGISTER;
+		this.mode = ClientToServerMode.REGISTERED;
 		this.username = username;
 		this.k = Base64.getEncoder().encodeToString(k.getEncoded());
 	}
 
 	@Override
-	public String call() {			
+	public String call() {
+		String response = null;
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			switch(mode) {
-			case REGISTER:
-				try {
-					dataToSend = new HashMap<>();
-					dataToSend.put("protocol", protocol.toString());
-					dataToSend.put("mode", mode.toString());
-					dataToSend.put("username", username);
-					dataToSend.put("svk", svk);
-					
-					String response = HTTPUtility.executePost(address, dataToSend);
-					return response;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			case CHALLENGE:
-				try {
-					dataToSend = new HashMap<>();
-					dataToSend.put("protocol", protocol.toString());
-					dataToSend.put("mode", mode.toString());
-					dataToSend.put("username", username);
-					
-					String challenge = HTTPUtility.executePost(address, dataToSend);
-					return challenge;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
+			case REGISTERED:
+				dataToSend = new HashMap<>();
+				dataToSend.put("protocol", protocol.toString());
+				dataToSend.put("mode", mode.toString());
+				dataToSend.put("username", username);
+				dataToSend.put("svk", svk);
+
+				response = HTTPUtility.executePost(address, dataToSend);
+				return response;
+			case READYTOAUTH:
+				dataToSend = new HashMap<>();
+				dataToSend.put("protocol", protocol.toString());
+				dataToSend.put("mode", mode.toString());
+				dataToSend.put("username", username);
+
+				response = HTTPUtility.executePost(address, dataToSend);
+				return response;
 			case AUTH:
-				try {
-					dataToSend = new HashMap<>();
-					dataToSend.put("protocol", protocol.toString());
-					dataToSend.put("mode", mode.toString());
-					dataToSend.put("username", username);
-					dataToSend.put("challenge", challenge);
-					
-					String response = HTTPUtility.executePost(address, dataToSend);
-					return response;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
+				dataToSend = new HashMap<>();
+				dataToSend.put("protocol", protocol.toString());
+				dataToSend.put("mode", mode.toString());
+				dataToSend.put("username", username);
+				dataToSend.put("challenge", challenge);
+
+				response = HTTPUtility.executePost(address, dataToSend);
+				return response;
 			}
 			break;
-			
+
 		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL:
 			switch(mode) { 
-			case REGISTER:
-				try {
-					dataToSend = new HashMap<>();
-					
-					dataToSend.put("protocol", ProtocolMode.STORAGE_OPTIMAL.toString());
-					dataToSend.put("mode", mode.toString());
-					dataToSend.put("username", username);
-					dataToSend.put("svk", svk);
-					dataToSend.put("bsk", bsk);
-					
-					String response = HTTPUtility.executePost(address, dataToSend);
-					return response;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			case CHALLENGE:
-				try {
-					dataToSend = new HashMap<>();
-					
-					dataToSend.put("protocol", ProtocolMode.STORAGE_OPTIMAL.toString());
-					dataToSend.put("mode", mode.toString());
-					dataToSend.put("username", username);
-					dataToSend.put("password", password);
-					
-					String response = HTTPUtility.executePost(address, dataToSend);
-					return response;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
+			case REGISTERED:
+				dataToSend = new HashMap<>();
+
+				dataToSend.put("protocol", ProtocolMode.STORAGE_OPTIMAL.toString());
+				dataToSend.put("mode", mode.toString());
+				dataToSend.put("username", username);
+				dataToSend.put("svk", svk);
+				dataToSend.put("bsk", bsk);
+
+				response = HTTPUtility.executePost(address, dataToSend);
+				return response;
+			case READYTOAUTH:
+				dataToSend = new HashMap<>();
+
+				dataToSend.put("protocol", ProtocolMode.STORAGE_OPTIMAL.toString());
+				dataToSend.put("mode", mode.toString());
+				dataToSend.put("username", username);
+				dataToSend.put("password", password);
+
+				response = HTTPUtility.executePost(address, dataToSend);
+				return response;
 			case AUTH:
 				break;
 			}
 			break;
-			
+
 		case MOBILE:
 			switch(mode) {
-			case REGISTER:
-				try {
-					dataToSend = new HashMap<>();
-					
-					dataToSend.put("protocol", protocol.toString());
-					dataToSend.put("mode", mode.toString());
-					dataToSend.put("username", username);
-					dataToSend.put("k", k);
-					
-					String response = HTTPUtility.executePost(address, dataToSend);
-					return response;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			case CHALLENGE:
-				try {
-					dataToSend = new HashMap<>();
-					
-					dataToSend.put("protocol", protocol.toString());
-					dataToSend.put("mode", mode.toString());
-					dataToSend.put("username", username);
-					
-					String response = HTTPUtility.executePost(address, dataToSend);
-					return response;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
+			case REGISTERED:
+				dataToSend = new HashMap<>();
+
+				dataToSend.put("protocol", protocol.toString());
+				dataToSend.put("mode", mode.toString());
+				dataToSend.put("username", username);
+				dataToSend.put("k", k);
+
+				response = HTTPUtility.executePost(address, dataToSend);
+				return response;
+			case READYTOAUTH:
+				dataToSend = new HashMap<>();
+
+				dataToSend.put("protocol", protocol.toString());
+				dataToSend.put("mode", mode.toString());
+				dataToSend.put("username", username);
+
+				response = HTTPUtility.executePost(address, dataToSend);
+				return response;
 			case AUTH:
 				break;
 			default:
@@ -242,7 +200,7 @@ public class ClientSenderThread implements Callable<String> {
 			}
 			break;
 		}
-		
+
 		Thread.currentThread().interrupt();
 		return "";
 	}

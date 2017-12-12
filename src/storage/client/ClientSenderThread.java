@@ -75,7 +75,6 @@ public class ClientSenderThread extends Thread implements Runnable {
 		this.id = id.toByteArray();
 	}
 
-	@Override
 	public void run() {	
 		byte[] protocolAsByte = protocol.toString().getBytes();
 		byte[] modeAsByte = mode.toString().getBytes();
@@ -95,10 +94,9 @@ public class ClientSenderThread extends Thread implements Runnable {
 					out.writeInt(ctext.length);
 					out.write(ctext);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				break;
+				return;
 			case RETRIEVE:
 				try {
 					out.writeInt(protocolAsByte.length);
@@ -113,7 +111,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				break;
+				return;
 			}
 			break;
 
@@ -130,10 +128,9 @@ public class ClientSenderThread extends Thread implements Runnable {
 					out.writeInt(ctext.length);
 					out.write(ctext);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				break;
+				return;
 			case RETRIEVE:
 				try {
 					out.writeInt(protocolAsByte.length);
@@ -146,7 +143,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				break;
+				return;
 			}
 			break;
 
@@ -163,10 +160,9 @@ public class ClientSenderThread extends Thread implements Runnable {
 					out.writeInt(ctext.length);
 					out.write(ctext);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				break;
+				return;
 			case RETRIEVE:
 				try {
 					out.writeInt(protocolAsByte.length);
@@ -179,7 +175,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				break;
+				return;
 			}
 			break;
 		case MOBILE:
@@ -187,5 +183,6 @@ public class ClientSenderThread extends Thread implements Runnable {
 		default:
 			break;
 		}
+		return;
 	}
 }

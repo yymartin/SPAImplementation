@@ -33,7 +33,7 @@ public class StorageClient {
 	public static Thread t1, t2;
 	private static DataInputStream in;
 	private static DataOutputStream out;
-	
+
 	private static ExecutorService ex = Executors.newSingleThreadExecutor();
 
 	private ProtocolMode protocol;
@@ -81,28 +81,26 @@ public class StorageClient {
 	 * Function which stores the necessary values to the storage
 	 */
 	public PublicKey storeValuesToStorage() {
+		UserApplication.output = UserApplication.output + "\n Try to store values into storage";
 		byte[] ctext;
 		PublicKey storageKey = null;
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			BigInteger sig = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
-//			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
+			//			SecretKey aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
 			byte[] oneTimePadkey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(sig);
-//			ctext = SymmetricEncryption.encryptAES(ssk.getEncoded(), aesKey);
+			//			ctext = SymmetricEncryption.encryptAES(ssk.getEncoded(), aesKey);
 			ctext = SymmetricEncryption.encryptOneTimePadding(ssk.getEncoded(), oneTimePadkey);
 
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection");
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
-
 				ex.execute(new ClientSenderThread(out, id, bsk, ctext));
-			} catch (UnknownHostException e) {
-
+				UserApplication.output = UserApplication.output + "\n Correctly store values into the storage";
 			} catch (IOException e) {
-
+				UserApplication.output = UserApplication.output + "\n Something went wrong, you are not registered to the storage";
+				e.printStackTrace();
 			}
 			break;
 		case STORAGE_OPTIMAL:
@@ -111,17 +109,14 @@ public class StorageClient {
 
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection");
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established"); 
 				out = new DataOutputStream(socket.getOutputStream());
-
 				ex.execute(new ClientSenderThread(out, protocol, id, ctext));
-			} catch (UnknownHostException e) {
-
+				UserApplication.output = UserApplication.output + "\n Correctly store values into the storage";
 			} catch (IOException e) {
-
-			}
+				UserApplication.output = UserApplication.output + "\n Something went wrong, you are not registered to the storage";
+				e.printStackTrace();
+			} 
 			break;
 		case PRIVACY_OPTIMAL:
 			id = AsymmetricEncryption.sign(password, (RSAPrivateKey) bsk);
@@ -129,25 +124,22 @@ public class StorageClient {
 
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection");
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
-				ex.execute(new ClientSenderThread(out, protocol, id, ctext));
-				Future<PublicKey> result = ex.submit(new ClientStorerThread(in));
+				ex.submit(new ClientSenderThread(out, protocol, id, ctext));
+				Future<PublicKey> result = ex.submit(new ClientReceiverThread(in));
 				storageKey = result.get();
-			} catch (UnknownHostException e) {
+				if(storageKey != null) {
+					UserApplication.output = UserApplication.output + "\n Correctly store value into the storage";
+				} else {
+					UserApplication.output = UserApplication.output + "\n Something went wrong, you are not registered to the storage";
+				}
 
-			} catch (IOException e) {
-
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			} catch (IOException | InterruptedException | ExecutionException e) {
+				UserApplication.output = UserApplication.output + "\n Something went wrong, you are not registered to the storage";
 				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
 			break;
 		case MOBILE:
 			break;
@@ -162,85 +154,61 @@ public class StorageClient {
 	 * @return The ssk of the user
 	 */
 	public PrivateKey retrieveValuesFromStorage(BigInteger idFromStorage, PublicKey obliviousTransferKey) {
+		UserApplication.output = UserApplication.output + "\n Try to retrieve values from storage";
+
 		PrivateKey resultKey = null;
 
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection to the storage");
-				UserApplication.output = UserApplication.output + "\n Ask for connection to the storage";
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established with the storage"); 
-				UserApplication.output = UserApplication.output + "\n Storage connection establised";
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
-				ex.execute(new ClientSenderThread(out, id, passwordBlinded));
+				ex.submit(new ClientSenderThread(out, id, passwordBlinded));
 				Future<PrivateKey> result = ex.submit(new ClientRetrieverThread(in, r, bvk));
 				resultKey = result.get();
-			} catch (UnknownHostException e) {
-
-			} catch (IOException e) {
-
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				UserApplication.output = UserApplication.output + "\n Correctly retrieve values from the storage";
+			} catch (IOException | InterruptedException | ExecutionException e) {
+				UserApplication.output = UserApplication.output + "\n Something went wrong, unable to retrieve values from the storage";
 				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
 			break;
 
 		case STORAGE_OPTIMAL:
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection");
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
-				ex.execute(new ClientSenderThread(out, protocol, idFromStorage));
+				ex.submit(new ClientSenderThread(out, protocol, idFromStorage));
 				Future<PrivateKey> result = ex.submit(new ClientRetrieverThread(in, r, bvk, password));
 				resultKey = result.get();
-			} catch (UnknownHostException e) {
-
-			} catch (IOException e) {
-
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				UserApplication.output = UserApplication.output + "\n Correctly retrieve values from the storage";
+			} catch (IOException | InterruptedException | ExecutionException e) {
+				UserApplication.output = UserApplication.output + "\n Something went wrong, unable to retrieve values from the storage";
 				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
 			break;
 
 		case PRIVACY_OPTIMAL:
 			try {
 				InputStream key = new FileInputStream(new File("./PUBLICKEY.jks"));
-				System.out.println("Ask for connection");
 				socket = SSLClientUtility.getSocketWithCert(InetAddress.getLocalHost(), 2009, key, "8rXbM7twa)E96xtFZmWq6/J^");
-				System.out.println("Connection established"); 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				OTReceiver obliviousReceiver = new OTReceiver(idFromStorage, (RSAPublicKey) obliviousTransferKey);
 				BigInteger obliviousR = AsymmetricEncryption.generateRForBlindSignature(((RSAPublicKey) obliviousTransferKey).getModulus());
 				BigInteger y = obliviousReceiver.generateY(obliviousR);
-				ex.execute(new ClientSenderThread(out, protocol, y));
+				ex.submit(new ClientSenderThread(out, protocol, y));
 				Future<PrivateKey> result = ex.submit(new ClientRetrieverThread(in, obliviousReceiver, obliviousR, password));
 				resultKey = result.get();		
-			} catch (UnknownHostException e) {
-
-			} catch (IOException e) {
-
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				UserApplication.output = UserApplication.output + "\n Correctly retrieve values from the storage";
+			} catch (IOException | InterruptedException | ExecutionException e) {
+				UserApplication.output = UserApplication.output + "\n Something went wrong, unable to retrieve values from the storage";
 				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
+			}  
 			break;
 		case MOBILE:
 			break;
