@@ -60,7 +60,7 @@ public class OTSender {
 	 * @return The value K'
 	 */
 	public BigInteger generateKprime(BigInteger y) {
-		return AsymmetricEncryption.sign(y, privateKey);
+		return AsymmetricEncryption.blindSign(y, privateKey);
 	}
 	
 	private byte[] concatenateThreeArrays(byte[] a, byte[] b, byte[] c) {

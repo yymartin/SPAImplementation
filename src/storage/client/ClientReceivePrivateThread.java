@@ -19,7 +19,7 @@ import cryptographyBasics.SymmetricEncryption;
  * @author yoanmartin
  * Instantiation of a thread which receives information from a storage
  */
-public class ClientRetrieverThread implements Callable<PrivateKey> {
+public class ClientReceivePrivateThread implements Callable<PrivateKey> {
 	private DataInputStream in;
 	private ProtocolMode protocol;
 	private BigInteger r;
@@ -34,7 +34,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 	 * @param r The blind factor received by the client
 	 * @param bvk The bvk received by the client
 	 */
-	public ClientRetrieverThread(DataInputStream in, BigInteger r, PublicKey bvk) {
+	public ClientReceivePrivateThread(DataInputStream in, BigInteger r, PublicKey bvk) {
 		this.in = in;
 		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		this.r = r;
@@ -48,7 +48,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 	 * @param bvk The bvk received by the client
 	 * @param password The password received by the client
 	 */
-	public ClientRetrieverThread(DataInputStream in, BigInteger r, PublicKey bvk, BigInteger password) {
+	public ClientReceivePrivateThread(DataInputStream in, BigInteger r, PublicKey bvk, BigInteger password) {
 		this.in = in;
 		this.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
 		this.r = r;
@@ -56,7 +56,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 		this.password = password;
 	}
 	
-	public ClientRetrieverThread(DataInputStream in, OTReceiver receiver, BigInteger r, BigInteger password) {
+	public ClientReceivePrivateThread(DataInputStream in, OTReceiver receiver, BigInteger r, BigInteger password) {
 		this.in = in;
 		this.protocol = SSLUtility.ProtocolMode.PRIVACY_OPTIMAL;
 		this.receiver = receiver;
@@ -68,7 +68,6 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 	@Override
 	public PrivateKey call() throws Exception{
 	PrivateKey resultKey = null;
-//	SecretKey aesKey;
 	byte[] oneTimePadKey;
 	byte[] keyAsByte;
 	byte[] ctext;
@@ -78,10 +77,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 			BigInteger sigBlinded = new BigInteger(getData());
 			BigInteger sig = AsymmetricEncryption.unblind(sigBlinded, ((RSAPublicKey) bvk).getModulus(), r);
 			ctext = getData();
-//			aesKey = MyKeyGenerator.generateAESKeyFromPassword(sig);
 			oneTimePadKey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(sig);
-			
-//			keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
 			keyAsByte = SymmetricEncryption.decryptOneTimePadding(ctext, oneTimePadKey);
 		
 			resultKey = MyKeyGenerator.convertByteArrayIntoPrivateKey(keyAsByte);
@@ -89,10 +85,7 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 			
 		case STORAGE_OPTIMAL :
 			ctext = getData();
-//			aesKey = MyKeyGenerator.generateAESKeyFromPassword(password);
 			oneTimePadKey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(password);
-
-//			keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
 			keyAsByte = SymmetricEncryption.decryptOneTimePadding(ctext, oneTimePadKey);
 			
 			resultKey = MyKeyGenerator.convertByteArrayIntoPrivateKey(keyAsByte);
@@ -108,12 +101,8 @@ public class ClientRetrieverThread implements Callable<PrivateKey> {
 			BigInteger k = receiver.generateK(new BigInteger(kPrime), r);
 			ArrayList<byte[]> AiBi = receiver.generateAiBi(e, k);
 			ctext = receiver.findValue(AiBi).toByteArray();
-//			aesKey = MyKeyGenerator.generateAESKeyFromPassword(password);
 			oneTimePadKey = MyKeyGenerator.generateOneTimePaddingKeyFromPassword(password);
-			
-//			keyAsByte = SymmetricEncryption.decryptAES(ctext, aesKey);
 			keyAsByte = SymmetricEncryption.decryptOneTimePadding(ctext, oneTimePadKey);
-
 			resultKey = MyKeyGenerator.convertByteArrayIntoPrivateKey(keyAsByte);
 			break;
 	case MOBILE:

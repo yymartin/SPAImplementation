@@ -57,7 +57,7 @@ public class DatabaseConnector {
 	 * Function used to insert one element in the database
 	 * @param values The corresponding values to be inserted into a single row
 	 */
-	public void insertElementIntoStorage(byte[]... values){ 
+	public boolean insertElementIntoStorage(byte[]... values){ 
 		PreparedStatement stmt;
 		try {
 			switch(mode) {
@@ -67,8 +67,11 @@ public class DatabaseConnector {
 				stmt.setBytes(2, values[0]);
 				stmt.setBytes(3, values[0]);
 				stmt.setBytes(4, values[1]);
-				stmt.executeUpdate();
-				break;
+				if(stmt.executeUpdate() >= 0) {
+					return true;
+				} else {
+					return false;
+				}
 			case SERVER_OPTIMAL :
 				stmt = connection.prepareStatement("UPDATE " + table + " SET BSK = ?, CTEXT = ? WHERE ID = ? IF @@ROWCOUNT = 0 INSERT INTO " + table + " VALUES (?, ?, ?)");
 				stmt.setBytes(1, values[1]);
@@ -77,15 +80,17 @@ public class DatabaseConnector {
 				stmt.setBytes(4, values[0]);
 				stmt.setBytes(5, values[1]);
 				stmt.setBytes(6, values[2]);
-				stmt.executeUpdate();
-				break;
+				if(stmt.executeUpdate() >= 0) {
+					return true;
+				} else {
+					return false;
+				}
 			default:
 				throw new IllegalStateException("Function called in the wrong database mode!");
 			}
-			System.out.println("Element inserted");
 		} catch (SQLException e) {
-			System.out.println("Insertion failed");
 			e.printStackTrace();
+			return false;
 		}
 	}
 

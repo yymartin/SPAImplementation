@@ -1,9 +1,16 @@
 package cryptographyBasics;
 
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  * @author yoanmartin
@@ -17,13 +24,16 @@ public class AsymmetricEncryption {
 	 * @return The BigInteger encrypted
 	 */
 	public static BigInteger encrypt(BigInteger message, RSAPublicKey key) {
-		BigInteger m = message;
-		BigInteger e = key.getPublicExponent();
-		BigInteger N = key.getModulus();
-		
-		return m.modPow(e, N);	
+		try {
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+			return new BigInteger(cipher.doFinal(message.toByteArray()));
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
-	
+
 	/**
 	 * Function which decrypt a message using RSA algorithm
 	 * @param cipherText The encrypted BigInteger
@@ -31,27 +41,57 @@ public class AsymmetricEncryption {
 	 * @return The BigInteger decrypted
 	 */
 	public static BigInteger decrypt(BigInteger cipherText, RSAPrivateKey key) {
-		BigInteger d = key.getPrivateExponent();
-		BigInteger N = key.getModulus();
-		
-		return cipherText.modPow(d, N);
+		try {
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+			cipher.init(Cipher.DECRYPT_MODE, key);
+			return new BigInteger(cipher.doFinal(cipherText.toByteArray()));
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
-	
-	
+
+	public static BigInteger sign(BigInteger message, RSAPrivateKey key) {
+		try {
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+			return new BigInteger(cipher.doFinal(message.toByteArray()));
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e1) {
+			e1.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static boolean signatureVerification(BigInteger message, BigInteger signature, RSAPublicKey key) {
+		BigInteger clearText = null;
+		try {
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+			cipher.init(Cipher.DECRYPT_MODE, key);
+			clearText = new BigInteger(cipher.doFinal(signature.toByteArray()));
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e1) {
+			e1.printStackTrace();
+		}
+
+		return clearText.equals(message);
+	}
+
+
 	/**
 	 * Function which sign a message using RSA algorithm
 	 * @param message The BigInteger to sign
 	 * @param key The RSA private key
 	 * @return The BigInteger signed
 	 */
-	public static BigInteger sign(BigInteger message, RSAPrivateKey key) {
+	public static BigInteger blindSign(BigInteger message, RSAPrivateKey key) {
 		BigInteger d = key.getPrivateExponent();
 		BigInteger N = key.getModulus();
-		
+
 		return message.modPow(d, N);	
 	}
-	
-	
+
+
 	/**
 	 * Function which verify the signature of a message
 	 * @param message The unsigned BigInteger
@@ -59,11 +99,21 @@ public class AsymmetricEncryption {
 	 * @param key The RSA public key
 	 * @return True if the verification is correct, False otherwise
 	 */
-	public static boolean signatureVerification(BigInteger message, BigInteger signature, RSAPublicKey key) {
+	public static boolean blindSignatureVerification(BigInteger message, BigInteger signature, RSAPublicKey key) {
+		//		BigInteger clearText = null;
+		//		try {
+		//			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+		//		    cipher.init(Cipher.DECRYPT_MODE, key);
+		//		    clearText = new BigInteger(cipher.doFinal(signature.toByteArray()));
+		//		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e1) {
+		//			e1.printStackTrace();
+		//		}
+
 		BigInteger e = key.getPublicExponent();
 		BigInteger N = key.getModulus();
-		
+
 		BigInteger clearText = signature.modPow(e, N);
+
 		return clearText.equals(message);
 	}
 
@@ -80,7 +130,7 @@ public class AsymmetricEncryption {
 
 		return message.multiply(r.modPow(e, N)).mod(N);
 	}
-	
+
 	/**
 	 * Function which unblind a message in the case of RSA blind signature
 	 * @param signature The BigInteger signed by the authority
@@ -94,7 +144,7 @@ public class AsymmetricEncryption {
 		return signature.multiply(rInverse).mod(N);
 	}
 
-	
+
 	/**
 	 * Function which generate a blind factor in the case of RSA blind signature
 	 * @param mod The modulus of the RSA key
@@ -105,7 +155,7 @@ public class AsymmetricEncryption {
 		do {
 			r = new BigInteger(1024, new SecureRandom());
 		} while(r.gcd(mod) == BigInteger.ONE);
-		
+
 		return r;
 	}
 }

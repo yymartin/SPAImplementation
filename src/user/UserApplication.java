@@ -7,7 +7,6 @@ import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.MyKeyGenerator;
 import mobile.MobileClient;
-import qrcode.QRCode;
 import server.client.ServerClient;
 import storage.client.StorageClient;
 
@@ -16,13 +15,9 @@ import org.eclipse.swt.widgets.List;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -31,7 +26,6 @@ import javax.crypto.SecretKey;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Text;
@@ -50,13 +44,25 @@ public class UserApplication {
 	private static PrivateKey bsk, ssk;
 	private static BigInteger r;
 	private static SecretKey K;
-	private Text textConsole;
-	
-	public static String output = "";
+
+	private Text textConsole;	
 	private Text textUsername;
 	private Text textPassword;
+
+	private String output = "";
+	private final String requestServerRegistration = "\n Request registration to the website";
+	private final String requestStorageRegistration = "\n Try to store values into the storage";
+	private final String serverRegistrationOK = "\n Correctly registered to the server";
+	private final String serverRegistrationBAD = "\n Something went wrong, not registered to the server";
+	private final String storageRegistrationOK = "\n Correctly store values into the storage";
+	private final String storageRegistrationBAD = "\n Something went wrong, unable to store values into the storage";
 	
-	private final String clipboard = "Response is copied!";
+	private final String requestServerConnection = "\n Request connection to the website";
+	private final String requestStorageConnection = "\n Try to retrieve values from the storage";
+	private final String serverConnectionOK = "\n Correctly get the challenge! Response is copied!";
+	private final String serverConnectionBAD = "\n Something went wrong, unable to connect to the website";
+	private final String storageConnectionOK = "\n Correctly retrieve values from the storage";
+	private final String storageConnectionBAD = "\n Something went wrong, unable to retrieve values from storage";
 
 	/**
 	 * Launch the application.
@@ -64,14 +70,17 @@ public class UserApplication {
 	 */
 	public static void main(String[] args) {
 		address = System.getProperty("user.dir");
-		website = "Bob";
+
+		MyKeyGenerator.generateAsymmetricKeyToFile(address, "blind");
+		MyKeyGenerator.generateAsymmetricKeyToFile(address, "digital");
+		MyKeyGenerator.generateOneTimePaddingKeyToFile(address, "mobile", 2048);
 
 		bvk = MyKeyGenerator.getPublicKeyFromFile(address, "blind");
 		bsk = MyKeyGenerator.getPrivateKeyFromFile(address,"blind");
 		r = MyKeyGenerator.getRFromFile(address, "blind");
 		svk = MyKeyGenerator.getPublicKeyFromFile(address,"digital");
 		ssk = MyKeyGenerator.getPrivateKeyFromFile(address,"digital");
-		
+
 		K = MyKeyGenerator.getHMacKeyFromFile(address, "mobile");
 
 		try {
@@ -102,26 +111,26 @@ public class UserApplication {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(1000, 600);
+		shell.setSize(554, 364);
 		shell.setText("SWT Application");
-		
+
 		textUsername = new Text(shell, SWT.BORDER);
 		textUsername.setBounds(238, 21, 82, 22);
 		textUsername.setMessage("Username");
-		
+
 		Combo comboWebsite = new Combo(shell, SWT.NONE);
 		comboWebsite.setBounds(238, 90, 82, 40);
 		comboWebsite.setText("Website");
 		comboWebsite.add("Bob.com");
-						
+
 		textPassword = new Text(shell, SWT.BORDER);
 		textPassword.setBounds(238, 56, 82, 22);
 		textPassword.setMessage("Password");
-		
+
 		textConsole = new Text(shell, SWT.BORDER | SWT.READ_ONLY | SWT.V_SCROLL);
-		textConsole.setBounds(31, 210, 430, 113);
+		textConsole.setBounds(31, 210, 490, 113);
 		textConsole.setText(output);
-						
+
 		Label qrcode = new Label(shell, SWT.NONE);
 		qrcode.setBounds(491, 40, 400, 400);
 		qrcode.setVisible(false);
@@ -166,50 +175,137 @@ public class UserApplication {
 				website = comboWebsite.getText();
 				if(username.equals("")) {
 					output = output + "\n Please enter correct username";
+					textConsole.setText(output);
 					return;
 				}
-				
+
 				if(password.equals("")) {
 					output = output + "\n Please enter correct password";
+					textConsole.setText(output);
 					return;
 				}
-				
+
 				if(website.equals("")) {
 					output = output + "\n Please enter correct website";
+					textConsole.setText(output);
 					return;
 				}
-				
+
 				switch(protocol) {
 				case SERVER_OPTIMAL:
+					//					long startTimeRegistration = System.currentTimeMillis();
 					serverConnector = new ServerClient(username, svk);
 					storageConnector = new StorageClient(username, password, website, bsk, bvk, ssk, r);
-					serverConnector.registerToServer();
-					storageConnector.storeValuesToStorage();
+					//					long startTimeServerRegistration = System.currentTimeMillis();
+					output = output + requestServerRegistration;
+					if(serverConnector.registerToServer()) {
+						output = output + serverRegistrationOK;
+					} else {
+						output = output + serverRegistrationBAD;
+					}
+					//					long endTimeServerRegistration = System.currentTimeMillis();
+					//					long startTimeStorageRegistration = System.currentTimeMillis();
+
+					output = output + requestStorageRegistration;
+					if(storageConnector.storeValuesToStorage()) {
+						output = output + storageRegistrationOK;
+					} else {
+						output = output + storageRegistrationBAD;
+						textConsole.setText(output);
+						return;
+					}
+
+					//					long endTimeStorageRegistration = System.currentTimeMillis();
+					//					long endTimeRegistration = System.currentTimeMillis();
+					//					System.out.println("Registration time : ");
+					//					System.out.println("Server : " + (endTimeServerRegistration - startTimeServerRegistration));
+					//					System.out.println("Storage : " + (endTimeStorageRegistration - startTimeStorageRegistration));
+					//					System.out.println("Total : " + (endTimeRegistration - startTimeRegistration));
 					break;
 				case STORAGE_OPTIMAL:
+					//					long startTimeRegistration = System.currentTimeMillis();
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
 					storageConnector = new StorageClient(SSLUtility.ProtocolMode.STORAGE_OPTIMAL, password, bsk, svk, ssk, r);
-					serverConnector.registerToServer();
-					storageConnector.storeValuesToStorage();
+					//					long startTimeServerRegistration = System.currentTimeMillis();
+					output = output + requestServerRegistration;
+					if(serverConnector.registerToServer()) {
+						output = output + serverRegistrationOK;
+					} else {
+						output = output + serverRegistrationBAD;
+						textConsole.setText(output);
+						return;
+					}
+					//					long endTimeServerRegistration = System.currentTimeMillis();
+					//					long startTimeStorageRegistration = System.currentTimeMillis();
+					output = output + requestStorageRegistration;
+					if(storageConnector.storeValuesToStorage()) {
+						output = output + storageRegistrationOK;
+					} else {
+						output = output + storageRegistrationBAD;
+						textConsole.setText(output);
+						return;
+					}
+					//					long endTimeStorageRegistration = System.currentTimeMillis();
+					//					long endTimeRegistration = System.currentTimeMillis();
+					//					System.out.println("Registration time:");
+					//					System.out.println("Server : " + (endTimeServerRegistration - startTimeServerRegistration));
+					//					System.out.println("Storage: " + (endTimeStorageRegistration - startTimeStorageRegistration));
+					//					System.out.println("Total : " + (endTimeRegistration - startTimeRegistration));
 					break;
 				case PRIVACY_OPTIMAL:
+					//					long startTimeRegistration = System.currentTimeMillis();
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
-					storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);		
-					serverConnector.registerToServer();
-					PublicKey obliviousTransferKey = storageConnector.storeValuesToStorage();
-					storePublicKeyToFile(obliviousTransferKey, address, "OT");
+					storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);
+					//					long startTimeServerRegistration = System.currentTimeMillis();
+					output = output + requestServerRegistration;
+					if(serverConnector.registerToServer()) {
+						output = output + serverRegistrationOK;
+					} else {
+						output = output + serverRegistrationBAD;
+						textConsole.setText(output);
+						return;
+					}
+					//					long endTimeServerRegistration = System.currentTimeMillis();
+					//					long startTimeStorageRegistration = System.currentTimeMillis();
+					output = output + requestStorageRegistration;
+					if(storageConnector.storeValuesToStorage()) {
+						output = output + storageRegistrationOK;
+					} else {
+						output = output + storageRegistrationBAD;
+						textConsole.setText(output);
+						return;
+					}
+					//					long endTimeStorageRegistration = System.currentTimeMillis();
+					//					long endTimeRegistration = System.currentTimeMillis();
+					//					System.out.println("Registration time:");
+					//					System.out.println("Server : " + (endTimeServerRegistration - startTimeServerRegistration));
+					//					System.out.println("Storage: " + (endTimeStorageRegistration - startTimeStorageRegistration));
+					//					System.out.println("Total : " + (endTimeRegistration - startTimeRegistration));
 					break;
 				case MOBILE:
 					serverConnector = new ServerClient(username, K);
-					serverConnector.registerToServer();
+//					long startTimeServerRegistration = System.currentTimeMillis();
+					output = output + requestServerRegistration;
+					if(serverConnector.registerToServer()) {
+						output = output + serverRegistrationOK;
+					} else {
+						output = output + serverRegistrationBAD;
+						textConsole.setText(output);
+						return;
+					}
+//					long endTimeServerRegistration = System.currentTimeMillis();
 					try {
 						output = output + "/n Please connect to: " + InetAddress.getLocalHost().getHostAddress();
 					} catch (UnknownHostException e) {
 						output = output + "/n Impossible to execute mobile registration";
+						textConsole.setText(output);
 						e.printStackTrace();
+						return;
 					}
 					textConsole.setText(output);
 					MobileClient.executeRegistration(K, password);
+//					System.out.println("Registration time:");
+//					System.out.println("Server : " + (endTimeServerRegistration - startTimeServerRegistration));
 					break;
 				default:
 					break;
@@ -224,75 +320,151 @@ public class UserApplication {
 			public void widgetSelected(SelectionEvent arg0) {
 				username = textUsername.getText();
 				website = comboWebsite.getText();
-				
+
 				if(username.equals("")) {
 					output = output + "\n Please enter correct username";
-					return;
-				}
-				
-				if(website.equals("")) {
-					output = output + "\n Please enter correct website";
+					textConsole.setText(output);
 					return;
 				}
 
-				BigInteger challenge, response, id;
-				BigInteger[] result;
-				PrivateKey keyFromStorage;
+				if(website.equals("")) {
+					output = output + "\n Please enter correct website";
+					textConsole.setText(output);
+					return;
+				}
+
+				BigInteger challenge = null;
+				BigInteger response, id;
+				BigInteger[] result = null;
+				PrivateKey keyFromStorage = null;
 				switch(protocol) {
 				case SERVER_OPTIMAL:
+					//					long startConnectionTime = System.currentTimeMillis();
+
 					password = textPassword.getText();
-					
+
 					if(password.equals("")) {
 						output = output + "\n Please enter correct password";
+						textConsole.setText(output);
 						return;
 					}
 					serverConnector = new ServerClient(username, svk);
 					storageConnector = new StorageClient(username, password, website, bsk, bvk, ssk, r);
+					//					long startStorageConnectionTime = System.currentTimeMillis();
+					output = output + requestStorageConnection;
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(null, null);
+					if(keyFromStorage != null) {
+						output = output + storageConnectionOK;
+					} else {
+						output = output + storageConnectionBAD;
+						textConsole.setText(output);
+						return;
+					}
+					//					long endStorageConnectionTime = System.currentTimeMillis();
+					//					long startServerConnectionTime = System.currentTimeMillis();
+					
+					output = output + requestServerConnection;
 					challenge = serverConnector.askForChallengeToServer()[0];
+					if(challenge == null) {
+						output = output + serverConnectionBAD;
+						textConsole.setText(output);
+						return;
+					}
+					//					long endServerConnectionTime = System.currentTimeMillis();
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-					output = output + "\n" + clipboard;
+					output = output + serverConnectionOK;
 					copyTextToClipboard(response.toString());
+					//					long endConnectionTime = System.currentTimeMillis();
+					//					System.out.println("Connection time :");
+					//					System.out.println("Storage connection time: " + (endStorageConnectionTime - startStorageConnectionTime));
+					//					System.out.println("Server connection time : "  + (endServerConnectionTime - startServerConnectionTime));
+					//					System.out.println("Total connection time : " + (endConnectionTime - startConnectionTime));
 					break;
 				case STORAGE_OPTIMAL:
+					//					long startConnectionTime = System.currentTimeMillis();
 					password = textPassword.getText();
-					
+
 					if(password.equals("")) {
 						output = output + "\n Please enter correct password";
+						textConsole.setText(output);
 						return;
 					}
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
 					storageConnector = new StorageClient(SSLUtility.ProtocolMode.STORAGE_OPTIMAL, password, bsk, svk, ssk, r);
+					//					long startServerConnectionTime = System.currentTimeMillis();
+					output = output + requestServerConnection;
 					result = serverConnector.askForChallengeToServer();
+					if(result == null) {
+						output = output + serverConnectionBAD;
+						textConsole.setText(output);
+						return;
+					}
 					id = result[0];
 					challenge = result[1];
+					//					long endServerConnectionTime = System.currentTimeMillis();
+					//					long startStorageConnectionTime = System.currentTimeMillis();
+					output = output + requestStorageConnection;
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(id, null);
+					if(keyFromStorage != null) {
+						output = output + storageConnectionOK;
+					} else {
+						output = output + storageConnectionBAD;
+						textConsole.setText(output);
+						return;
+					}
+					//					long endStorageConnectionTime = System.currentTimeMillis();
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-					output = output + "\n" + clipboard;
+					output = output + "\n" + serverConnectionOK;
 					copyTextToClipboard(response.toString());
+					//					long endConnectionTime = System.currentTimeMillis();
+					//					System.out.println("Connection time :");
+					//					System.out.println("Storage connection time: " + (endStorageConnectionTime - startStorageConnectionTime));
+					//					System.out.println("Server connection time : "  + (endServerConnectionTime - startServerConnectionTime));
+					//					System.out.println("Total connection time : " + (endConnectionTime - startConnectionTime));
 					break;
 				case PRIVACY_OPTIMAL:
+					//					long startConnectionTime = System.currentTimeMillis();
 					password = textPassword.getText();
 					if(password.equals("")) {
 						output = output + "\n Please enter correct password";
+						textConsole.setText(output);
 						return;
 					}
 					serverConnector = new ServerClient(username, password, bsk, bvk, svk, r);
-					storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);		
+					storageConnector = new StorageClient(SSLUtility.ProtocolMode.PRIVACY_OPTIMAL, password, bsk, svk, ssk, r);	
+					//					long startServerConnectionTime = System.currentTimeMillis();
+					output = output + requestServerConnection;
 					result = serverConnector.askForChallengeToServer();
+					if(result == null) {
+						output = output + serverConnectionBAD;
+						textConsole.setText(output);
+						return;
+					}
 					id = result[0];
 					challenge = result[1];
+					//					long endServerConnectionTime = System.currentTimeMillis();
 					PublicKey obliviousTransferKey = MyKeyGenerator.getPublicKeyFromFile(address, "OT");
+					//					long startStorageConnectionTime = System.currentTimeMillis();
+					output = output + requestStorageConnection;
 					keyFromStorage = storageConnector.retrieveValuesFromStorage(id, obliviousTransferKey);
+					if(keyFromStorage != null) {
+						output = output + storageConnectionOK;
+					} else {
+						output = output + storageConnectionBAD;
+						textConsole.setText(output);
+						return;
+					}
+					//					long endStorageConnectionTime = System.currentTimeMillis();
 					response = AsymmetricEncryption.sign(challenge, (RSAPrivateKey) keyFromStorage);
-					output = output + "\n" + clipboard;
+					output = output + "\n" + serverConnectionOK;
 					copyTextToClipboard(response.toString());
+					//					long endConnectionTime = System.currentTimeMillis();
+					//					System.out.println("Connection time :");
+					//					System.out.println("Storage connection time: " + (endStorageConnectionTime - startStorageConnectionTime));
+					//					System.out.println("Server connection time : "  + (endServerConnectionTime - startServerConnectionTime));
+					//					System.out.println("Total connection time : " + (endConnectionTime - startConnectionTime));
 					break;
 				case MOBILE:
-					challenge = serverConnector.askForChallengeToServer()[0];
-					QRCode.generateQRCodeFromData(challenge.toString().getBytes(), System.getProperty("user.home")+"/Desktop");
-					qrcode.setVisible(true);
-					qrcode.setImage(new Image(Display.getDefault(), System.getProperty("user.home") + "/Desktop/qrcode.png"));
 					break;
 				default:
 					break;
@@ -302,20 +474,9 @@ public class UserApplication {
 		});
 		btnConnect.setBounds(127, 130, 94, 28);
 		btnConnect.setText("Connect");
-	
+
 	}
 
-	public void storePublicKeyToFile(PublicKey key, String address, String title) {
-		Path path = Paths.get(address+"/Public-Key-"+title);
-		try {
-			Files.write(path, key.getEncoded());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	
 	private void copyTextToClipboard(String message) {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Clipboard clipboard = toolkit.getSystemClipboard();

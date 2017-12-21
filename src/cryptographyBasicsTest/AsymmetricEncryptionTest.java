@@ -63,15 +63,14 @@ public class AsymmetricEncryptionTest {
 		RSAPublicKey publicKey = (RSAPublicKey) keypair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keypair.getPrivate();
 		BigInteger N = publicKey.getModulus();
-
 		
 		BigInteger message = new BigInteger(10, new SecureRandom());
 		BigInteger r = AsymmetricEncryption.generateRForBlindSignature(N);
 		
 		BigInteger messageBlinded = AsymmetricEncryption.blind(message, r, publicKey);
-		BigInteger signature = AsymmetricEncryption.sign(messageBlinded, privateKey);
+		BigInteger signature = AsymmetricEncryption.blindSign(messageBlinded, privateKey);
 		BigInteger signatureUnBlinded = AsymmetricEncryption.unblind(signature, N, r);
 				
-		assertTrue(AsymmetricEncryption.signatureVerification(message, signatureUnBlinded, publicKey));
+		assertTrue(AsymmetricEncryption.blindSignatureVerification(message, signatureUnBlinded, publicKey));
 	}
 }

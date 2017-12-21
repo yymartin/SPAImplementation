@@ -185,14 +185,6 @@ public class ClientSenderThread implements Callable<String> {
 				response = HTTPUtility.executePost(address, dataToSend);
 				return response;
 			case READYTOAUTH:
-				dataToSend = new HashMap<>();
-
-				dataToSend.put("protocol", protocol.toString());
-				dataToSend.put("mode", mode.toString());
-				dataToSend.put("username", username);
-
-				response = HTTPUtility.executePost(address, dataToSend);
-				return response;
 			case AUTH:
 				break;
 			default:

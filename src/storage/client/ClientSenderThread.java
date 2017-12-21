@@ -1,10 +1,11 @@
 package storage.client;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.PrivateKey;
-
+import java.util.concurrent.Callable;
 import SSLUtility.ProtocolMode;
 import storage.ClientToStorageMode;
 
@@ -12,7 +13,8 @@ import storage.ClientToStorageMode;
  * @author yoanmartin
  * Instantiation of a thread which sends information to a storage
  */
-public class ClientSenderThread extends Thread implements Runnable {
+public class ClientSenderThread implements Callable<Boolean> {
+	private DataInputStream in;
 	private DataOutputStream out;
 	private ClientToStorageMode mode;
 	private ProtocolMode protocol;
@@ -26,7 +28,8 @@ public class ClientSenderThread extends Thread implements Runnable {
 	 * @param bsk The bsk to be sent
 	 * @param ctext The ctext to be sent
 	 */
-	public ClientSenderThread(DataOutputStream out, BigInteger id, PrivateKey bsk, byte[] ctext) {
+	public ClientSenderThread(DataInputStream in, DataOutputStream out, BigInteger id, PrivateKey bsk, byte[] ctext) {
+		this.in = in;
 		this.out = out;
 		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		this.mode = ClientToStorageMode.STORE;
@@ -55,7 +58,8 @@ public class ClientSenderThread extends Thread implements Runnable {
 	 * @param id The id to be sent
 	 * @param ctext The ctext to be sent
 	 */
-	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, BigInteger id, byte[] ctext) {
+	public ClientSenderThread(DataInputStream in, DataOutputStream out, ProtocolMode protocol, BigInteger id, byte[] ctext) {
+		this.in = in;
 		this.out = out;
 		this.protocol = protocol;
 		this.mode = ClientToStorageMode.STORE;
@@ -75,13 +79,13 @@ public class ClientSenderThread extends Thread implements Runnable {
 		this.id = id.toByteArray();
 	}
 
-	public void run() {	
+	public Boolean call() {	
 		byte[] protocolAsByte = protocol.toString().getBytes();
 		byte[] modeAsByte = mode.toString().getBytes();
 		switch(protocol) {
 		case SERVER_OPTIMAL:
 			switch(mode) {
-			case STORE:
+			case STORE:	
 				try {
 					out.writeInt(protocolAsByte.length);
 					out.write(protocolAsByte);
@@ -95,8 +99,14 @@ public class ClientSenderThread extends Thread implements Runnable {
 					out.write(ctext);
 				} catch (IOException e) {
 					e.printStackTrace();
+				}	
+				
+				try {
+					return in.readBoolean();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				return;
+				return false;
 			case RETRIEVE:
 				try {
 					out.writeInt(protocolAsByte.length);
@@ -111,7 +121,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				return;
+				return false;
 			}
 			break;
 
@@ -130,7 +140,13 @@ public class ClientSenderThread extends Thread implements Runnable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				return;
+				
+				try {
+					return in.readBoolean();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return false ;
 			case RETRIEVE:
 				try {
 					out.writeInt(protocolAsByte.length);
@@ -143,7 +159,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				return;
+				return false;
 			}
 			break;
 
@@ -162,7 +178,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				return;
+				return false;
 			case RETRIEVE:
 				try {
 					out.writeInt(protocolAsByte.length);
@@ -175,7 +191,7 @@ public class ClientSenderThread extends Thread implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				return;
+				return false;
 			}
 			break;
 		case MOBILE:
@@ -183,6 +199,6 @@ public class ClientSenderThread extends Thread implements Runnable {
 		default:
 			break;
 		}
-		return;
+		return false;
 	}
 }

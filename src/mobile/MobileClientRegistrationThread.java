@@ -31,9 +31,7 @@ public class MobileClientRegistrationThread extends Thread implements Runnable{
 			this.hashPassword = Hash.generateSHA256Hash(password.getBytes());
 	}
 
-	public void run() {		
-		byte[] ctext = SymmetricEncryption.encryptOneTimePadding(K, hashPassword.toByteArray());
-		
+	public void run() {				
 		try {
 			System.out.println("Server created");
 			InputStream key = new FileInputStream(new File("./PRIVATEKEYMOBILE.jks"));
@@ -41,12 +39,16 @@ public class MobileClientRegistrationThread extends Thread implements Runnable{
 			key.close();
 			socket = ss.accept();
 			ss.close();
+			long startRegistrationTime = System.currentTimeMillis();
 			System.out.println("Client accepted");
+			byte[] ctext = SymmetricEncryption.encryptOneTimePadding(K, hashPassword.toByteArray());
 			out = new DataOutputStream(socket.getOutputStream());		
 			out.writeInt(ctext.length);
 			out.write(ctext);
 			out.close();
 			socket.close();
+			long endRegistrationTime = System.currentTimeMillis();
+			System.out.println("Mobile time : " + (endRegistrationTime-startRegistrationTime));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

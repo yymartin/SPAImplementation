@@ -15,7 +15,6 @@ import SSLUtility.ProtocolMode;
 import cryptographyBasics.AsymmetricEncryption;
 import cryptographyBasics.Hash;
 import server.ClientToServerMode;
-import user.UserApplication;
 
 /**
  * @author yoanmartin
@@ -67,34 +66,29 @@ public class ServerClient {
 	/**
 	 * Function which registers to the server
 	 */
-	public void registerToServer() {
-		UserApplication.output = UserApplication.output + "\n Request website registration";
+	public boolean registerToServer() {
 		Future<String> response;
 		switch(protocol) {
 		case SERVER_OPTIMAL:		
 			response = serverPool.submit(new ClientSenderThread(ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.REGISTERED, username, svk));
 			try {
 				if(response.get().equals("OK")) {
-					System.out.println("Correctly registered to the website!");
-					UserApplication.output = UserApplication.output + "\n Correctly registered to the website";
+					return true;
 				}
 			} catch (InterruptedException | ExecutionException e) {
-				System.out.println("Something went wrong, you are not registered to the website");
-				UserApplication.output = UserApplication.output + "\n Something went wrong, you are not registered to the website";
 				e.printStackTrace();
+				return false;
 			} 
-			break;
 
 		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL :
 			response = serverPool.submit(new ClientSenderThread(ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.REGISTERED, username, svk, bsk));
 			try {
 				if(response.get().equals("OK")) {
-					System.out.println("Correctly registered to the website!");
-					UserApplication.output = UserApplication.output + "\n Correctly registered to the website";
+					return true;
 				}
 			} catch (InterruptedException | ExecutionException e) {
-				System.out.println("Something went wrong, you are not registered to the website");
 				e.printStackTrace();
+				return false;
 			}
 			break;
 
@@ -102,15 +96,16 @@ public class ServerClient {
 			response = serverPool.submit(new ClientSenderThread(ProtocolMode.MOBILE, ClientToServerMode.REGISTERED, username, k));
 			try {
 				if(response.get().equals("OK")) {
-					System.out.println("Correctly registered to the website!");
-					UserApplication.output = UserApplication.output + "\n Correctly registered to the website";
+					return true;
 				}
 			} catch (InterruptedException | ExecutionException e) {
-				System.out.println("Something went wrong, you are not registered to the website");
 				e.printStackTrace();
+				return false;
 			}
 			break;
 		}
+		
+		return false;
 	}
 
 	/**
@@ -118,8 +113,6 @@ public class ServerClient {
 	 * @return The challenge in the case of Server Optimal protocol and the id and the challenge in the case of Storage Optimal protocol
 	 */
 	public BigInteger[] askForChallengeToServer() {
-		UserApplication.output = UserApplication.output + "\n Request challenge to the website";
-
 		BigInteger[] finalChallenge = new BigInteger[2];
 		Future<String> response;
 		switch(protocol) {
@@ -127,10 +120,9 @@ public class ServerClient {
 			response = serverPool.submit(new ClientSenderThread(ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.READYTOAUTH, username));
 			try {
 				finalChallenge[0] = new BigInteger(response.get());
-				UserApplication.output = UserApplication.output + "\n Correctly get the challenge from the website";
 			} catch (InterruptedException | ExecutionException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				return null;
 			}
 			break;
 
@@ -141,20 +133,18 @@ public class ServerClient {
 				String[] idAndChallenge = response.get().split(",");
 				finalChallenge[0] = AsymmetricEncryption.unblind(new BigInteger(idAndChallenge[0]), ((RSAPublicKey) bvk).getModulus(), r);
 				finalChallenge[1] = new BigInteger(idAndChallenge[1]);
-				UserApplication.output = UserApplication.output + "\n Correctly get the challenge from the website";
 			} catch (InterruptedException | ExecutionException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				return null;
 			}
 			break;
 		case MOBILE:
 			response = serverPool.submit(new ClientSenderThread(ProtocolMode.MOBILE, ClientToServerMode.READYTOAUTH, username));
 			try {
 				finalChallenge[0] = new BigInteger(response.get());
-				UserApplication.output = UserApplication.output + "\n Correctly get the challenge from the website";
 			} catch (InterruptedException | ExecutionException e) {
-				UserApplication.output = UserApplication.output + "\n Something went wrong, unable to get a challenge from the website";
 				e.printStackTrace();
+				return null;
 			}
 			break;
 		}

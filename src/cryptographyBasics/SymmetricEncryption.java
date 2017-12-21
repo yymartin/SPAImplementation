@@ -19,38 +19,6 @@ import javax.crypto.SecretKey;
 public class SymmetricEncryption {
 	
 	/**
-	 * Function which encrypt a message using AES algorithm
-	 * @param message The BigInteger to be encrypted
-	 * @param key The AES key
-	 * @return The message encrypted as a byte array
-	 */
-	public static byte[] encryptAES(byte[] message, SecretKey key) {		
-		Cipher encryptorAlgorithm;
-		byte[] encryptedByte = null;
-		try {
-			encryptorAlgorithm = Cipher.getInstance("AES");
-			encryptorAlgorithm.init(Cipher.ENCRYPT_MODE, key);
-			encryptedByte = encryptorAlgorithm.doFinal(message);
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return encryptedByte;
-	}
-
-	/**
 	 * Function which encrypt a message using one time padding encryption
 	 * @param message The BigInteger to be encrypted
 	 * @param key The key as a byte array
@@ -104,37 +72,6 @@ public class SymmetricEncryption {
 		return decrypted;
 	}
 
-	/**
-	 * Function which decrypt a message using AES algorithm
-	 * @param cipherText The message encrypted as a byte array
-	 * @param key The AES key
-	 * @return The decrypted message as a BigInteger
-	 */
-	public static byte[] decryptAES(byte[] cipherText, SecretKey key) {
-		Cipher decryptorAlgorithm;
-		byte[] decryptedByte = null;
-		try {
-			decryptorAlgorithm = Cipher.getInstance("AES");
-			decryptorAlgorithm.init(Cipher.DECRYPT_MODE, key);
-			decryptedByte = decryptorAlgorithm.doFinal(cipherText);
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return decryptedByte;
-	}
 	
 	/**
 	 * Function which verify the signature of a HMacSHA256

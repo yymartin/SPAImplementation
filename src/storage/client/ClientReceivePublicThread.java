@@ -7,10 +7,10 @@ import java.util.concurrent.Callable;
 
 import cryptographyBasics.MyKeyGenerator;
 
-public class ClientReceiverThread implements Callable<PublicKey>{
+public class ClientReceivePublicThread implements Callable<PublicKey>{
 	private DataInputStream in;
 	
-	public ClientReceiverThread(DataInputStream in) {
+	public ClientReceivePublicThread(DataInputStream in) {
 		this.in = in;
 	}
 

@@ -49,9 +49,23 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				bsk = getData();
 				ctext = getData();	
 				db = new DatabaseConnector(DatabaseMode.SERVER_OPTIMAL);
-				db.insertElementIntoStorage(new byte[][] {id, bsk, ctext});
-				break;
+				if(db.insertElementIntoStorage(new byte[][] {id, bsk, ctext})) {
+					try {
+						out.writeBoolean(true);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						out.writeBoolean(false);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 
+				break;
 			case RETRIEVE :
 				id = getData();
 				hashPassword = getData();
@@ -81,7 +95,19 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				ctext = getData();
 
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
-				db.insertElementIntoStorage(new byte[][] {id, ctext});
+				if(db.insertElementIntoStorage(new byte[][] {id, ctext})) {
+					try {
+						out.writeBoolean(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						out.writeBoolean(false);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 				break;
 
 			case RETRIEVE :
@@ -120,7 +146,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 			case RETRIEVE :
 				id = getData();
 				db = new DatabaseConnector(DatabaseMode.STORAGE_OPTIMAL);
-				
+
 				Map<BigInteger, BigInteger> dbElements = null;
 				try {
 					dbElements = db.getRandomElementFromStorage();
@@ -130,10 +156,10 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 				}
 				int numElem = dbElements.size();
 				OTSender obliviousSender = new OTSender(dbElements, (RSAPrivateKey) storagePrivateKey);
-				
+
 				ArrayList<byte[]> e = obliviousSender.generateE();
 				byte[] kPrime = obliviousSender.generateKprime(new BigInteger(id)).toByteArray();			
-				
+
 				try {
 					out.writeInt(kPrime.length);
 					out.write(kPrime);
@@ -175,7 +201,7 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 
 	private byte[] generateBlindSignature(byte[] bsk, byte[] hashPassword) {
 		RSAPrivateKey privateKey = MyKeyGenerator.convertByteArrayIntoPrivateKey(bsk);
-		BigInteger signature = AsymmetricEncryption.sign(new BigInteger(hashPassword), privateKey);
+		BigInteger signature = AsymmetricEncryption.blindSign(new BigInteger(hashPassword), privateKey);
 		return signature.toByteArray();
 	}
 }

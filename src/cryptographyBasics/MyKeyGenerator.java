@@ -13,6 +13,7 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -263,7 +264,8 @@ public class MyKeyGenerator {
 		KeyPair keys = null;
 		try {
 			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-			keyGen.initialize(RSALengthKey);
+			SecureRandom rand = new SecureRandom();
+			keyGen.initialize(RSALengthKey, rand);
 			keys = keyGen.generateKeyPair();
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
