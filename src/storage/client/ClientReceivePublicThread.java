@@ -7,9 +7,17 @@ import java.util.concurrent.Callable;
 
 import cryptographyBasics.MyKeyGenerator;
 
+/**
+ * @author yoanmartin
+ *  Instantiation of a thread which receives a PublicKey from a storage
+ */
 public class ClientReceivePublicThread implements Callable<PublicKey>{
 	private DataInputStream in;
 	
+	/**
+	 * The constructor of the thread
+	 * @param in The DataInputStream received by the client
+	 */
 	public ClientReceivePublicThread(DataInputStream in) {
 		this.in = in;
 	}
@@ -30,7 +38,6 @@ public class ClientReceivePublicThread implements Callable<PublicKey>{
 				in.readFully(result, 0, result.length); 
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
 		return result;

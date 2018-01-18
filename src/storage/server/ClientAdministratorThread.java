@@ -28,6 +28,13 @@ public class ClientAdministratorThread extends Thread implements Runnable{
 	private PublicKey storagePublicKey;
 	private PrivateKey storagePrivateKey;
 
+	/**
+	 * Constructor of the thread 
+	 * @param in The DataInputStream received by the client
+	 * @param out The DataOutputStream received by the client
+	 * @param storagePublicKey The PublicKey of the storage 
+	 * @param storagePrivateKey The PrivateKey of the storage
+	 */
 	public ClientAdministratorThread(DataInputStream in, DataOutputStream out, PublicKey storagePublicKey, PrivateKey storagePrivateKey){
 		this.in = in;
 		this.out = out;

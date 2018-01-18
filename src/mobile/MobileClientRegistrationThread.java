@@ -26,6 +26,11 @@ public class MobileClientRegistrationThread extends Thread implements Runnable{
 	private byte[] K;
 	private BigInteger hashPassword;
 	
+	/**
+	 * Constructor of the thread used to create the connection with the mobile application
+	 * @param K The SecretKey K
+	 * @param password The password used to encrypt K
+	 */
 	public MobileClientRegistrationThread(SecretKey K, String password) {
 			this.K = K.getEncoded();
 			this.hashPassword = Hash.generateSHA256Hash(password.getBytes());
@@ -39,7 +44,6 @@ public class MobileClientRegistrationThread extends Thread implements Runnable{
 			key.close();
 			socket = ss.accept();
 			ss.close();
-			long startRegistrationTime = System.currentTimeMillis();
 			System.out.println("Client accepted");
 			byte[] ctext = SymmetricEncryption.encryptOneTimePadding(K, hashPassword.toByteArray());
 			out = new DataOutputStream(socket.getOutputStream());		
@@ -47,8 +51,6 @@ public class MobileClientRegistrationThread extends Thread implements Runnable{
 			out.write(ctext);
 			out.close();
 			socket.close();
-			long endRegistrationTime = System.currentTimeMillis();
-			System.out.println("Mobile time : " + (endRegistrationTime-startRegistrationTime));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

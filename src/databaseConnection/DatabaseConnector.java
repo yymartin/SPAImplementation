@@ -56,6 +56,7 @@ public class DatabaseConnector {
 	/**
 	 * Function used to insert one element in the database
 	 * @param values The corresponding values to be inserted into a single row
+	 * @return Return true if the operation succeeded
 	 */
 	public boolean insertElementIntoStorage(byte[]... values){ 
 		PreparedStatement stmt;
@@ -125,7 +126,6 @@ public class DatabaseConnector {
 				break;
 			}		
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		result = value;
@@ -158,7 +158,6 @@ public class DatabaseConnector {
 				throw new IllegalAccessException();
 			}		
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 		return randomValues;
@@ -209,7 +208,6 @@ public class DatabaseConnector {
 				stmt.execute();
 				System.out.println("Element deleted");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;

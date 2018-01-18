@@ -17,7 +17,7 @@ import cryptographyBasics.SymmetricEncryption;
 
 /**
  * @author yoanmartin
- * Instantiation of a thread which receives information from a storage
+ * Instantiation of a thread which receives a PrivateKey from a storage
  */
 public class ClientReceivePrivateThread implements Callable<PrivateKey> {
 	private DataInputStream in;
@@ -123,7 +123,6 @@ public class ClientReceivePrivateThread implements Callable<PrivateKey> {
 				in.readFully(result, 0, result.length); 
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
 		return result;

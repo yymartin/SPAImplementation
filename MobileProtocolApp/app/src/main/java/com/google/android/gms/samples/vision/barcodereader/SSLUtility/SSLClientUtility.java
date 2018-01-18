@@ -4,6 +4,7 @@ package com.google.android.gms.samples.vision.barcodereader.SSLUtility;
         import java.io.InputStream;
         import java.net.InetAddress;
         import java.net.InetSocketAddress;
+        import java.security.Key;
         import java.security.KeyManagementException;
         import java.security.KeyStore;
         import java.security.KeyStoreException;
@@ -16,7 +17,7 @@ package com.google.android.gms.samples.vision.barcodereader.SSLUtility;
         import javax.net.ssl.TrustManager;
         import javax.net.ssl.TrustManagerFactory;
         import javax.net.ssl.X509TrustManager;
-//https://github.com/gpotter2/SSLKeystoreFactories
+//Source: https://github.com/gpotter2/SSLKeystoreFactories
 /**
  * @author yoanmartin
  * Utility class which creates an SSL connection with a server
@@ -35,20 +36,7 @@ public class SSLClientUtility {
             SSLSocketFactory SocketFactory = context.getSocketFactory();
             socket = (SSLSocket) SocketFactory.createSocket();
             socket.connect(new InetSocketAddress(ip, port), 5000);
-        } catch (KeyStoreException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            // TODO Auto-generated catch block
+        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException |KeyManagementException e) {
             e.printStackTrace();
         }
         return socket;
@@ -68,11 +56,7 @@ public class SSLClientUtility {
                     return trustManagerArray;
                 }
             }
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            // TODO Auto-generated catch block
+        } catch (NoSuchAlgorithmException | KeyStoreException e) {
             e.printStackTrace();
         }
         return null;

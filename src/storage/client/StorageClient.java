@@ -48,6 +48,7 @@ public class StorageClient {
 	 * @param password The password of the user
 	 * @param website The website which the user wants to connect to
 	 * @param bsk The bsk of the user
+	 * @param bvk The bvk of the user
 	 * @param ssk The ssk of the user
 	 * @param r The blind factor of the user
 	 */
@@ -63,8 +64,10 @@ public class StorageClient {
 
 	/**
 	 * Constructor used when the Storage Optimal protocol is used
+	 * @param protocol The protocol used by the client
 	 * @param password The password of the user
 	 * @param bsk The bsk of the user
+	 * @param bvk The bvk of the user
 	 * @param ssk The ssk of the user
 	 * @param r The blind factor of the user
 	 */
@@ -78,6 +81,7 @@ public class StorageClient {
 
 	/**
 	 * Function which stores the necessary values to the storage
+	 * @return return true if the operation succeeded
 	 */
 	public boolean storeValuesToStorage() {		
 		try {
@@ -145,6 +149,8 @@ public class StorageClient {
 
 	/**
 	 * Function which retrieves the values from the storage and uses them to retrieve the ssk
+	 * @param idFromStorage The necessary id when storage optimal is used
+	 * @param obliviousTransferKey The PublicKey of the server if privacy optimal is used 
 	 * @return The ssk of the user
 	 */
 	public PrivateKey retrieveValuesFromStorage(BigInteger idFromStorage, PublicKey obliviousTransferKey) {		
@@ -216,7 +222,6 @@ public class StorageClient {
 		try {
 			Files.write(path, key.getEncoded());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

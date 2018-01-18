@@ -23,6 +23,7 @@ public class ClientSenderThread implements Callable<Boolean> {
 
 	/**
 	 * Constructor used when the client registers to the storage using the Server Optimal protocol
+	 * @param in The DataInputStream rceived by the client
 	 * @param out The DataOutputStream received by the client
 	 * @param id The id to be sent
 	 * @param bsk The bsk to be sent
@@ -54,7 +55,9 @@ public class ClientSenderThread implements Callable<Boolean> {
 
 	/**
 	 * Constructor used when the client registers to the storage using the Storage Optimal protocol
+	 * @param in The DataInputStream received by the client
 	 * @param out The DataOutputStream received by the client
+	 * @param protocol The protocol used by the client
 	 * @param id The id to be sent
 	 * @param ctext The ctext to be sent
 	 */
@@ -70,6 +73,7 @@ public class ClientSenderThread implements Callable<Boolean> {
 	/**
 	 * Constructor used when the client retrieves information from the storage in the Storage Optimal protocol and Privacy Optimal protocol
 	 * @param out The DataOutputStream received by the client
+	 * @param protocol The protocol used by the client
 	 * @param id The id to be sent
 	 */
 	public ClientSenderThread(DataOutputStream out, ProtocolMode protocol, BigInteger id) {
@@ -118,7 +122,6 @@ public class ClientSenderThread implements Callable<Boolean> {
 					out.writeInt(password.length);
 					out.write(password);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return false;
@@ -156,7 +159,6 @@ public class ClientSenderThread implements Callable<Boolean> {
 					out.writeInt(id.length);
 					out.write(id);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return false;
@@ -188,7 +190,6 @@ public class ClientSenderThread implements Callable<Boolean> {
 					out.writeInt(id.length);
 					out.write(id);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return false;

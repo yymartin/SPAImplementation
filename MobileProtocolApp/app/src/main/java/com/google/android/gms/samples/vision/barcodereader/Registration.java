@@ -41,8 +41,8 @@ public class Registration extends AsyncTask<Void,Void,byte[]> {
         int port = 1234;
 
         byte[] result = null;
-
         try {
+            System.out.println(InetAddress.getByName(ipAddress));
             socket = SSLClientUtility.getSocketWithCert(InetAddress.getByName(ipAddress), port, key, "8rXbM7twa)E96xtFZmWq6/J^");
 	        in = new DataInputStream(socket.getInputStream());
 

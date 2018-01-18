@@ -3,12 +3,12 @@ package cryptographyBasicsTest;
 import static org.junit.Assert.assertEquals;
 import java.math.BigInteger;
 import java.security.KeyPair;
-import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ import cryptographyBasics.OTSender;
 public class OTTest {
 	@Test
 	public void testObliviousTransfer() {		
-		SecureRandom random = new SecureRandom();
+		Random random = new Random();
 		byte[] id1 = new byte[128];
 		random.nextBytes(id1);
 		byte[] id2 = new byte[128];

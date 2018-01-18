@@ -15,7 +15,17 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * @author yoanmartin
+ *	Class which implements a method to execute an HTTP POST request
+ */
 public class HTTPUtility {
+	/**
+	 * Function which execute an HTTP POST request
+	 * @param url The URL of the website
+	 * @param data The data to send to the website
+	 * @return A string containing the response of the server
+	 */
 	public static String executePost(String url, Map<String, String> data) {	
 
 		HttpClient httpclient = HttpClients.createDefault();
@@ -29,7 +39,6 @@ public class HTTPUtility {
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -38,7 +47,6 @@ public class HTTPUtility {
 		try {
 			response = httpclient.execute(httppost);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -46,7 +54,6 @@ public class HTTPUtility {
 		try {
 			responseString = new BasicResponseHandler().handleResponse(response);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return responseString;

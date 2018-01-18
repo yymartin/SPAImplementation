@@ -1,21 +1,23 @@
 --Table creation
 
-Create Table STORAGE_SERVER_OPTIMAL (ID varbinary(256), BSK varbinary(256), CTEXT varbinary(256) );
+--Create Table STORAGE_SERVER_OPTIMAL (ID varbinary(256), BSK varbinary(256), CTEXT varbinary(256) );
 
-Create Table STORAGE_SERVER_OPTIMAL (ID varbinary(256), CTEXT varbinary(256) );
+--Create Table STORAGE_SERVER_OPTIMAL (ID varbinary(256), CTEXT varbinary(256) );
 
 -- Table selection
 
-Select * From ? Where ID = ?;
+--Select * From ? Where ID = ?;
 
-Select * From STORAGE_STORAGE_OPTIMAL ORDER BY NEWID();
+--Select * From STORAGE_STORAGE_OPTIMAL ORDER BY NEWID();
 
 -- Table deletion
 
-Delete * From ? Where ID = ?;
+--Delete * From ? Where ID = ?;
 
 -- Table insertion or update
 
-UPDATE STORAGE_SERVER_OPTIMAL SET BSK = ?, CTEXT = ? WHERE ID = ? IF @@ROWCOUNT = 0 INSERT INTO STORAGE_SERVER_OPTIMAL VALUES (?, ?, ?)
+--UPDATE STORAGE_SERVER_OPTIMAL SET BSK = ?, CTEXT = ? WHERE ID = ? IF @@ROWCOUNT = 0 INSERT INTO STORAGE_SERVER_OPTIMAL VALUES (?, ?, ?)
 
-UPDATE STORAGE_STORAGE_OPTIMAL SET CTEXT = ? WHERE ID = ? IF @@ROWCOUNT = 0 INSERT INTO STORAGE_STORAGE_OPTIMAL VALUES (?, ?);
+--UPDATE STORAGE_STORAGE_OPTIMAL SET CTEXT = ? WHERE ID = ? IF @@ROWCOUNT = 0 INSERT INTO STORAGE_STORAGE_OPTIMAL VALUES (?, ?);
+
+Select * From STORAGE_SERVER_OPTIMAL;

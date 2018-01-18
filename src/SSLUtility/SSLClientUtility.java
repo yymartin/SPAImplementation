@@ -16,12 +16,20 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-//https://github.com/gpotter2/SSLKeystoreFactories
+//Source: https://github.com/gpotter2/SSLKeystoreFactories
 /**
  * @author yoanmartin
  * Utility class which creates an SSL connection with a server
  */
 public class SSLClientUtility {	
+	/**
+	 * Function which generate an SSL Socket with a server
+	 * @param ip The IP address of the server
+	 * @param port The port of the server 
+	 * @param pathToCert An InputStream containing the certificate
+	 * @param passwordFromCert The password of the certificate
+	 * @return The SSL socket
+	 */
 	public static SSLSocket getSocketWithCert(InetAddress ip, int port, InputStream pathToCert, String passwordFromCert) {
 		X509TrustManager[] trustManager;
 		KeyStore keyStore;
@@ -35,22 +43,9 @@ public class SSLClientUtility {
 			SSLSocketFactory SocketFactory = context.getSocketFactory();
 			socket = (SSLSocket) SocketFactory.createSocket();
 			socket.connect(new InetSocketAddress(ip, port), 5000);
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
+		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | KeyManagementException e) {
 			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KeyManagementException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		return socket;
 	}
 	
@@ -68,13 +63,9 @@ public class SSLClientUtility {
 					return trustManagerArray;
 				}
 			}
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+		} catch (NoSuchAlgorithmException | KeyStoreException e) {
 			e.printStackTrace();
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		return null;
 	}
 }

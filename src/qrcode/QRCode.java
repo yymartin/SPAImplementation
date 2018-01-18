@@ -12,7 +12,16 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+/**
+ * @author yoanmartin
+ *	Class which implements a method to generate a QR Code
+ */
 public class QRCode {
+	/**
+	 * Function which generate a QR Code into in image
+	 * @param data The data to store into the QR Code
+	 * @param address The address to store the image
+	 */
 	public static void generateQRCodeFromData(byte[] data, String address) {
 		BitMatrix matrix = generateMatrix(data);
 		FileOutputStream fileOut;
@@ -21,10 +30,8 @@ public class QRCode {
 			MatrixToImageWriter.writeToStream(matrix, "png", fileOut);
 			fileOut.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

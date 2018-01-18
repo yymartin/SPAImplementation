@@ -13,7 +13,6 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -37,24 +36,7 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class MyKeyGenerator {
 	
-	private static final int RSALengthKey = 1024;
-	private static final int AESLengthKey = 128;
-	
-	/**
-	 * Function which generate a key for AES256 signature
-	 * @return The SecretKey for the signature
-	 */
-	public static SecretKey generateAESKey() {
-		KeyGenerator keyGen = null;
-		try {
-			keyGen = KeyGenerator.getInstance("AES");
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		keyGen.init(AESLengthKey);
-		return keyGen.generateKey();
-	}
+	private static final int RSALengthKey = 2048;
 	
 	/**
 	 * Function which generate a key for one time padding encryption
@@ -78,38 +60,12 @@ public class MyKeyGenerator {
 		try {
 			keyGen = KeyGenerator.getInstance("HmacSHA256");
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		keyGen.init(256);
 		return keyGen.generateKey();
 	}
-	
-	/**
-	 * Function which generates an AES key from a given password. The password should be hashed, so it should be a BigInteger
-	 * @param password The hashed password
-	 * @return A SecretKey for AES encryption
-	 */
-	public static SecretKey generateAESKeyFromPassword(BigInteger password) {
-		String passwordAsString = new String(password.toString());
-		SecretKeyFactory f = null;
-		try {
-			f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "predefinedsalt".getBytes(), 10, AESLengthKey);
-		SecretKey s = null;
-		try {
-			s = f.generateSecret(spec);
-		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return new SecretKeySpec(s.getEncoded(), "AES");
-	}
-	
+		
 	/**
 	 * Function which generates an OneTime padding key from a given password. The password should be hashed, so it should be a BigInteger
 	 * @param password The hashed password
@@ -149,26 +105,12 @@ public class MyKeyGenerator {
         return new SecretKeySpec(s.getEncoded(), "HMacSHA256");
     }
     
-	/**
-	 * Function which generate an AES key for symmetric encryption and store it in a file
-	 * @param address The location where the key must be stored
-	 * @param title The title of the file
-	 */
-	public static void generateAESKeyToFile(String address, String title){
-		byte[] key = generateAESKey().getEncoded();
-		Path path = Paths.get(address+"/AES-"+title);
-		try {
-			Files.write(path, key);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
     
 	/**
 	 * Function which generate a OneTime padding key for symmetric encryption and store it in a file
 	 * @param address The location where the key must be stored
 	 * @param title The title of the file
+	 * @param length The desired length key
 	 */
 	public static void generateOneTimePaddingKeyToFile(String address, String title, int length) {
 		byte[] key = getOneTimePaddingKey(length);
@@ -277,7 +219,8 @@ public class MyKeyGenerator {
 	
 
 	/**
-	 * Function which generate a public and a private key for asymmetric encryption and store them in two files
+	 * Function which generate a public and a private key for asymmetric encryption and store them in two files. R for blind signature is also 
+	 * generated and store with private key.
 	 * @param address The location where the keys must be stored
 	 * @param title The title of the file
 	 */
@@ -285,6 +228,7 @@ public class MyKeyGenerator {
 		KeyPair keyPair = generateAsymmetricKey();
 		byte[] privateKey = keyPair.getPrivate().getEncoded();
 		byte[] publicKey = keyPair.getPublic().getEncoded();
+		
 		byte[] r = AsymmetricEncryption.generateRForBlindSignature(((RSAPrivateKey)keyPair.getPrivate()).getModulus()).toByteArray();
 		List<byte[]> privateList = new ArrayList<>();
 		privateList.add(privateKey);

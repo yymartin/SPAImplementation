@@ -21,21 +21,19 @@ import server.ClientToServerMode;
 public class ClientSenderThread implements Callable<String> {
 	private ProtocolMode protocol;
 	private ClientToServerMode mode;
-	private String username, password, challenge, k, svk, bsk;
+	private String website, username, password, challenge, k, svk, bsk;
 	private Map<String, String> dataToSend;
-
-	private String address = "https://localhost:8443/pro/register";
-
 
 	/**
 	 * Constructor used when the client registers to the server using the Server Optimal protocol
-	 * @param out The DataOutputStream given by the client 
+	 * @param website The address of the server
 	 * @param protocol The protocol used 
 	 * @param mode The actual client state from the server point of view
-	 * @param username
-	 * @param svk
+	 * @param username The username of the client
+	 * @param svk The svk received by the client
 	 */
-	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk) {
+	public ClientSenderThread(String website, ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk) {
+		this.website = website;
 		this.protocol = protocol;
 		this.mode = mode;
 		this.username = username;
@@ -44,12 +42,13 @@ public class ClientSenderThread implements Callable<String> {
 
 	/**
 	 * Constuctor used when the client asks for a challenge using the Server Optimal protocol
-	 * @param out The DataOutputStream given by the server 
+	 * @param website The address of the server
 	 * @param protocol The protocol used 
 	 * @param mode The actual client state from the server point of view
 	 * @param username The username of the client
 	 */
-	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode mode, String username) {
+	public ClientSenderThread(String website, ProtocolMode protocol, ClientToServerMode mode, String username) {
+		this.website = website;
 		this.protocol = protocol;
 		this.mode = mode;
 		this.username = username;
@@ -57,12 +56,13 @@ public class ClientSenderThread implements Callable<String> {
 
 	/**
 	 * Constructor used when the client sends the response to a challenge using the Server Optimal or Storage Optimal protocol
-	 * @param out The DataOutputStream given by the server 
+	 * @param website The address of the server
 	 * @param mode The actual client state from the server point of view
 	 * @param username The username of the client
 	 * @param challenge The challenge received by the client
 	 */
-	public ClientSenderThread(ClientToServerMode mode, String username, BigInteger challenge) {
+	public ClientSenderThread(String website, ClientToServerMode mode, String username, BigInteger challenge) {
+		this.website = website;
 		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
 		this.mode = mode;
 		this.username = username;
@@ -72,14 +72,15 @@ public class ClientSenderThread implements Callable<String> {
 
 	/**
 	 * Constructor used when the client registers to the server using the Storage Optimal protocol
-	 * @param out The DataOutputStream given by the server 
+	 * @param website The address of the server
 	 * @param protocol The protocol used 
 	 * @param mode The actual client state from the server point of view
 	 * @param username The username of the client
 	 * @param svk The svk of the client
 	 * @param bsk The bsk of the client
 	 */
-	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk, PrivateKey bsk) {
+	public ClientSenderThread(String website, ProtocolMode protocol, ClientToServerMode mode, String username, PublicKey svk, PrivateKey bsk) {
+		this.website = website;
 		this.protocol = protocol;
 		this.mode = mode;
 		this.username = username;
@@ -89,20 +90,30 @@ public class ClientSenderThread implements Callable<String> {
 
 	/**
 	 * Constructor used when the client asks for a challenge using the Storage Optimal protocol
-	 * @param out The DataOutputStream given by the server 
+	 * @param website The address of the server
 	 * @param protocol The protocol used 
 	 * @param mode The actual client state from the server point of view
 	 * @param username The username of the client
 	 * @param password The hashed password of the client
 	 */
-	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode mode, String username, BigInteger password) {
+	public ClientSenderThread(String website, ProtocolMode protocol, ClientToServerMode mode, String username, BigInteger password) {
+		this.website = website;
 		this.protocol = protocol;
 		this.mode = mode;
 		this.username = username;
 		this.password = password.toString();
 	}
 
-	public ClientSenderThread(ProtocolMode protocol, ClientToServerMode register, String username, SecretKey k) {
+	/**
+	 * Constructor used when the client registers to the server using Mobile Protocol
+	 * @param website The address of the server
+	 * @param protocol The protocol used
+	 * @param register The client state for the server
+	 * @param username The username of the client
+	 * @param k The SecretKey of the client
+	 */
+	public ClientSenderThread(String website, ProtocolMode protocol, ClientToServerMode register, String username, SecretKey k) {
+		this.website = website;
 		this.protocol = protocol;
 		this.mode = ClientToServerMode.REGISTERED;
 		this.username = username;
@@ -122,7 +133,7 @@ public class ClientSenderThread implements Callable<String> {
 				dataToSend.put("username", username);
 				dataToSend.put("svk", svk);
 
-				response = HTTPUtility.executePost(address, dataToSend);
+				response = HTTPUtility.executePost(website, dataToSend);
 				return response;
 			case READYTOAUTH:
 				dataToSend = new HashMap<>();
@@ -130,7 +141,7 @@ public class ClientSenderThread implements Callable<String> {
 				dataToSend.put("mode", mode.toString());
 				dataToSend.put("username", username);
 
-				response = HTTPUtility.executePost(address, dataToSend);
+				response = HTTPUtility.executePost(website, dataToSend);
 				return response;
 			case AUTH:
 				dataToSend = new HashMap<>();
@@ -139,7 +150,7 @@ public class ClientSenderThread implements Callable<String> {
 				dataToSend.put("username", username);
 				dataToSend.put("challenge", challenge);
 
-				response = HTTPUtility.executePost(address, dataToSend);
+				response = HTTPUtility.executePost(website, dataToSend);
 				return response;
 			}
 			break;
@@ -155,7 +166,7 @@ public class ClientSenderThread implements Callable<String> {
 				dataToSend.put("svk", svk);
 				dataToSend.put("bsk", bsk);
 
-				response = HTTPUtility.executePost(address, dataToSend);
+				response = HTTPUtility.executePost(website, dataToSend);
 				return response;
 			case READYTOAUTH:
 				dataToSend = new HashMap<>();
@@ -164,8 +175,7 @@ public class ClientSenderThread implements Callable<String> {
 				dataToSend.put("mode", mode.toString());
 				dataToSend.put("username", username);
 				dataToSend.put("password", password);
-
-				response = HTTPUtility.executePost(address, dataToSend);
+				response = HTTPUtility.executePost(website, dataToSend);
 				return response;
 			case AUTH:
 				break;
@@ -182,7 +192,7 @@ public class ClientSenderThread implements Callable<String> {
 				dataToSend.put("username", username);
 				dataToSend.put("k", k);
 
-				response = HTTPUtility.executePost(address, dataToSend);
+				response = HTTPUtility.executePost(website, dataToSend);
 				return response;
 			case READYTOAUTH:
 			case AUTH:

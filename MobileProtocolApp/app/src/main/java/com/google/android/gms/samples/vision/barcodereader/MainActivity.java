@@ -75,10 +75,10 @@ public class MainActivity extends Activity{
                 } else {
 
                     File internalStorageDir = getFilesDir();
-                    File myfile = new File(internalStorageDir, "myfile.txt");
+                    File ctext = new File(internalStorageDir, "ctext.txt");
                     FileOutputStream fos;
                     try {
-                        fos = new FileOutputStream(myfile);
+                        fos = new FileOutputStream(ctext);
                         fos.write(result);
                         fos.close();
                     } catch (FileNotFoundException e) {

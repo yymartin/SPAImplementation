@@ -100,15 +100,6 @@ public class AsymmetricEncryption {
 	 * @return True if the verification is correct, False otherwise
 	 */
 	public static boolean blindSignatureVerification(BigInteger message, BigInteger signature, RSAPublicKey key) {
-		//		BigInteger clearText = null;
-		//		try {
-		//			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-		//		    cipher.init(Cipher.DECRYPT_MODE, key);
-		//		    clearText = new BigInteger(cipher.doFinal(signature.toByteArray()));
-		//		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e1) {
-		//			e1.printStackTrace();
-		//		}
-
 		BigInteger e = key.getPublicExponent();
 		BigInteger N = key.getModulus();
 

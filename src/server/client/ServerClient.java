@@ -21,8 +21,8 @@ import server.ClientToServerMode;
  * Object which instantiate the client side of the connection with a server
  */
 public class ServerClient {
-	private static ProtocolMode protocol;
-	private static String username;
+	private ProtocolMode protocol;
+	private String username;
 	private BigInteger password;
 	private PublicKey svk, bvk;
 	private PrivateKey bsk;
@@ -38,12 +38,13 @@ public class ServerClient {
 	 * @param username The username of the user
 	 * @param password The password of the user
 	 * @param bsk The bsk of the user
+	 * @param bvk The bvk of the user
 	 * @param svk The svk of the user
 	 * @param r The blind factor used in blind signature
 	 */
 	public ServerClient(String username, String password, PrivateKey bsk, PublicKey bvk, PublicKey svk, BigInteger r) {
-		ServerClient.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
-		ServerClient.username = username;
+		this.protocol = SSLUtility.ProtocolMode.STORAGE_OPTIMAL;
+		this.username = username;
 		this.password = Hash.generateSHA256Hash(password.getBytes());
 		this.svk = svk;
 		this.bsk = bsk;
@@ -52,25 +53,27 @@ public class ServerClient {
 	}
 
 	public ServerClient(String username, PublicKey svk) {
-		ServerClient.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
-		ServerClient.username = username;
+		this.protocol = SSLUtility.ProtocolMode.SERVER_OPTIMAL;
+		this.username = username;
 		this.svk = svk;
 	}
 
 	public ServerClient(String username, SecretKey k) {
-		ServerClient.protocol = SSLUtility.ProtocolMode.MOBILE;
-		ServerClient.username = username;
+		this.protocol = SSLUtility.ProtocolMode.MOBILE;
+		this.username = username;
 		this.k = k;
 	}
 
 	/**
 	 * Function which registers to the server
+	 * @param website The address of the server
+	 * @return Return true if the operation succeeded
 	 */
-	public boolean registerToServer() {
+	public boolean registerToServer(String website) {
 		Future<String> response;
 		switch(protocol) {
 		case SERVER_OPTIMAL:		
-			response = serverPool.submit(new ClientSenderThread(ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.REGISTERED, username, svk));
+			response = serverPool.submit(new ClientSenderThread(website, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.REGISTERED, username, svk));
 			try {
 				if(response.get().equals("OK")) {
 					return true;
@@ -81,7 +84,7 @@ public class ServerClient {
 			} 
 
 		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL :
-			response = serverPool.submit(new ClientSenderThread(ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.REGISTERED, username, svk, bsk));
+			response = serverPool.submit(new ClientSenderThread(website, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.REGISTERED, username, svk, bsk));
 			try {
 				if(response.get().equals("OK")) {
 					return true;
@@ -93,7 +96,7 @@ public class ServerClient {
 			break;
 
 		case MOBILE:
-			response = serverPool.submit(new ClientSenderThread(ProtocolMode.MOBILE, ClientToServerMode.REGISTERED, username, k));
+			response = serverPool.submit(new ClientSenderThread(website, ProtocolMode.MOBILE, ClientToServerMode.REGISTERED, username, k));
 			try {
 				if(response.get().equals("OK")) {
 					return true;
@@ -110,14 +113,15 @@ public class ServerClient {
 
 	/**
 	 * Function which asks the server a challenge
+	 * @param website The address of the server
 	 * @return The challenge in the case of Server Optimal protocol and the id and the challenge in the case of Storage Optimal protocol
 	 */
-	public BigInteger[] askForChallengeToServer() {
+	public BigInteger[] askForChallengeToServer(String website) {
 		BigInteger[] finalChallenge = new BigInteger[2];
 		Future<String> response;
 		switch(protocol) {
 		case SERVER_OPTIMAL:
-			response = serverPool.submit(new ClientSenderThread(ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.READYTOAUTH, username));
+			response = serverPool.submit(new ClientSenderThread(website, ProtocolMode.SERVER_OPTIMAL, ClientToServerMode.READYTOAUTH, username));
 			try {
 				finalChallenge[0] = new BigInteger(response.get());
 			} catch (InterruptedException | ExecutionException e1) {
@@ -128,7 +132,7 @@ public class ServerClient {
 
 		case STORAGE_OPTIMAL: case PRIVACY_OPTIMAL :
 			BigInteger passwordBlinded = AsymmetricEncryption.blind(password, r, (RSAPublicKey) bvk);
-			response = serverPool.submit(new ClientSenderThread(ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.READYTOAUTH, username, passwordBlinded));
+			response = serverPool.submit(new ClientSenderThread(website, ProtocolMode.STORAGE_OPTIMAL, ClientToServerMode.READYTOAUTH, username, passwordBlinded));
 			try {
 				String[] idAndChallenge = response.get().split(",");
 				finalChallenge[0] = AsymmetricEncryption.unblind(new BigInteger(idAndChallenge[0]), ((RSAPublicKey) bvk).getModulus(), r);
@@ -139,7 +143,7 @@ public class ServerClient {
 			}
 			break;
 		case MOBILE:
-			response = serverPool.submit(new ClientSenderThread(ProtocolMode.MOBILE, ClientToServerMode.READYTOAUTH, username));
+			response = serverPool.submit(new ClientSenderThread(website, ProtocolMode.MOBILE, ClientToServerMode.READYTOAUTH, username));
 			try {
 				finalChallenge[0] = new BigInteger(response.get());
 			} catch (InterruptedException | ExecutionException e) {

@@ -18,12 +18,9 @@ public class SymmetricEncryptionTest {
 	
 	@Test
 	public void testEncryptionAndDecryption() {		
-		BigInteger message = new BigInteger(1023, new SecureRandom());
+		BigInteger message = new BigInteger(1024, new SecureRandom());
 
-		SecretKey keyAES = MyKeyGenerator.generateAESKey();
-		byte[] keyOneTimePadding = MyKeyGenerator.getOneTimePaddingKey(message.toByteArray().length);
-		
-	
+		byte[] keyOneTimePadding = MyKeyGenerator.getOneTimePaddingKey(message.toByteArray().length);	
 		byte[] cipherText = SymmetricEncryption.encryptOneTimePadding(message.toByteArray(), keyOneTimePadding);
 		byte [] clearText = SymmetricEncryption.decryptOneTimePadding(cipherText, keyOneTimePadding);
 		assertEquals(message, new BigInteger(clearText));
@@ -31,10 +28,9 @@ public class SymmetricEncryptionTest {
 	
 	@Test
 	public void testEncryptionAndDecryptionFromFile() {
-		String address = "/Users/yoanmartin/Desktop";
+		String address = System.getenv("user.home");
 		
 		BigInteger message = new BigInteger(1024, new SecureRandom());
-		MyKeyGenerator.generateAESKeyToFile(address, "test");
 		
 		MyKeyGenerator.generateOneTimePaddingKeyToFile(address, "test", message.toByteArray().length);
 		byte[] keyOneTimePadding = MyKeyGenerator.getOneTimePaddingKeyFromFile(address, "test");
@@ -67,7 +63,7 @@ public class SymmetricEncryptionTest {
 		
 		assertTrue(SymmetricEncryption.verifyHMac(message, hmac, key));
 		
-		String address = "/Users/yoanmartin/Desktop";
+		String address = System.getProperty("user.home");
 		MyKeyGenerator.generateHMacKeyToFile(address, "test");
 		key = MyKeyGenerator.getHMacKeyFromFile(address, "test");
 		

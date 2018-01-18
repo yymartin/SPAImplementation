@@ -31,7 +31,7 @@ public class AsymmetricEncryptionTest {
 	
 	@Test
 	public void testEncryptionAndDecryptionFromFile() {
-		String address = "/Users/yoanmartin/Desktop";
+		String address = System.getProperty("user.home");
 		BigInteger message = new BigInteger(10, new SecureRandom());
 		MyKeyGenerator.generateAsymmetricKeyToFile(address, "test");
 		

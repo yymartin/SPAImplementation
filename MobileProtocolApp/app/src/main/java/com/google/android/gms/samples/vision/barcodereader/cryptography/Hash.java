@@ -41,63 +41,6 @@ public class Hash {
     }
 
     /**
-     * Function which generates an AES key from a given password. The password should be hashed, so it should be a BigInteger
-     * @param password The hashed password
-     * @return A SecretKey for AES encryption
-     */
-    public static SecretKey generateAESKeyFromPassword(BigInteger password) {
-        String passwordAsString = new String(password.toByteArray());
-        SecretKeyFactory f = null;
-        try {
-            f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        KeySpec spec = new PBEKeySpec(passwordAsString.toCharArray(), "predefinedsalt".getBytes(), 10, 128);
-        SecretKey s = null;
-        try {
-            s = f.generateSecret(spec);
-        } catch (InvalidKeySpecException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return new SecretKeySpec(s.getEncoded(), "AES");
-    }
-
-    /**
-     * Function which decrypt a message using AES algorithm
-     * @param cipherText The message encrypted as a byte array
-     * @param key The AES key
-     * @return The decrypted message as a BigInteger
-     */
-    public static byte[] decryptAES(byte[] cipherText, SecretKey key) {
-        Cipher decryptorAlgorithm;
-        byte[] decryptedByte = null;
-        try {
-            decryptorAlgorithm = Cipher.getInstance("AES");
-            decryptorAlgorithm.init(Cipher.DECRYPT_MODE, key);
-            decryptedByte = decryptorAlgorithm.doFinal(cipherText);
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return decryptedByte;
-    }
-
-    /**
      * Function which sign a message using HMacSHA256
      * @param message The message to be signed
      * @param key The HMacSHA256 key

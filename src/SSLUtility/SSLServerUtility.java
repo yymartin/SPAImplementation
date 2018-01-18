@@ -25,6 +25,13 @@ import javax.net.ssl.X509TrustManager;
  * Utility class which creates an SSL connection with a client
  */
 public class SSLServerUtility {
+	/**
+	 * Function which creates an SSL Socket to connect with a client
+	 * @param port The port used by the client
+	 * @param pathToCert An InputStream containing the certificate
+	 * @param passwordFromCert The password of the certificate
+	 * @return The SSL Socket
+	 */
 	public static SSLServerSocket getServerSocketWithCert(int port, InputStream pathToCert, String passwordFromCert) {
 		TrustManager[] trustManagerArray = new TrustManager[1];
 		KeyManager[] keyManagerArray = new KeyManager[1];
